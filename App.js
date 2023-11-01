@@ -6,27 +6,19 @@ import {
   View,
 } from 'react-native';
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+const Tab = createBottomTabNavigator();
 
 function App(){
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.title}>리액트 네이티브 준비완료 !</Text>
-      </View>
-    </SafeAreaView>
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Calendar" component={CalendarScreen} />
+      <Tab.Screen name="Alarm" component={AlarmScreen} />
+      <Tab.Screen name="Todo" component={TodoScreen} />      
+    </Tab.Navigator>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    color: 'orange'
-  }
-})
 
 export default App;
