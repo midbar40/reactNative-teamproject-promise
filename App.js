@@ -1,7 +1,15 @@
 import React,{useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import ChatScreen from './screens/ChatScreen';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import {HomeScreen, CalendarScreen, AlarmScreen, TodoScreen} from './screens';
 const Tab = createBottomTabNavigator();
 
@@ -36,6 +44,7 @@ function App({navigation, route}) {
         component={TodoScreen}
         options={{headerShown: false}}
       />
+  <Tab.Screen name="Chat" component={ChatScreen} />
     </Tab.Navigator>
   );
 }
