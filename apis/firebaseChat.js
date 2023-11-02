@@ -16,6 +16,6 @@ export const sendMessageToFirebase = async (roomName, message) => {
 export const getMessage = (roomName, onResult, onError) => {
   return firestore()
     .collection(`${roomName}`)
-    // .orderBy('date', 'desc')
+    .orderBy('date', 'asc')
     .onSnapshot(onResult, onError);
 }

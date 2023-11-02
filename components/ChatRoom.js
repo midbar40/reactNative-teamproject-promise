@@ -48,8 +48,8 @@ function ChatRoom({ navigation, roomName }){
         <Text>{roomName.trim()} 채팅방</Text>
       </View>
       <View>
-        {messageList.length !== 0 &&
-          messageList.map(chat => <ChatList message={chat.message}/>)
+        {messageList?.length !== 0 &&
+          messageList?.map(chat => <ChatList message={chat.message}/>)
         }
       </View>
       <View>
