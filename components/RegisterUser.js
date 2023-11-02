@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, TextInput,Alert } from 'react-native';
-import { signUp, verifyUserEmail } from '../lib/auth';
+import { signUp, verifyUserEmail } from '../apis/auth';
 
 function RegisterUser({navigation, isFindEmail, setIsFindEmail, findEmail, setIsRegister, isRegister}){
     const [registerInfo, setRegisterInfo] = useState({
@@ -19,6 +19,8 @@ function RegisterUser({navigation, isFindEmail, setIsFindEmail, findEmail, setIs
     const registerUser =  async () => {
       if(email.trim().length == 0 || email.trim() == null){
         return Alert.alert('이메일을 입력해주세요')
+      } else if((!/\S+@\S+\.\S+/.test(email.trim()))){
+        return Alert.alert('이메일 형식이 올바르지 않습니다')
       } else if(password.trim().length == 0 || password.trim() == null){
         return Alert.alert('비밀번호를 입력해주세요')
       } else if(passwordCheck.trim().length == 0 || passwordCheck.trim() == null){
@@ -27,9 +29,6 @@ function RegisterUser({navigation, isFindEmail, setIsFindEmail, findEmail, setIs
         return Alert.alert('비밀번호가 일치하지 않습니다')
       }
       else{
-        //  await verifyUserEmail(email.trim())
-        //  .then((res) => {console.log(res)})
-
          signUp(email.trim(), password.trim(), passwordCheck.trim())
          Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다')
          setIsFindEmail(false)
@@ -90,7 +89,7 @@ function RegisterUser({navigation, isFindEmail, setIsFindEmail, findEmail, setIs
             </TouchableOpacity>
 
             <TouchableOpacity onPress={findEmail}>
-              <Text>이메일찾기</Text>
+              <Text>비밀번호찾기</Text>
             </TouchableOpacity>
           </View>
       </View>      

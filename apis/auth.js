@@ -23,3 +23,7 @@ export const finduserEmail = async(email) => { // 이메일 찾기 (가입한 �
 export const verifyUserEmail = async(email) => { // 이메일 인증
     return await auth().currentUser.sendEmailVerification(email);
 }
+
+export const getUserUid = () => { // 사용자 uid 가져오기
+    return auth().currentUser.uid;
+}

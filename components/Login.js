@@ -7,7 +7,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import {signIn} from '../lib/auth';
+import {signIn} from '../apis/auth';
 // import { useNavigation } from '@react-navigation/native';
 
 function Login({
@@ -99,7 +99,7 @@ function Login({
         </TouchableOpacity>
 
         <TouchableOpacity onPress={findEmail}>
-          <Text>이메일찾기</Text>
+          <Text>비밀번호찾기</Text>
         </TouchableOpacity>
       </View>
     </View>

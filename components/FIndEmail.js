@@ -7,7 +7,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import {finduserEmail} from '../lib/auth';
+import {finduserEmail} from '../apis/auth';
 
 function findEmail({
   navigation,

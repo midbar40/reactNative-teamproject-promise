@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {signOut} from '../lib/auth';
+import {signOut} from '../apis/auth';
 
 function Logout({navigation, loginInfo}) {
     console.log(loginInfo)
