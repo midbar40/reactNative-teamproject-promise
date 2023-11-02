@@ -7,7 +7,6 @@ import {
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import LandingScreen from './screens/LandingScreen';
-import RegisterScreen from './screens/RegisterScreen';
 import App from './App';
 
 const Stack = createNativeStackNavigator();
@@ -22,9 +21,6 @@ function stackRouter() {
         }}>
         <Stack.Screen name="Landing">
           {props => <LandingScreen {...props} />}
-        </Stack.Screen>
-        <Stack.Screen name="Register">
-          {props => <RegisterScreen {...props} />}
         </Stack.Screen>
         <Stack.Screen name="App">
           {props => <App {...props} />}
