@@ -1,18 +1,15 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-
+// import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import ChatScreen from './screens/ChatScreen';
-
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
+// import {NavigationContainer} from '@react-navigation/native';
 import {HomeScreen, CalendarScreen, AlarmScreen, TodoScreen} from './screens';
-import {getUserUid} from './apis/auth';
+import {getUser} from './apis/auth';
 const Tab = createBottomTabNavigator();
 
-function App({navigation, route}) {
-  console.log(route.params.email);
-  console.log(getUserUid()) // 로그인한 유저의 uid를 가져옴
-  
+function App({navigation}) {
+  console.log(getUser().email); // 로그인한 유저의 정보를 가져옴 (이메일, uid)
+
   const [isLogin, setIsLogin] = useState(false);
   return (
     <Tab.Navigator>
@@ -21,7 +18,6 @@ function App({navigation, route}) {
           <HomeScreen
             {...props}
             navigation={navigation}
-            loginInfo={route.params.email}
           />
         )}
       </Tab.Screen>

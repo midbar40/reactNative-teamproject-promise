@@ -17,22 +17,22 @@ function Login({
   handleUserInfoChange,
   findEmail,
   setLoginInfo,
-  setIsFindEmail,
-  isFindEmail,
+  setIsFindPassword,
+  isFindPassword,
   isRegister,
-  setIsRegister
+  setIsRegister,
 }) {
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
     // 로그인 정보 확인
-    if (email.trim() == '' || email.trim() == null) {
+    if (!email.trim() || email.trim() == null) {
       return Alert.alert('이메일을 입력해주세요');
-    } else if (password.trim() == '' || password.trim() == null) {
+    } else if (!password.trim() || password.trim() == null) {
       return Alert.alert('비밀번호를 입력해주세요');
     } else {
       try {
         await signIn(email.trim(), password.trim());
-        navigation.navigate('App', {email});
+        navigation.navigate('App');
         setLoginInfo({email: '', password: ''});
       } catch (e) {
         console.log(e.code);
@@ -92,8 +92,9 @@ function Login({
       <View style={styles.signUpAndFindEmail}>
         <TouchableOpacity
           onPress={() => {
-            setIsFindEmail(false);
+            setIsFindPassword(false);
             setIsRegister(true);
+            setLoginInfo({email: '', password: ''});
           }}>
           <Text>회원가입</Text>
         </TouchableOpacity>

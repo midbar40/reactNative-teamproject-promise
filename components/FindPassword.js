@@ -7,29 +7,41 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import {finduserEmail} from '../apis/auth';
+import {finduserEmail, getUser} from '../apis/auth';
 
-function findEmail({
+function FindPassword({
   navigation,
   email,
   handleUserInfoChange,
-  isFindEmail,
-  setIsFindEmail,
+  isFindPassword,
+  setIsFindPassword,
   isRegister,
   setIsRegister,
+  setLoginInfo,
 }) {
+  let regex = new RegExp(
+    '/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;',
+  );
+
   const findEmailAndSend = async () => {
-    if (email.trim() == '' || email.trim() == null) {
+    if (!email.trim() || email.trim() == null) {
       Alert.alert('이메일을 입력해주세요');
+    } else if (!regex.test(email.trim())) {
+      return Alert.alert('이메일 형식이 올바르지 않습니다');
     } else {
-      try{
-        await finduserEmail(email.trim());
-        Alert.alert(
-          '비밀번호 전송',
-          '가입하신 이메일로 비밀번호 재설정 URL을 전송했습니다',
-        );
-        setIsFindEmail(!isFindEmail);
-      }catch(e){
+      try {
+        if (getUser().emailVerified) {
+          await finduserEmail(email.trim());
+          Alert.alert(
+            '비밀번호 전송',
+            '가입하신 이메일로 비밀번호 재설정 URL을 전송했습니다',
+          );
+          setIsFindPassword(!isFindPassword);
+          setLoginInfo({email: '', password: ''});
+        } else {
+          Alert.alert('등록되지 않은 이메일입니다');
+        }
+      } catch (e) {
         if (e.code == 'auth/invalid-email') {
           Alert.alert('이메일 형식이 올바르지 않습니다');
         } else if (e.code == 'auth/user-not-found') {
@@ -66,7 +78,7 @@ function findEmail({
       <View style={styles.signUpAndFindEmail}>
         <TouchableOpacity
           onPress={() => {
-            setIsFindEmail(false);
+            setIsFindPassword(false);
             setIsRegister(true);
           }}>
           <Text>회원가입</Text>
@@ -74,9 +86,8 @@ function findEmail({
 
         <TouchableOpacity
           onPress={() => {
-            setIsFindEmail(false);
+            setIsFindPassword(false);
             setIsRegister(false);
-            console.log('clicked 로그인하기new');
           }}>
           <Text>로그인하기</Text>
         </TouchableOpacity>
@@ -141,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default findEmail;
+export default FindPassword;

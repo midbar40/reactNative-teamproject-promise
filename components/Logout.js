@@ -9,12 +9,12 @@ import {
 import {signOut} from '../apis/auth';
 
 function Logout({navigation, loginInfo}) {
-    console.log(loginInfo)
+  console.log(loginInfo);
 
-    const handleLogout = async () => {
-        await signOut()
-        navigation.navigate('Landing')
-    }
+  const handleLogout = async () => {
+    await signOut();
+    navigation.navigate('Landing');
+  };
   return (
     <View style={styles.logoutBtn}>
       <TouchableOpacity onPress={handleLogout}>
@@ -25,11 +25,11 @@ function Logout({navigation, loginInfo}) {
 }
 
 const styles = StyleSheet.create({
-    logoutBtn:{
-        position: 'absolute',
-        right: 20,
-        top: 20,
-    }
-})
+  logoutBtn: {
+    position: 'absolute',
+    right: 20,
+    top: 20,
+  },
+});
 
 export default Logout;

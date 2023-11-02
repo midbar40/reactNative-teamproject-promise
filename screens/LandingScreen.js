@@ -1,15 +1,15 @@
-import React, {useState, useRef} from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
-import {FindEmail, Login, RegisterUser} from '../components';
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { FindPassword, Login, RegisterUser } from '../components';
 
-function LandingScreen({navigation}) {
+function LandingScreen({ navigation }) {
   const [loginInfo, setLoginInfo] = useState({
     email: '',
     password: '',
   });
-  const [isFindEmail, setIsFindEmail] = useState(false);
+  const [isFindPassword, setIsFindPassword] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
-  const {email, password} = loginInfo;
+  const { email, password } = loginInfo;
 
   const handleUserInfoChange = (name, value) => {
     setLoginInfo(prev => ({
@@ -19,24 +19,26 @@ function LandingScreen({navigation}) {
   };
 
   const findEmail = async () => {
-    setIsFindEmail(!isFindEmail);
+    setIsFindPassword(!isFindPassword);
+    setLoginInfo({ email: '', password: '' })
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {isFindEmail ? (
-        <FindEmail
+      {isFindPassword ? (
+        <FindPassword
           email={email}
           handleUserInfoChange={handleUserInfoChange}
           navigation={navigation}
-          setIsFindEmail={setIsFindEmail}
+          setIsFindPassword={setIsFindPassword}
           isRegister={isRegister}
           setIsRegister={setIsRegister}
+          setLoginInfo={setLoginInfo}
         />
       ) : isRegister ? (
-        <RegisterUser 
-          isFindEmail={isFindEmail}
-          setIsFindEmail={setIsFindEmail}
+        <RegisterUser
+          isFindPassword={isFindPassword}
+          setIsFindPassword={setIsFindPassword}
           findEmail={findEmail}
           navigation={navigation}
           isRegister={isRegister}
@@ -45,17 +47,17 @@ function LandingScreen({navigation}) {
         />
       ) : (
         <Login
-        email={email}
-        password={password}
-        handleUserInfoChange={handleUserInfoChange}
-        findEmail={findEmail}
-        navigation={navigation}
-        setLoginInfo={setLoginInfo}
-        setIsFindEmail={setIsFindEmail}
-        isFindEmail={isFindEmail}
-        isRegister={isRegister}
-        setIsRegister={setIsRegister}
-      />
+          email={email}
+          password={password}
+          handleUserInfoChange={handleUserInfoChange}
+          findEmail={findEmail}
+          navigation={navigation}
+          setLoginInfo={setLoginInfo}
+          setIsFindPassword={setIsFindPassword}
+          isFindPassword={isFindPassword}
+          isRegister={isRegister}
+          setIsRegister={setIsRegister}
+        />
       )}
     </SafeAreaView>
   );

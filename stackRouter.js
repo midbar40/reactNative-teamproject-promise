@@ -1,10 +1,7 @@
 import React from 'react';
-import {View, StyleSheet, SafeAreaView, Text} from 'react-native';
-import {
-  NavigationContainer,
-  NavigtaionContainer,
-} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+// import { View, StyleSheet, SafeAreaView, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LandingScreen from './screens/LandingScreen';
 import App from './App';
