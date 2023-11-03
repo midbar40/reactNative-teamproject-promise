@@ -49,7 +49,7 @@ function ChatRoom({ navigation, roomName }){
       </View>
       <FlatList
         data={messageList}
-        renderItem={({ item }) => {return <ChatList message={item.message} user={item.user}/>}}
+        renderItem={({ item }) => {return <ChatList message={item.message} userUID={item.userUID} userEmail={item.userEmail}/>}}
         keyExtractor={item => item.date}
       />
         {/* {messageList?.length !== 0 &&

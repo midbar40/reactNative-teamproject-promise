@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { getUser } from '../apis/auth';
 
-function ChatList({ message, user }){
-  const userUID = getUser().uid;
+function ChatList({ message, userUID, userEmail }){
+  const myUserUID = getUser().uid;
   return (
     <>
-    {user === userUID ?
+    {myUserUID === userUID ?
       <View style={styles.myMessageContainer}>
         <View style={styles.myMessageBox}>
           <Text style={styles.chatText}>{message}</Text>
@@ -15,7 +15,7 @@ function ChatList({ message, user }){
       :
       <View style={styles.otherMessageContainer}>
         <View style={styles.otherMessageUserName}>
-          <Text>{user}</Text>
+          <Text>{userEmail}</Text>
         </View>
         <View style={styles.otherMessageBox}>
           <Text>{message}</Text>

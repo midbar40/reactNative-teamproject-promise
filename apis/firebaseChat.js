@@ -7,7 +7,8 @@ export const sendMessageToFirebase = async (roomName, message) => {
     .add({
       message : message,
       date : Date.now(),
-      user : getUser().uid
+      userUID : getUser().uid,
+      userEmail : getUser().email,
     })
   } catch (error) {
     console.log(error)
