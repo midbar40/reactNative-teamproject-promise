@@ -35,18 +35,17 @@ function Login({
         navigation.navigate('App');
         setLoginInfo({email: '', password: ''});
       } catch (e) {
-        console.log(e.code);
-        if (e.code == 'auth/invalid-login') {
-          Alert.alert('이메일 또는 비밀번호가 일치하지 않습니다');
-        } else if (e.code == 'auth/user-not-found') {
-          Alert.alert('존재하지 않는 이메일입니다');
-        } else if (e.code == 'auth/wrong-password') {
-          Alert.alert('비밀번호가 일치하지 않습니다');
-        } else if (e.code == 'auth/invalid-email') {
-          Alert.alert('이메일 형식이 올바르지 않습니다');
-        } else {
-          Alert.alert(`오류가 발생했습니다 error code: ${e.code}`);
-          console.log(e.code, e.message);
+        switch (e.code) {
+          case 'auth/invalid-login':
+            return Alert.alert('이메일 또는 비밀번호가 일치하지 않습니다');
+          case 'auth/user-not-found':
+            return Alert.alert('존재하지 않는 이메일입니다');
+          case 'auth/wrong-password':
+            return Alert.alert('비밀번호가 일치하지 않습니다');
+          case 'auth/invalid-email':
+            return Alert.alert('이메일 형식이 올바르지 않습니다');
+          default:
+            return '로그인이 처리되지 않았습니다';
         }
       }
       // 로그인 성공 시 App으로 이동

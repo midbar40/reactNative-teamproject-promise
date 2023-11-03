@@ -34,3 +34,9 @@ export const getUser = () => {
   // 사용자 정보 가져오기 .uid, .email
   return auth().currentUser;
 };
+
+
+export const fetchRegisterdUser = async email => {
+  // 가입된 사용자 정보 가져오기
+  return await auth().fetchSignInMethodsForEmail(email);
+}

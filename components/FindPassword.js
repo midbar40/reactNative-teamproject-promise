@@ -19,18 +19,14 @@ function FindPassword({
   setIsRegister,
   setLoginInfo,
 }) {
-  let regex = new RegExp(
-    '/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;',
-  );
+
 
   const findEmailAndSend = async () => {
     if (!email.trim() || email.trim() == null) {
       Alert.alert('이메일을 입력해주세요');
-    } else if (!regex.test(email.trim())) {
-      return Alert.alert('이메일 형식이 올바르지 않습니다');
-    } else {
+    }  else {
       try {
-        if (getUser().emailVerified) {
+      
           await finduserEmail(email.trim());
           Alert.alert(
             '비밀번호 전송',
@@ -38,9 +34,9 @@ function FindPassword({
           );
           setIsFindPassword(!isFindPassword);
           setLoginInfo({email: '', password: ''});
-        } else {
-          Alert.alert('등록되지 않은 이메일입니다');
-        }
+        
+          // Alert.alert('등록되지 않은 이메일입니다');
+        
       } catch (e) {
         if (e.code == 'auth/invalid-email') {
           Alert.alert('이메일 형식이 올바르지 않습니다');

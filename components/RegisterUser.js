@@ -33,43 +33,35 @@ function RegisterUser({
   };
 
   const registerUser = async () => {
-    // 이메일 유효성 검증, 정규표현식
-    // let regex = new RegExp(
-    //   '/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i',
-    // );
+   
 
-    if (email.trim().length == 0 || email.trim() == null) {
+    if (!email.trim() || email.trim() == null) {
       return Alert.alert('이메일을 입력해주세요');
-    } 
-    // else if (!regex.test(email.trim())) {
-    //   return Alert.alert('이메일 형식이 올바르지 않습니다');
-    // } 
-    else if (password.trim().length ==0 || password.trim() == null) {
+    } else if (!password.trim() || password.trim() == null) {
       return Alert.alert('비밀번호를 입력해주세요');
     } else if (!passwordCheck.trim() || passwordCheck.trim() == null) {
       return Alert.alert('비밀번호를 다시 입력해주세요');
     } else if (password.trim() !== passwordCheck.trim()) {
       return Alert.alert('비밀번호가 일치하지 않습니다');
     } else {
-      try {
-        signUp(email.trim(), password.trim(), passwordCheck.trim());
-        Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
-        setIsFindPassword(false);
-        setIsRegister(false);
-        setLoginInfo({email: '', password: ''});
-      } catch (e) {
-        if (e.code == 'auth/email-already-in-use') {
-          Alert.alert('이미 가입된 이메일입니다');
-        } else if (e.code == 'auth/invalid-email') {
-          console.log(e.code, e.message)
-          Alert.alert('이메일 형식이 올바르지 않습니다');
-        } else if (e.code == 'auth/weak-password') {
-          Alert.alert('비밀번호는 6자리 이상이어야 합니다');
-        } else {
-          Alert.alert(`오류가 발생했습니다 error code: ${e.code}`);
-          console.log(e.code, e.message);
+        try{
+          await signUp(email.trim(), password.trim(), passwordCheck.trim());
+          Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
+          setIsFindPassword(false);
+          setIsRegister(false);
+          setLoginInfo({email: '', password: ''});
+        }catch(e){
+          switch (e.code) {
+            case 'auth/email-already-in-use':
+              return Alert.alert('이미 가입된 이메일입니다');
+            case 'auth/invalid-email':
+              return Alert.alert('이메일 형식이 올바르지 않습니다');
+            case 'auth/weak-password':
+              return Alert.alert('비밀번호는 6자리 이상이어야 합니다');
+            default:
+              return '회원가입이 처리되지 않았습니다';
+          }
         }
-      }
     }
   };
   const {email, password, passwordCheck} = registerInfo;

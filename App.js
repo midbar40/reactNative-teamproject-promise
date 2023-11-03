@@ -8,7 +8,8 @@ import {getUser} from './apis/auth';
 const Tab = createBottomTabNavigator();
 
 function App({navigation}) {
-  console.log(getUser().email); // 로그인한 유저의 정보를 가져옴 (이메일, uid)
+  console.log('App화면')
+  console.log(getUser(), 'App'); // 로그인한 유저의 정보를 가져옴 (이메일, uid)
 
   const [isLogin, setIsLogin] = useState(false);
   return (
