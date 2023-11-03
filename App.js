@@ -5,12 +5,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 // import {NavigationContainer} from '@react-navigation/native';
 import {HomeScreen, CalendarScreen, AlarmScreen, TodoScreen} from './screens';
 import {getUser} from './apis/auth';
+
 const Tab = createBottomTabNavigator();
 
 function App({navigation}) {
-  console.log('App화면')
   console.log(getUser(), 'App'); // 로그인한 유저의 정보를 가져옴 (이메일, uid)
-
   const [isLogin, setIsLogin] = useState(false);
   return (
     <Tab.Navigator>

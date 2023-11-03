@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -7,7 +7,12 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import {finduserEmail, getUser} from '../apis/auth';
+// import {finduserEmail, getUser, getUserByEmail} from '../apis/auth';
+import {
+  getAuth,
+  getUser,
+  sendPasswordResetEmail,
+} from '@react-native-firebase/auth';
 
 function FindPassword({
   navigation,
@@ -19,36 +24,35 @@ function FindPassword({
   setIsRegister,
   setLoginInfo,
 }) {
-
-
   const findEmailAndSend = async () => {
-    if (!email.trim() || email.trim() == null) {
-      Alert.alert('이메일을 입력해주세요');
-    }  else {
-      try {
-      
-          await finduserEmail(email.trim());
-          Alert.alert(
-            '비밀번호 전송',
-            '가입하신 이메일로 비밀번호 재설정 URL을 전송했습니다',
-          );
-          setIsFindPassword(!isFindPassword);
-          setLoginInfo({email: '', password: ''});
-        
-          // Alert.alert('등록되지 않은 이메일입니다');
-        
-      } catch (e) {
-        if (e.code == 'auth/invalid-email') {
-          Alert.alert('이메일 형식이 올바르지 않습니다');
-        } else if (e.code == 'auth/user-not-found') {
-          Alert.alert('존재하지 않는 이메일입니다');
-        } else {
-          Alert.alert(`오류가 발생했습니다 error code: ${e.code}`);
-          console.log(e.code, e.message);
-        }
+    try {
+      const auth = getAuth();
+      const user = await getUser(auth, email);
+      if (user) {
+        await sendPasswordResetEmail(auth, email);
+        Alert.alert('비밀번호 재설정 이메일을 보냈습니다.');
+        setIsFindPassword(false);
+        setIsRegister(false);
+      } else {
+        Alert.alert('존재하지 않는 이메일입니다.');
       }
+    } catch (err) {
+      console.log(err);
     }
   };
+  useEffect(() => {
+    try {
+      async function fetchData() {
+        await fetch('http://192.168.200.17:5300')
+          .then(res => res.json())
+          .then(data => console.log(data));
+        Alert.alert('데이타를 가져왔습니다.')
+      }
+      fetchData();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   return (
     <View style={styles.contentBox}>

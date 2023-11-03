@@ -1,4 +1,5 @@
 import auth from '@react-native-firebase/auth';
+// import {getAuth, onAuthStateChanged} from '@react-native-firebase/auth';
 
 export const signIn = async (email, password) => {
   // 로그인
@@ -38,5 +39,9 @@ export const getUser = () => {
 
 export const fetchRegisterdUser = async email => {
   // 가입된 사용자 정보 가져오기
-  return await auth().fetchSignInMethodsForEmail(email);
+  return await auth().getUserByEmail(email);
+}
+
+export const getUserByEmail = async email => {
+  return await auth().getUserByEmailAsync(email);
 }
