@@ -13,7 +13,7 @@ function PickDate({selectedDate, setSelectedDate, }){
   return(
     <View style={styles.block} onTouchStart={onTouchStart}>
       <Text>{selectedDate}</Text>
-      <Text>테스트</Text>
+      <Text>flatlist로 목록 띄워주기</Text>
     </View>
   )
 

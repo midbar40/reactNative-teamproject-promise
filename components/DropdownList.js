@@ -1,5 +1,5 @@
 import React,{ useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, TouchableWithoutFeedback, ScrollView } from 'react-native'
 
 import DropdownItem from './DropdownItem'
 
@@ -10,9 +10,10 @@ const caretupComponent = (props) => <AntIcon name='caretup' {...props} size={15}
 
 
 function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpen, setDropYearOpen, dropMonthOpen, setDropMonthOpen, dropDateOpen, setDropDateOpen, startDate, setStartDate, endDate, setEndDate}){
-  
+
   //드롭다운 닫기
   const closeDropdown = () => {
+    console.log('드롭다운닫힘')
     dropYearOpen && setDropYearOpen(false)
     dropMonthOpen && setDropMonthOpen(false)
     dropDateOpen && setDropDateOpen(false)
@@ -31,88 +32,104 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
   }
 
   return(
-    <TouchableOpacity style={[styles.horizontalAlign, (dropYearOpen || dropMonthOpen || dropDateOpen) && {height:300} ]} onPress={onPress}>
-      {dropYearOpen || dropMonthOpen || dropDateOpen ? caretupComponent() : caretdownComponent()}
-      {dropYearOpen ?
-       <FlatList
-        data={categories}
-        keyExtractor={item => item}
-        renderItem={({item}) => (
-          <DropdownItem
-            category={item}
-            closeDropdown={closeDropdown}
-            selectedDate={selectedDate}
-            setStartDate={setStartDate} setEndDate={setEndDate}
-            title={title} modalTitle={modalTitle}
-          />
-        )}
-      />
-      :
-      modalTitle === '시작날짜' ? 
-      title === '년' &&
-      <View>
-        <Text>{startDate.year ? startDate.year : `${selectedDate.slice(0,4)}년`}</Text>
-      </View>
-      :
-      title === '년' &&
-      <View>
-        <Text>{endDate.year ? endDate.year : `${selectedDate.slice(0,4)}년`}</Text>
-      </View>
-    }
-      {dropMonthOpen ?
-       <FlatList
-        data={categories}
-        keyExtractor={item => item}
-        renderItem={({item}) => (
-          <DropdownItem
-            category={item}
-            closeDropdown={closeDropdown}
-            selectedDate={selectedDate}
-            setStartDate={setStartDate} setEndDate={setEndDate}
-            title={title} modalTitle={modalTitle}
-          />
-        )}
-      />
-      :
-      modalTitle === '시작날짜' ? 
-      title === '월' &&
-      <View>
-        <Text>{startDate.month ? startDate.month : `${selectedDate.slice(5,7)}월`}</Text>
-      </View>
-      :
-      title === '월' &&
-      <View>
-        <Text>{endDate.month ? endDate.month : `${selectedDate.slice(5,7)}월`}</Text>
-      </View>
+    <TouchableOpacity style={[styles.horizontalAlign, (dropYearOpen || dropMonthOpen || dropDateOpen) && styles.drops ]} onPress={onPress}>
+        {dropYearOpen || dropMonthOpen || dropDateOpen ? caretupComponent() : caretdownComponent()}
+        {dropYearOpen ?
+        <View style={{height:200}}>
+          <FlatList
+           data={categories}
+           keyExtractor={item => item}
+           renderItem={({item}) => (
+             <View onStartShouldSetResponder={() => true}>
+               <DropdownItem
+                 category={item}
+                 closeDropdown={closeDropdown}
+                 selectedDate={selectedDate}
+                 startDate={startDate} setStartDate={setStartDate} 
+                 endDate={endDate} setEndDate={setEndDate}
+                 title={title} modalTitle={modalTitle}
+               />
+             </View>
+           )}
+           style={[styles.list, dropYearOpen && styles.yearOpen]}
+         />
 
-    }
-      {dropDateOpen ?
-       <FlatList
-        data={categories}
-        keyExtractor={item => item}
-        renderItem={({item}) => (
-          <DropdownItem
-            category={item}
-            closeDropdown={closeDropdown}
-            selectedDate={selectedDate}
-            setStartDate={setStartDate} setEndDate={setEndDate}
-            title={title} modalTitle={modalTitle}
-          />
-        )}
-      />
-      :
-      modalTitle === '시작날짜' ? 
-      title === '일' &&
-      <View>
-        <Text>{startDate.date ? startDate.date : `${selectedDate.slice(8,10)}일`}</Text>
-      </View>
-      :
-      title === '일' &&
-      <View>
-        <Text>{endDate.date ? endDate.date : `${selectedDate.slice(8,10)}일`}</Text>
-      </View>
+        </View>
+        :
+        modalTitle === '시작날짜' ? 
+        title === '년' &&
+        <View style={styles.nodrops}>
+          <Text>{startDate.year ? startDate.year : `${selectedDate.slice(0,4)}년`}</Text>
+        </View>
+        :
+        title === '년' &&
+        <View style={styles.nodrops}>
+          <Text>{endDate.year ? endDate.year : `${selectedDate.slice(0,4)}년`}</Text>
+        </View>
+      }
+        {dropMonthOpen ?
+        <View style={{height:200}}>
+          <FlatList
+           data={categories}
+           keyExtractor={item => item}
+           renderItem={({item}) => (
+             <View onStartShouldSetResponder={() => true}>
+               <DropdownItem
+                 category={item}
+                 closeDropdown={closeDropdown}
+                 selectedDate={selectedDate}
+                 startDate={startDate} setStartDate={setStartDate} 
+                 endDate={endDate} setEndDate={setEndDate}
+                 title={title} modalTitle={modalTitle}
+               />
+             </View>
+           )}
+           style={[styles.list, dropMonthOpen && styles.monthOpen]}
+         />
+        </View>
+        :
+        modalTitle === '시작날짜' ? 
+        title === '월' &&
+        <View style={[styles.nodrops, !dropMonthOpen && styles.month]}>
+          <Text>{startDate.month ? startDate.month : `${selectedDate.slice(5,7)}월`}</Text>
+        </View>
+        :
+        title === '월' &&
+        <View style={[styles.nodrops, !dropMonthOpen && styles.month]}>
+          <Text>{endDate.month ? endDate.month : `${selectedDate.slice(5,7)}월`}</Text>
+        </View>
 
-    }
+      }
+        {dropDateOpen ?
+        <View style={{height:200}}>
+          <FlatList
+           data={categories}
+           keyExtractor={item => item}
+           renderItem={({item}) => (
+               <DropdownItem
+                 category={item}
+                 closeDropdown={closeDropdown}
+                 selectedDate={selectedDate}
+                 startDate={startDate} setStartDate={setStartDate} 
+                 endDate={endDate} setEndDate={setEndDate}
+                 title={title} modalTitle={modalTitle}
+               />
+           )}
+           style={[styles.list, dropDateOpen && styles.dateOpen]}
+         />
+        </View>
+        :
+        modalTitle === '시작날짜' ? 
+        title === '일' &&
+        <View style={[styles.nodrops, styles.date]}>
+          <Text>{startDate.date ? startDate.date : `${selectedDate.slice(8,10)}일`}</Text>
+        </View>
+        :
+        title === '일' &&
+        <View style={[styles.nodrops, styles.date]}>
+          <Text>{endDate.date ? endDate.date : `${selectedDate.slice(8,10)}일`}</Text>
+        </View>
+      }
     </TouchableOpacity>
   )
 }
@@ -122,9 +139,47 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    marginVertical: 10,
-    marginRight:10,
-  }
+    margin: 10,
+    width: 60,
+    height: 20,
+    // flex: 1,
+  },
+  list: {
+    marginLeft: 10,
+    flex: 1,
+    height: 200,
+  },
+  drops: {
+    // height:200, 
+    justifyContent:'flex-start', 
+    alignItems: 'center',
+    top:0,
+    zIndex:2,
+    elevation: 2,
+    height: 20,
+  },
+  yearOpen: {
+    position:'absolute', 
+    left: -15,
+    top: 90,
+  },
+  monthOpen: {
+    position:'absolute', 
+    left: -15,
+    top: 90,
+  },
+  dateOpen: {
+    position:'absolute', 
+    left: -15,
+    top: 90,
+  },
+  nodrops: {
+    padding: 5,
+    paddingTop: 0,
+    marginHorizontal: 20,
+    position: 'absolute',
+    left: 0
+  },
 })
 
 export default DropdownList

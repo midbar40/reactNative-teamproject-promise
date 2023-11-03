@@ -37,9 +37,11 @@ function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate
       <View style={styles.horizontalAlign}>
         <View style={[styles.dropDowns]}>
           <Text style={styles.titleText}>{modalTitle}</Text>
-          <DropdownList title='년' categories={yearsRange} dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
-          <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
-          <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
+          <View style={[styles.dropDownlists]}>
+            <DropdownList title='년' categories={yearsRange} dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
+            <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
+            <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
+          </View>
         </View>
       </View>
     </View>
@@ -49,15 +51,22 @@ function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate
 const styles = StyleSheet.create({
   // block: {
   //   flex: 1,
+  //   width: 300,
+  //   height: 500
   // },
   dropDowns: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   titleText: {
     marginRight: 15,
-  }
+  },
+  dropDownlists: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
 })
 
 export default ModalInputs

@@ -2,7 +2,7 @@ import React,{ useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 
-function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown, setStartDate, setEndDate}){
+function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown, startDate, setStartDate, endDate, setEndDate}){
   
   //카테고리 클릭
   const onPress = () => {
@@ -18,6 +18,9 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
       }
     }else if(modalTitle === '종료날짜'){
       if(title === '년'){
+        console.log('dd',startDate.year)
+        console.log('ff',endDate.year)
+        console.log(startDate.year < endDate.year)
         setEndDate((prev) => ({...prev, year:category}))
       }else if(title === '월'){
         setEndDate((prev) => ({...prev, month:category}))
@@ -30,7 +33,7 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
   return(
     <TouchableOpacity onPress={onPress} style={styles.list}>
       <View style={styles.DropdownItemContainer}>
-        <Text>{category}</Text>
+        <Text style={styles.text}>{category}</Text>
       </View>
     </TouchableOpacity>
   )
@@ -38,15 +41,18 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
 
 const styles = StyleSheet.create({
   list: {
-    // position: 'absolute',
-    // top: 0,
+    flex: 1
   },
   DropdownItemContainer: {
     flex: 1,
     backgroundColor: '#fff',
+    alignItems: 'flex-start',
     padding: 10,
     paddingTop: 0,
-    alignItems: 'flex-start'
+    marginLeft: 5
+  },
+  text: {
+    backgroundColor: '#fff'
   }
 })
 
