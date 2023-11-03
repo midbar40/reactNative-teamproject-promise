@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { SafeAreaView, StyleSheet, Text, View, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,8 +6,6 @@ import {HomeScreen, CalendarScreen, AlarmScreen, TodoScreen, ChatScreen} from '.
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import Icon2 from 'react-native-vector-icons/FontAwesome6'
-
-import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,11 +15,10 @@ function App({navigation, route}) {
   const [isLogin, setIsLogin] = useState(false);
 
   return (
-    <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen 
           name="Home" 
-          component={HomeScreen} 
+          // component={HomeScreen} 
           options={{
             title:'Home',
             tabBarIcon:({color, size}) => <Icon name='home' color={color} size={size}/>
@@ -65,11 +62,10 @@ function App({navigation, route}) {
           component={ChatScreen} 
           options={{
             title:'Chat',
-            tabBarIcon:({color, size}) => <Icon2 name='chatbubbles-sharp' color={color} size={size}/>
+            tabBarIcon:({color, size}) => <Icon name='chatbubbles-sharp' color={color} size={size}/>
         }}
         />
       </Tab.Navigator>
-    </NavigationContainer>
   )
 }
 
