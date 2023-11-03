@@ -12,7 +12,7 @@ function PickDate({selectedDate, setSelectedDate, }){
 
   return(
     <View style={styles.block} onTouchStart={onTouchStart}>
-      <Text>{selectedDate}</Text>
+      <Text style={styles.titleText}>{selectedDate}</Text>
       <Text>flatlist로 목록 띄워주기</Text>
     </View>
   )
@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
   block:{
     flex: 1,
     backgroundColor: '#fff'
+  },
+  titleText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    padding: 10,
   }
 })
 

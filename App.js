@@ -15,7 +15,11 @@ function App({navigation, route}) {
   const [isLogin, setIsLogin] = useState(false);
 
   return (
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor : 'skyblue',
+        }}
+      >
         <Tab.Screen 
           name="Home" 
           // component={HomeScreen} 

@@ -63,6 +63,11 @@ function CalendarScreen() {
         setOpenModal(false)
     }
 
+    //오늘 날짜의 달력 보여주기
+    const goToday = () => {
+        console.log('오늘날짜보여주기')
+    }
+
     //해당 스케쥴 등록
     const addSchedule = () => {
         console.log(`${selectedDate}의 스케쥴을 추가하겠읍니다.`)
@@ -78,13 +83,13 @@ function CalendarScreen() {
     useEffect(() => {
         if(startDate.year > endDate.year){
             setEndDate((prev) => ({...prev, year:startDate.year}))
-            console.log('연도빠름', startDate.year > endDate.year, endDate)
+            // console.log('연도빠름', startDate.year > endDate.year, endDate)
         }else if(startDate.month > endDate.month){
             setEndDate((prev) => ({...prev, month:startDate.month}))
-            console.log('월빠름', startDate.month > endDate.month, endDate)
+            // console.log('월빠름', startDate.month > endDate.month, endDate)
         }else if(startDate.date > endDate.date){
             setEndDate((prev) => ({...prev, date:startDate.date}))
-            console.log('일빠름', startDate.date > endDate.date, endDate)
+            // console.log('일빠름', startDate.date > endDate.date, endDate)
         }
     },[startDate])
 
@@ -98,12 +103,12 @@ function CalendarScreen() {
                 theme={{
                     backgroundColor: '#eeeeee',
                     textSectionTitleColor: '#b6c1cd',
-                    selectedDayBackgroundColor: '#00adf5',
-                    selectedDayTextColor: '#fff',
+                    // selectedDayBackgroundColor: '#00adf5',
+                    selectedDayTextColor: 'blue',
                     // dotColor: 'red',
                     selectedDotColor: 'red',
                     todayTextColor: 'orange',
-                    indicatorColor: 'yellow',
+                    // indicatorColor: 'yellow',
                     arrowColor: 'lightgreen',
                     'stylesheet.calendar.header': {
                         dayHeader:{
@@ -128,7 +133,12 @@ function CalendarScreen() {
                 }}
                 
             />
-            <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+            <View style={[styles.horizontalView, styles.bgWhite]}>
+                <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+                <Pressable style={styles.todayBtn} onPress={goToday}>
+                    <Text style={{textAlign:'center'}}>오늘</Text>
+                </Pressable>
+            </View>
             {/* <Pressable style={styles.plusBtn} onPress={open}>
                 <Text style={styles.icon}>
                     <AntIcon name='plus' size={20}/>
@@ -274,6 +284,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
+    },
+    todayBtn:{
+        padding: 7,
+        width: 60,
+        backgroundColor: 'pink',
+        elevation: 2,
+        borderRadius: 13,
+        margin: 10,
+        marginTop: -10
+    },
+    bgWhite: {
+        backgroundColor: '#fff'
     }
   })
 
