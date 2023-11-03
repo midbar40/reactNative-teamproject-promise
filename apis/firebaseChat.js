@@ -1,11 +1,13 @@
 import firestore from '@react-native-firebase/firestore';
+import { getUser } from './auth';
 
 export const sendMessageToFirebase = async (roomName, message) => {
   try {
     await firestore().collection(`${roomName}`)
     .add({
       message : message,
-      date : Date.now()
+      date : Date.now(),
+      user : getUser().uid
     })
   } catch (error) {
     console.log(error)

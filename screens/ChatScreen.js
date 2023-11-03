@@ -13,7 +13,7 @@ function ChatScreen({ navigation }){
   const [roomName, setRoomName] = useState('');
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown : false }}>
       <Stack.Screen name="ChatRoomList" children={(props) => 
         <ChatRoomList
           {...props}
