@@ -1,22 +1,28 @@
 import React from 'react'
-import { View, Text, SafeAreaView, StyleSheet, Pressable} from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, Pressable, ScrollView} from 'react-native'
 
-function PickDate({selectedDate, setSelectedDate, }){
+function PickDate({selectedDate, setSelectedDate, showSchedule, }){
 
   const onTouchStart = () => {
 
-    //캘린더 밖 터치했을때 클릭되어있던 날짜 초기화
-    setSelectedDate('')
-    console.log('빈칸:',selectedDate)
+    
   }
 
+  console.log('쇼',showSchedule.length)
   return(
-    <View style={styles.block} onTouchStart={onTouchStart}>
-      <Text style={styles.titleText}>{selectedDate}</Text>
-      <Text>flatlist로 목록 띄워주기</Text>
-    </View>
+    <ScrollView style={styles.block} onTouchStart={onTouchStart}>
+      {showSchedule.map(show => {
+        return(
+          <View style={styles.content}>
+            <Text>제목 :{show.title}</Text>
+            <Text>내용 :{show.content}</Text>
+            <Text>끝나는 날짜 :{show.endDay}</Text>
+          </View>  
+        )
+      })
+      }
+    </ScrollView>
   )
-
 }
 
 const styles = StyleSheet.create({
@@ -27,6 +33,12 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
     fontWeight: 'bold',
+    padding: 10,
+    borderBottomWidth: 1,
+  },
+  content: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgreen',
     padding: 10,
   }
 })
