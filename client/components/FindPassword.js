@@ -38,7 +38,7 @@ function FindPassword({
   useEffect(() => {
     try {
       async function fetchData() {
-        await fetch('http://192.168.0.172:5300')
+        await fetch('http://192.168.200.17:5300')  // 사용하고 있는 컴퓨터의 ip주소로 변경(ipv4 주소 확인 방법: cmd -> ipconfig)
           .then(res => res.json())
           .then(data => {
             console.log(data);
