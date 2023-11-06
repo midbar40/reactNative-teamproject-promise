@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {signIn} from '../apis/auth';
 // import { useNavigation } from '@react-navigation/native';
+import SnsLogin from './SnsLogin';
 
 function Login({
   navigation,
@@ -22,6 +23,7 @@ function Login({
   isRegister,
   setIsRegister,
 }) {
+  const [isSnsLogin, setIsSnsLogin] = useState(false);
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
     // 로그인 정보 확인
@@ -51,6 +53,9 @@ function Login({
       // 로그인 성공 시 App으로 이동
     }
   };
+  const moveToSnsLogin = () => {
+    setIsSnsLogin(true);
+  }
   return (
     <View style={styles.contentBox}>
       <Text style={styles.appName}>KAIROS</Text>
@@ -75,18 +80,24 @@ function Login({
         />
       </View>
       <View style={styles.loginBtnBox}>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.7}
-          onPress={loginAndMoveToApp}>
-          <Text style={styles.loginBtn}>로그인</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.GoogleButton}
-          activeOpacity={0.7}
-          onPress={loginAndMoveToApp}>
-          <Text style={styles.GoogleLoginBtn}>Google 로그인</Text>
-        </TouchableOpacity>
+        {isSnsLogin ? (
+          <SnsLogin />
+        ) : (
+          <>
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.7}
+            onPress={loginAndMoveToApp}>
+            <Text style={styles.loginBtn}>로그인</Text>
+          </TouchableOpacity>
+             <TouchableOpacity
+             style={styles.snsLoginButton}
+             activeOpacity={0.7}
+             onPress={moveToSnsLogin}>
+             <Text style={styles.snsLoginBtn}>SNS 로그인</Text>
+           </TouchableOpacity>
+           </>
+        )}
       </View>
       <View style={styles.signUpAndFindEmail}>
         <TouchableOpacity
@@ -136,6 +147,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderRadius: 10,
   },
+  signUpAndFindEmail: {
+    width: '80%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
   loginBtnBox: {
     width: '100%',
     justifyContent: 'center',
@@ -154,24 +170,22 @@ const styles = StyleSheet.create({
   loginBtn: {
     fontSize: 18,
     color: 'white',
+    fontWeight: 'bold',
   },
-  GoogleButton: {
+  snsLoginButton:{
     width: '80%',
     height: 50,
-    backgroundColor: '#4285F4',
+    backgroundColor: '#c7c7c7',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 10,
   },
-  GoogleLoginBtn: {
+  snsLoginBtn:{
     fontSize: 18,
     color: 'white',
-  },
-  signUpAndFindEmail: {
-    width: '80%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+    fontWeight: 'bold',
+  }
 });
 
 export default Login;

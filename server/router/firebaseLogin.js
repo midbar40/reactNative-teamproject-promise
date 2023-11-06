@@ -1,16 +1,13 @@
 const express = require('express');
+const expressAsyncHandler = require('express-async-handler');
+const router = express.Router();
 const admin = require("firebase-admin");
-const serviceAccount = require("./serviceAccountKey.json");
+const serviceAccount = require("../serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://reactnative-teamproject-default-rtdb.firebaseio.com"
 });
-
-const app = express();
-const port = 5300;
-
-app.use(express.json());
 
 const listAllUsers = async () => {
   try{
@@ -25,7 +22,7 @@ const listAllUsers = async () => {
   }
 };
 
-app.get('/', async (req, res) => {
+router.get('/', expressAsyncHandler (async(req, res) => {
   try {
     const emails = await listAllUsers();
     res.json(emails);
@@ -34,10 +31,7 @@ app.get('/', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
     throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
   }
-});
+}));
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}!`);
-});
 
-module.exports = app;
+module.exports = router;
