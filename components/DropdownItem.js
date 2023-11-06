@@ -41,15 +41,19 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
 
 const styles = StyleSheet.create({
   list: {
-    flex: 1
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    // backgroundColor: 'green'
   },
   DropdownItemContainer: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     padding: 10,
     paddingTop: 0,
-    marginLeft: 5
+    marginLeft: 5,
   },
   text: {
     backgroundColor: '#fff'

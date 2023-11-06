@@ -30,7 +30,7 @@ function CalendarScreen() {
     const today = new Date()
     const pickDay = new Date(selectedDate)
     
-    // console.log('오늘',today, '선택:',selectedDate,)
+    // console.log('오늘',today, '선택:',selectedDate, '이번달')
 
     //현재 로그인한 유저 uid 불러오기
     onAuthStateChanged(auth, (user) => {
@@ -53,8 +53,9 @@ function CalendarScreen() {
     //   console.log('스케쥴조회',loadSchedule.map(load => load.startDay))
     //마크 찍기 테스트
     console.log('마크',markedDate)
-    // const markedDates = markedDate
-    // {
+    const markedDates = 
+    {
+        '2023-11-07' : {'marked': true, dotColor: 'red'}
         // [selectedDate]: {selected: true},
         // '2023-11-07': {periods:[{startingDay: true, endingDay: false, color:'green'},{startingDay:true, endingDay: true, color:'pink'}]},
         // '2023-11-08': {periods:[{startingDay: false, endingDay: false, color:'green'}]},
@@ -62,7 +63,7 @@ function CalendarScreen() {
         // // '2023-11-15': {startingDay: true, endingDay: true, color:'skyblue'},
         // '2023-11-05': {color: 'red'},
         //마크되어있는날 selected하면 둘다 표시되게 하기
-    // }
+    }
     
 
     //요일 한글화
@@ -103,7 +104,7 @@ function CalendarScreen() {
             const newSchedule = {
                 startDay : `${(startDate.year).slice(0,4)}-${(startDate.month).slice(0,2)}-${(startDate.date).slice(0,2)}`,
                 endDay :  `${(endDate.year).slice(0,4)}-${(endDate.month).slice(0,2)}-${(endDate.date).slice(0,2)}`,
-                // members: ,
+                members: [user], //추후 유저조회하여 배열에 추가해줄것
                 title: scheduleTitle,
                 content: scheduleContent,
                 createdAt: getCurrentTime(),
@@ -153,18 +154,25 @@ function CalendarScreen() {
             console.log('리스트', list)
             setLoadSchedule(list)
 
-            // const obj = list.map((k, v) => {
-            //     console.log('로드된데이터', k , v)
-            // return {v : { [k.startDay] : JSON.stringify({marked: true, dotColor: 'red'}),}}   
+            //데이터 불러와서 캘린더에 마킹
+
+            const obj = list.reduce((c,v) =>
+                {
+                    console.log('v',v.startDay, v.id, v.endDay,)
+                    console.log('c', c)
+                    const { date } = v.startDay
+                    // if(c[date]) c[date].push({periods:[{startingDay: v.startDay ? true : false, endingDay: v.startDay === v.endDay ? true : false, color: 'blue'}]})
+                    // else c[date] = [v.startDay]
+                    // return c
+                    if(c[date]) c[date].push({periods:[{startingDay: v.startDay ? true : false, endingDay: v.startDay === v.endDay ? true : false, color: 'blue'}]})
+                    else(c[v.endDay]) = ({periods:[{startingDay: v.startDay === v.endDay ? true : false, endingDay: v.endDay ? true : false, color: 'blue'}]})
+                    return c
+                }
+            //     Object.assign(c, { //이 함수는 덮어쓰기가 되서 다중으로 날짜를 가져올수 없음
             // }
             // )
-            // console.log('d',obj)
-            // setMarkDate(obj)
-
-            const obj = list.reduce((c,v) => Object.assign(c, {
-                [v.startDay] : {makred: true, dotColor: 'red'}
-            }),{})
-            console.log('obj',obj)
+            ,{})
+            console.log('obj',JSON.stringify(obj))
             setMarkDate(obj)
         }
         function onError(error){
@@ -173,16 +181,6 @@ function CalendarScreen() {
         return getSchedules('CalendarSchedule', onResult, onError)
     },[])
 
-    //데이터에서 불러온 날짜에 마크 해놓기
-    // useEffect(() => {
-    //     const obj = loadSchedule.map((load) => {
-    //         Object.assign({
-    //             [load.startDay] : {marked: true, dotColor: 'red'},
-    //         })
-    //     }
-    //     )
-    //     console.log('d',obj)
-    // },[])
 
     return(
         <SafeAreaView style={styles.block}>
@@ -211,14 +209,15 @@ function CalendarScreen() {
                     // textDisabledColor: 'red',
                 }}
                 // disableAllTouchEventsForDisabledDays={true} //disabled클릭 안됨
-                // markingType={'multi-period'}
+                markingType={'multi-period'}
                 disabledDaysIndexes={[0]}
                 onDayPress={(day,state) => {
                     console.log('선택한날짜', day)
                     let arr = []
                     loadSchedule.forEach(date => {
-                        if(date.startDay === day.dateString){
-                            console.log('클릭한날짜에 일정이 있으쇼', date)
+                        //클릭한 날짜가 스케쥴 기간안에 포함될때
+                        if(date.startDay === day.dateString || date.endDay === day.dateString || day.dateString > date.startDay && day.dateString < date.endDay){
+                            console.log('일정O', date)
                             arr.push(date)
                         }
                     })
