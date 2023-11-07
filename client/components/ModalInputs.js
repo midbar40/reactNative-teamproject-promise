@@ -13,8 +13,8 @@ function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate
   const [dropMonthOpen, setDropMonthOpen] = useState(false) //드롭다운 오픈(월)
   const [dropDateOpen, setDropDateOpen] = useState(false) //드롭다운 오픈(일)
 
-  console.log('시작', startDate)
-  console.log('끝', endDate)
+  // console.log('시작', startDate)
+  // console.log('끝', endDate)
 
   //날짜 가져오기
   const N = 10
@@ -28,9 +28,25 @@ function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate
   //드롭다운 범위 설정(년,월,일)
   const offset = pickYear
   const yearsRange = Array(2*N).fill(0).map((_, id) => `${id+offset}년`)
-  const monthRange = Array(12).fill(0).map((_, id) => `${id+1}월`)
-  const dateRange = Array(31).fill(0).map((_, id) => `${id+1}일`)
-  // console.log(yearsRange, monthRange, dateRange)
+  const monthRangeTest = Array(12).fill(0).map((_, id) => `${id+1}월`)
+  //1~9월 01~09월로 변환
+  const monthRange = monthRangeTest.map(month => {
+    if(month.length > 2){
+      return month
+    }else{
+      return `0${month}`
+    }
+  })
+  const dateRangeTest = Array(31).fill(0).map((_, id) => `${id+1}일`)
+  //1~9일 01~09일로 변환
+  const dateRange = dateRangeTest.map(date => {
+    if(date.length > 2){
+      return date
+    }else{
+      return `0${date}`
+    }
+  })
+  console.log(yearsRange, monthRange, dateRange)
 
   return(
     <View style={styles.block}>
