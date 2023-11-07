@@ -13,7 +13,7 @@ export const creatChatRoom = async (roomTitle) => { // 현재는 룸 타이틀�
         roomTitle : roomTitle,
         invitedUser : [],
         joinUser : [getUser().uid],
-        message : [],
+        messages : [],
       })
       .then(r => console.log('r:',r.id))
     }
@@ -37,7 +37,7 @@ export const sendMessageToFirebase = async (selectRoomId, roomTitle, message) =>
         userEmail : getUser().email,
       }
       await firestore().collection(`chat`).doc(`${selectRoomId}`).update({
-        message : [...messages, newMessage]
+        messages : [...messages, newMessage]
       })
     } else {
       // await firestore().collection(`chat`).doc(`${roomName}`).set({
