@@ -22,6 +22,8 @@ function Login({
   isFindPassword,
   isRegister,
   setIsRegister,
+  setNaverLoginLink,
+  isNaverLoginLink,
 }) {
   const [isSnsLogin, setIsSnsLogin] = useState(false);
   // const navigation = useNavigation();
@@ -81,7 +83,11 @@ function Login({
       </View>
       <View style={styles.loginBtnBox}>
         {isSnsLogin ? (
-          <SnsLogin />
+          <SnsLogin 
+          navigation={navigation}
+          setNaverLoginLink={setNaverLoginLink}
+          isNaverLoginLink={isNaverLoginLink}
+          />
         ) : (
           <>
           <TouchableOpacity

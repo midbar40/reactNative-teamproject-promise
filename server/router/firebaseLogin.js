@@ -13,7 +13,7 @@ const listAllUsers = async () => {
   try{
       const listUsersResult = await admin.auth().listUsers();
       const emails = listUsersResult.users.map((userRecord) => userRecord.email);
-      return emails;
+      return emails; // return Promise(emails)
   }
   catch(error){
         console.log(error);

@@ -1,20 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 
+function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
 
-function SnsLogin() {
   const googleLogin = () => {
     console.log('google 로그인');
   };
 
   const kakaoLogin = async () => {
-   console.log('카카오 로그인')
+    console.log('kakao 로그인');
   };
 
   const naverLogin = async () => {
-    await fetch('http://192.168.200.17:5300/naverlogin/naverlogin')
-    .then(res => res.json())
-    .then(data => {console.log(data)})
+    const getNaverLoginLink = async () => {
+      await fetch('http://192.168.200.17:5300/naverlogin')
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          setNaverLoginLink(data.API_URL); // 이게 비동기라서 undefined 
+        })
+        .catch(err => console.log(err));
+        navigation.navigate('Web'); // route로 값을 넘길까?
+    };
+    await getNaverLoginLink();
+    console.log(naverLoginLink) // 왜 undefined? 
+    
   };
 
   return (
