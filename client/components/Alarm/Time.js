@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
 import moment from 'moment-timezone'
 import AddAlarm from './AddAlarm'
 import AlarmList from './AlarmList'
+import { addData, getCollection, getCurrentTime } from './apis/firebase'
 
 function Time(){
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
@@ -10,22 +11,30 @@ function Time(){
   const [addAlarmModal, setAddAlarmModal] = useState(false)
 
   // 시간을 AM/PM으로 나누어 보여주기 
-  const getFormattedTime = (time) => {
-    const hours = time.hours()
-    const minutes = time.minutes()
-    const period = hours >= 12 ? 'PM' : 'AM'
-    const formattedHours = hours % 12 || 12
-    return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${period}`
+  const getFormattedTime = (time) => {    
+    const formattedTime = time.format('hh:mm A')
+    return formattedTime
   }
 
   // 알람 추가
-  const addAlarm = (time, title) => {    
+  const addAlarm = (time, title) => { 
+    const alarmTime = moment(currentTime).add(time, 'minutes') 
+    const alarmId = Math.random().toString(36).substring(7)
     const alarm = {
-      time: moment(currentTime).add(time, 'minutes'),
+      id: alarmId,
+      time: alarmTime.toISOString(),
       title,
+      createdAt: getCurrentTime(),
     }
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
+    addData('Alarms', alarm)
+  }
+   //알람 삭제
+  const removeAlarm = (id) => {
+    const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id)
+    setAlarmTimes(updatedAlarms)
+    removeData('Alarms', id)
   }
   
   // 실시간 한국시간으로 보여주기
@@ -39,6 +48,26 @@ function Time(){
     }
   }, [])
 
+  useEffect(() => {
+    const fetchAlarms = getCollection(
+      'Alarms',
+      (querySnapshot) => {
+        const alarms = []
+        querySnapshot.forEach((doc) => {
+          const alarmData = doc.data()
+          alarms.push(alarmData)
+        })
+        setAlarmTimes(alarms)
+      },
+      (error) => {
+        console.error('알람 조회중 오류: ', error)
+      }
+    )
+    return () => {
+      fetchAlarms()
+    }
+  }, [])
+  
   return (
     <View style={styles.container}>
       <View style={styles.dayContainer}>
@@ -51,8 +80,8 @@ function Time(){
       </View>
 
       <View style={styles.alarmsContainer}>
-        <Text style={styles.alarmsText}>Alarms : </Text>
-        <AlarmList alarms={alarmTimes} />        
+        <Text style={styles.alarmsText}>Alarms : </Text>        
+          <AlarmList alarms={alarmTimes} onRemoveAlarm={removeAlarm}/>        
       </View>
       <TouchableOpacity
         style={styles.addButton}
@@ -81,28 +110,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 10, 
     width: '90%',
-    backgroundColor: '#dddd',
+    backgroundColor: '#98c8ffff',
     borderRadius: 20,     
   },
   dayText: {
     fontSize: 50,
     marginTop: 10,
     marginBottom: 5,   
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#fff'
   },
   timeText: {
     fontSize: 40,
     marginBottom: 15,
-    fontWeight: 'bold'    
+    fontWeight: 'bold',  
+    color: '#fff'
   },  
   alarmsContainer: {
     alignItems: 'center',
+    flex: 1,
   },
   alarmsText: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
+    marginTop: 10,
     marginBottom: 10,
-  },
+  },  
   addButton: {
     backgroundColor: '#a8c8ffff',
     width: 40, height: 40,
