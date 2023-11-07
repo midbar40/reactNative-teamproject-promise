@@ -114,8 +114,8 @@ function CalendarScreen() {
 
   //캘린더 밖 터치했을때 클릭되어있던 날짜 초기화
   const onTouch = () => {
-    setSelectedDate('')
-    console.log('빈칸:',selectedDate)
+    // setSelectedDate('')
+    // console.log('빈칸:',selectedDate)
   }
   
   //시작날짜가 종료날짜보다 느릴시 종료날짜가 시작날짜로 자동 셋팅
@@ -261,7 +261,7 @@ function CalendarScreen() {
       />
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}  onTouchEnd={onTouch}>
-        <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule}/>
+        <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule}/>
         {/* <Pressable style={styles.todayBtn} onPress={goToday}>
             <Text style={{textAlign:'center'}}>오늘</Text>
         </Pressable> */}

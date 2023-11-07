@@ -31,7 +31,7 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
     }
   }
 
-  console.log(categories)
+  // console.log(categories)
   return(
     <TouchableOpacity style={[styles.horizontalAlign, (dropYearOpen || dropMonthOpen || dropDateOpen) && styles.drops ]} onPress={onPress}>
         {dropYearOpen || dropMonthOpen || dropDateOpen ? caretupComponent() : caretdownComponent()}

@@ -1,28 +1,67 @@
-import React from 'react'
-import { View, Text, SafeAreaView, StyleSheet, Pressable, ScrollView} from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView} from 'react-native'
+import { SwipeListView } from 'react-native-swipe-list-view'
 
-function PickDate({selectedDate, setSelectedDate, showSchedule, }){
+import PickItem from './PickItem'
+import { removeData } from '../apis/firebaseCalendar'
 
-  const onTouchStart = () => {
+function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule}){
 
-    
+  const [itemKey, setItemKey] = useState('') //삭제할 스케쥴 key 저장
+
+  const clickDelete = () => {
+    console.log('삭제', itemKey)
+    removeData('CalendarSchedule', itemKey)
+    const newSchedule = showSchedule.filter(show => itemKey !== show.id)
+    setShowSchedule(newSchedule)
+    // console.log(newSchedule)
   }
-  console.log(showSchedule)
+
+  const onRowOpen = (rowKey) => {
+    console.log('row open', rowKey)
+    setItemKey(rowKey)
+  }
+
+  const hiddenItem = () => {
+    return(
+      <View style={styles.rowBack}>
+        <TouchableOpacity style={styles.deleteBtn} onPress={clickDelete}>
+          <Text style={styles.deleteText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+ 
   return(
     selectedDate &&
-    <ScrollView style={styles.block} onTouchStart={onTouchStart}>
-      {showSchedule.map((show,id) => {
-        return(
-          <View style={styles.content} key={id}>
-            <Text>제목 : {show.title}</Text>
-            <Text>내용 : {show.content}</Text>
-            {/* <Text>멤버 : {show.members}</Text> */}
-            <Text>{show.startDay}  ~  {show.endDay}</Text>
-          </View>  
-        )
-      })
-      }
-    </ScrollView>
+    <SwipeListView
+      data={showSchedule}
+      style={styles.block}
+      keyExtractor={item => item.id}
+      renderItem={({item}) => (
+        <PickItem {...item}/>
+      )}
+      renderHiddenItem={hiddenItem}
+      rightOpenValue={-70}
+      previewRowKey={'0'}
+      previewOpenValue={-40}
+      previewOpenDelay={1000}
+      onRowOpen={onRowOpen}
+    />
+
+    // <ScrollView style={styles.block} onTouchStart={onTouchStart}>
+    //   {showSchedule.map((show,id) => {
+    //     return(
+    //       <View style={styles.content} key={id}>
+    //         <Text>제목 : {show.title}</Text>
+    //         <Text>내용 : {show.content}</Text>
+    //         {/* <Text>멤버 : {show.members}</Text> */}
+    //         <Text>{show.startDay}  ~  {show.endDay}</Text>
+    //       </View>  
+    //     )
+    //   })
+    //   }
+    // </ScrollView>
   )
 }
 
@@ -31,10 +70,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff'
   },
-  content: {
-    borderBottomWidth: 1,
-    borderBottomColor: 'lightgreen',
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+    height: 0,
+  },
+  deleteBtn: {
+    backgroundColor: 'red',
+    right: 0,
+    height: '100%',
     padding: 10,
+    position: 'absolute',
+    top: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  deleteText: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'white',
   }
 })
 

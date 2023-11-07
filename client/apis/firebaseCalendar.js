@@ -8,3 +8,7 @@ export const addSchedule = async ( name, data ) => {
 export const getSchedules = ( name, onResult, onError) => {
   return  firestore().collection(name).onSnapshot(onResult, onError)
 }
+
+export const removeData = async ( name, id ) => {
+  await firestore().collection(name).doc(id).delete()
+}
