@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view'
 
 import PickItem from './PickItem'
@@ -11,10 +11,19 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule}
 
   const clickDelete = () => {
     console.log('삭제', itemKey)
-    removeData('CalendarSchedule', itemKey)
-    const newSchedule = showSchedule.filter(show => itemKey !== show.id)
-    setShowSchedule(newSchedule)
-    // console.log(newSchedule)
+    Alert.alert('삭제',
+      '할일을 삭제하시겠습니까?', 
+      [
+        {text: '취소', style: 'cancel'},
+        {text: '삭제', onPress: () => {
+          try{
+            removeData('CalendarSchedule', itemKey)
+            const newSchedule = showSchedule.filter(show => itemKey !== show.id)
+            setShowSchedule(newSchedule)
+          }catch(err){console.log('err:', err)}
+        }}
+      ]
+    )
   }
 
   const onRowOpen = (rowKey) => {
@@ -39,7 +48,7 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule}
       style={styles.block}
       keyExtractor={item => item.id}
       renderItem={({item}) => (
-        <PickItem {...item}/>
+        <PickItem {...item} itemKey={itemKey}/>
       )}
       renderHiddenItem={hiddenItem}
       rightOpenValue={-70}

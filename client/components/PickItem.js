@@ -1,15 +1,21 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
 
-function PickItem({ title, content, startDay, endDay }){
+function PickItem({ title, content, startDay, endDay, itemKey }){
+
+  const longPress = () => {
+    console.log('길게누르기', itemKey)
+  }
 
   return(
-    <View style={styles.content}>
-      <Text>제목 : {title}</Text>
-      <Text>내용 : {content}</Text>
-      {/* <Text>멤버 : {members}</Text> */}
-      <Text>{startDay}  ~  {endDay}</Text>
-    </View>
+    <Pressable onLongPress={longPress}>
+      <View style={styles.content}>
+        <Text>제목 : {title}</Text>
+        <Text>내용 : {content}</Text>
+        {/* <Text>멤버 : {members}</Text> */}
+        <Text>{startDay}  ~  {endDay}</Text>
+      </View>
+    </Pressable>
   )
 }
 
