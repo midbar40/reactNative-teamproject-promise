@@ -21,7 +21,7 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
   
   //드롭다운 클릭
   const onPress = () => {
-    console.log(title)
+    // console.log(title)
     if(title === '년'){
       setDropYearOpen(!dropYearOpen)
     }else if(title === '월'){

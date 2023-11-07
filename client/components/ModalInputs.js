@@ -46,7 +46,7 @@ function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate
       return `0${date}`
     }
   })
-  console.log(yearsRange, monthRange, dateRange)
+  // console.log(yearsRange, monthRange, dateRange)
 
   return(
     <View style={styles.block}>

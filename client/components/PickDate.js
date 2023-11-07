@@ -11,9 +11,9 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, }){
   return(
     selectedDate &&
     <ScrollView style={styles.block} onTouchStart={onTouchStart}>
-      {showSchedule.map(show => {
+      {showSchedule.map((show,id) => {
         return(
-          <View style={styles.content}>
+          <View style={styles.content} key={id}>
             <Text>제목 : {show.title}</Text>
             <Text>내용 : {show.content}</Text>
             {/* <Text>멤버 : {show.members}</Text> */}
