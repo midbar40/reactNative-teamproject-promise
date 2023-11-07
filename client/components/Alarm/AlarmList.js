@@ -4,12 +4,12 @@ import moment from 'moment-timezone'
 import { removeData } from './apis/firebase'
 import AlarmItem from './AlarmItem'
 
-function AlarmList({ alarms }) {
+function AlarmList({ alarms, onRemoveAlarm }) {
   alarms.sort((a, b) => moment(a.time).diff(b.time))
 
-  const onRemoveAlarm = (id) => {
-    removeData('Alarms', id)
-  }
+  // const onRemoveAlarm = (id) => {
+  //   removeData('Alarms', id)
+  // }  
 
   return (
     <View style={styles.container}>
@@ -17,11 +17,9 @@ function AlarmList({ alarms }) {
         data={alarms}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity
-          onPress={() => onRemoveAlarm(item.id)}
-        >
-          <AlarmItem item={item}/>
-        </TouchableOpacity>
+          <TouchableOpacity>
+            <AlarmItem item={item} onDelete={onRemoveAlarm} />
+          </TouchableOpacity>
         )}
       />
     </View>
@@ -33,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     width: '90%',
-  },  
+  },
 })
 
 export default AlarmList

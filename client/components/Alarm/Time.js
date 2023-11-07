@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
 import moment from 'moment-timezone'
 import AddAlarm from './AddAlarm'
 import AlarmList from './AlarmList'
-import { addData, getCollection, getCurrentTime } from './apis/firebase'
+import Icon from 'react-native-vector-icons/Ionicons'
+import { addData, getCollection, getCurrentTime, removeData } from './apis/firebase'
 
 function Time(){
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
@@ -87,7 +88,9 @@ function Time(){
         style={styles.addButton}
         onPress={() => setAddAlarmModal(true)}
       >
-        <Text style={styles.addText}>+</Text>
+        <Text style={styles.addText}>
+        <Icon name='add' size={40}/>
+        </Text>
       </TouchableOpacity>
       <AddAlarm
         visible={addAlarmModal}
@@ -138,15 +141,14 @@ const styles = StyleSheet.create({
   },  
   addButton: {
     backgroundColor: '#a8c8ffff',
-    width: 40, height: 40,
-    borderRadius: 20,
+    width: 50, height: 50,
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
     bottom: 30, right: 30,
   },
-  addText: {
-    fontSize: 25,
+  addText: {    
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center'
