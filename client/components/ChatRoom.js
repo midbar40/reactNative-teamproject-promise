@@ -6,13 +6,13 @@ import ChatList from './ChatList';
 
 import { sendMessageToFirebase, getMessage } from '../apis/firebaseChat';
 
-function ChatRoom({ navigation, roomName }){
+function ChatRoom({ navigation, roomTitle, selectRoomId }){
   const [message, setMessage] = useState('');
   const [messageList , setMessageList] = useState([]);
 
   const sendMessage = async () => {
     try {
-      await sendMessageToFirebase(roomName, message);
+      await sendMessageToFirebase(selectRoomId, roomTitle, message);
       setMessage('');
     } catch (error) {
       console.log(error)
@@ -35,7 +35,7 @@ function ChatRoom({ navigation, roomName }){
       console.log(error)
     }
 
-    return getMessage(roomName, onResult, onRrror)
+    return getMessage(selectRoomId, onResult, onRrror)
     
   }, []);
 
@@ -44,7 +44,7 @@ function ChatRoom({ navigation, roomName }){
   return (
     <SafeAreaView style={styles.block}>
       <View style={styles.chatRoomNameContainer}>
-        <Text style={styles.chatRoomNameText}>{roomName.trim()} 채팅방</Text>
+        <Text style={styles.chatRoomNameText}>{roomTitle.trim()} 채팅방</Text>
       </View>
       <FlatList
         data={messageList?.message}
