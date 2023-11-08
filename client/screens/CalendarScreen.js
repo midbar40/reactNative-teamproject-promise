@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Text, FlatList, Pressable, Modal, TextInput, Keyboard } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Text, FlatList, Pressable, Modal, TouchableOpacity, Keyboard } from 'react-native';
 import { Calendar,  CalendarList, Agenda, LocaleConfig } from 'react-native-calendars'
 import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth'
 
@@ -20,6 +20,7 @@ function CalendarScreen() {
   const [openModal, setOpenModal] = useState(false) //모달창 열기
   const [startDate, setStartDate] = useState({ year:'', month: '', date: '' }) //시작날짜
   const [endDate, setEndDate] = useState({ year:'', month: '', date: '' }) //종료날짜
+  const [betweenDate, setBetweenDate] = useState('') //시작날짜와 종료날짜 사이의 날짜
   const [scheduleTitle, setScheduleTitle] = useState('') //할일 제목
   const [scheduleContent, setScheduleContent] = useState('') //할일 내용
   const [user, setUser] = useState('') //현재 로그인한 유저 uid저장용
@@ -50,16 +51,22 @@ function CalendarScreen() {
   //   console.log('스케쥴조회',loadSchedule.map(load => load.startDay))
   //마크 찍기 테스트
   // console.log('마크',markedDate)
-  const markedDates = 
-  {
-    '2023-11-07' : {'marked': true, dotColor: 'red'}
-    // [selectedDate]: {selected: true},
-    // '2023-11-07': {periods:[{startingDay: true, endingDay: false, color:'green'},{startingDay:true, endingDay: true, color:'pink'}]},
-    // '2023-11-08': {periods:[{startingDay: false, endingDay: false, color:'green'}]},
-    // '2023-11-09': {periods:[{startingDay: false, endingDay: true, color:'green'}]},
-    // // '2023-11-15': {startingDay: true, endingDay: true, color:'skyblue'},
-    // '2023-11-05': {color: 'red'},
-    //마크되어있는날 selected하면 둘다 표시되게 하기
+  
+  //두사이의 날짜 구하기
+  const getDateRange = (startDate, endDate) => {
+    let regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)
+    if(!regex.test(startDate) && regex.test(endDate)) return 'not date format'
+    let listDate = []
+    let dateMove = new Date(startDate)
+    
+    while(dateMove <= new Date(endDate)){
+      listDate.push(dateMove.toISOString().split('T')[0])
+      dateMove.setDate(dateMove.getDate() + 1)
+    }
+    listDate.pop()
+    listDate.shift()
+    console.log(listDate)
+    return setBetweenDate(listDate)
   }
   
   //요일 한글화
@@ -71,33 +78,55 @@ function CalendarScreen() {
     today: 'Aujourd\'hui',
   }
   LocaleConfig.defaultLocale = 'fr'
+
   //모달창 열기 - 버튼 사용유무 보류
   // const open = () => {
   //     console.log('모달창열기')
   //     setOpenModal(true)
   // }
+
   //모달창 닫기
   const closeModal = () => {
     setOpenModal(false)
   }
+
   //오늘 날짜의 달력 보여주기
   const goToday = () => {
     console.log('오늘날짜보여주기')
   }
+
+  //'YYYY-MM-DD' 형식
+  const sliceDate = (date) => {
+    return `${(date.year).slice(0,4)}-${(date.month).slice(0,2)}-${(date.date).slice(0,2)}`
+  }
+  
+  useEffect(() => {
+    startDate && endDate && 
+    getDateRange(sliceDate(startDate), sliceDate(endDate))
+    console.log('bet',betweenDate)
+  },[scheduleContent])
+  
   //해당 스케쥴 등록
   const addScheduleClick = async() => {
     console.log('할일제목 :', scheduleTitle, '할일 내용 :', scheduleContent)
     console.log('시작:', startDate, '종료:', endDate)
+
+    // getDateRange(sliceDate(startDate), sliceDate(endDate))
+    // console.log('bet',betweenDate)
+
+    // console.log('123',listDate)
     //파이어베이스에 데이터 추가(제목, 내용 빈칸 아닐때)
     if(scheduleTitle !== '' && scheduleContent !== ''){
       const newSchedule = {
-        startDay : `${(startDate.year).slice(0,4)}-${(startDate.month).slice(0,2)}-${(startDate.date).slice(0,2)}`,
-        endDay :  `${(endDate.year).slice(0,4)}-${(endDate.month).slice(0,2)}-${(endDate.date).slice(0,2)}`,
+        startDay : sliceDate(startDate),
+        endDay :  sliceDate(endDate),
+        betweenDay: betweenDate,
         members: [user], //추후 유저조회하여 배열에 추가해줄것
         title: scheduleTitle,
         content: scheduleContent,
         createdAt: getCurrentTime(),
         createdUser: user
+
       }
       await addSchedule('CalendarSchedule', newSchedule)
       Keyboard.dismiss()
@@ -142,46 +171,48 @@ function CalendarScreen() {
         
         //데이터 불러와서 캘린더에 마킹
         let marking = list.reduce((acc, leave) => {
-          let { startDay, endDay } = leave
+          let { startDay, betweenDay, endDay } = leave
           //하루안에 끝나지 않을때
           if(startDay !== endDay){
+            let betweenDayObj = {
+                ...acc,
+                
+                [betweenDay.length >= 2 ? betweenDay.forEach(day => day) : betweenDay]: {
+                ...(acc[betweenDay.length >= 2 ? betweenDay.forEach(day => day) : betweenDay] || {}),
+                color: 'pink'
+                
+                // startingDay: false,
+                // endingDay: false,
+                // color: 'pink'
+                }
+              }
             let startDayObj = {
-              ...acc,
+              ...betweenDayObj,
               [startDay]: {
-                ...acc[startDay],
-                periods:[...((acc[startDay] || {}).periods || []),
-                {
-                  startingDay: true,
-                  endingDay: false,
-                  color: 'pink' //추후 데이터에저장
-                }]
+                ...(betweenDayObj[startDay] || {}),
+                startingDay: startDay !== endDay ? true : '',
+                endingDay: startDay !== endDay ? false : '',
+                color: 'pink' //추후 데이터에저장
               }
             }
             return {
               ...startDayObj,
+              // ...betweenDayObj,
               [endDay]:{
-                ...startDayObj[endDay],
-                periods: [...((startDayObj[endDay] || {})['periods'] || []),
-              {
+                ...(startDayObj[endDay] || {}),
                 startingDay: false,
                 endingDay: true,
                 color: 'pink'
-              }]
               }
             }
-          }
-          else{
+          }else{
             //하루짜리 일정
             return {
               ...acc,
-              [startDay]: {
-                ...acc[startDay],
-                periods:[...((acc[startDay] || {}).periods || []),
-                {
-                  startingDay: true,
-                  endingDay: true,
-                  color: 'lightblue'
-                }]
+              [startDay]:{
+                ...(acc[startDay] || {}),
+                marked: true,
+                dotColor: 'blue'
               }
             }
           }
@@ -194,7 +225,7 @@ function CalendarScreen() {
             return obj
           }, {})
         
-          // console.log(marking)
+          console.log('mark',JSON.stringify(marking))
         
         setMarkDate(marking)
       })
@@ -208,8 +239,6 @@ function CalendarScreen() {
     }
     return getSchedules('CalendarSchedule', onResult, onError)
   },[])
-
-
 
   return(
     <SafeAreaView style={styles.block}>
@@ -238,7 +267,7 @@ function CalendarScreen() {
           // textDisabledColor: 'red',
         }}
         // disableAllTouchEventsForDisabledDays={true} //disabled클릭 안됨
-        markingType={'multi-period'}
+        markingType={'period'}
         disabledDaysIndexes={[0]}
         onDayPress={(day,state) => {
           console.log('선택한날짜', day)
@@ -252,6 +281,7 @@ function CalendarScreen() {
           })
           setShowSchedule(arr)
           setSelectedDate(day.dateString)
+
         }}
         onDayLongPress={day => {
           console.log('길게누르기',day.dateString)
@@ -277,6 +307,7 @@ function CalendarScreen() {
         visible={openModal}
         onRequestClose={() => {
           setOpenModal(!openModal)  
+          setBetweenDate('')
         }}
         onShow={() => {
           setStartDate({
@@ -306,17 +337,17 @@ function CalendarScreen() {
                 <ModalTextInputs title='할일 내용' setScheduleContent={setScheduleContent}/>
               </View>
               <View style={styles.horizontalView}>
-                <Pressable style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
+                <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
                   <Text style={styles.btnText}>취소</Text>
-                </Pressable>
-                <Pressable style={[styles.modalBtn, styles.addBtn]} onPress={addScheduleClick}>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalBtn, styles.addBtn]} onPress={addScheduleClick}>
                   <Text style={styles.btnText}>등록</Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             </View>
             :
             <View style={styles.modal}>
-              <Text style={styles.titleText}>지난 날짜는 스케쥴을 추가할 수 없습니다.</Text>
+              <Text style={styles.message}>지난 날짜에는 스케쥴을 추가 할 수 없습니다.</Text>
               <Pressable style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
                 <Text style={styles.btnText}>닫기</Text>
               </Pressable>
@@ -415,6 +446,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center', 
     padding :10,
+  },
+  message:{
+    fontSize: 16,
+    textAlign: 'center',
+    backgroundColor: '#fff',
+    padding: 10,
   },
   pickTitle: {
     borderBottomWidth: 1,
