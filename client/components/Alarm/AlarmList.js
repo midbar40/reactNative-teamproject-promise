@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Animated } from 'react-native'
 import moment from 'moment-timezone'
 import { removeData } from './apis/firebase'
 import AlarmItem from './AlarmItem'
@@ -10,19 +10,29 @@ function AlarmList({ alarms, onRemoveAlarm }) {
   // const onRemoveAlarm = (id) => {
   //   removeData('Alarms', id)
   // }  
+  const scrollY = new Animated.Value(0)
+
+  const translateY = scrollY.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  })
+
+  const onScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    { useNativeDriver: true }
+  )
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={{ ...styles.container, transform: [{ translateY }] }}>
       <FlatList
         data={alarms}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity>
-            <AlarmItem item={item} onDelete={onRemoveAlarm} />
-          </TouchableOpacity>
+          <AlarmItem item={item} onDelete={onRemoveAlarm} />
         )}
+        onScroll={onScroll}
       />
-    </View>
+    </Animated.View>
   )
 }
 

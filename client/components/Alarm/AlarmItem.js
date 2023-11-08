@@ -1,33 +1,51 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import moment from 'moment-timezone'
-import {Swipeable, GestureHandlerRootView} from 'react-native-gesture-handler'
+import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler'
 
-function AlarmItem({ item, onDelete }) {
-  const renderRightActions = () => {
+function AlarmItem({ item, onDelete }){  
+  const rightActions = () => {
     return (
-      <TouchableOpacity style={styles.delete} onPress={() => onDelete(item.id)}>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={handleDelete}
+      >
         <Text style={styles.deleteText}>Delete</Text>
       </TouchableOpacity>
     )
   }
 
   const handleDelete = () => {
-    onDelete(item.id)
+    // 리스트 삭제 애니메이션
+    Animated.timing(translateX, {
+      toValue: 62, // 리스트를 오른쪽으로 사라지는 거리(화면밖으로)
+      duration: 250, // 애니메이션 시간
+      useNativeDriver: true, // 애니메이션이 실행이 native면(true), javascript면(false) 
+    }).start(() => {
+      onDelete(item.id) // 리스트 제거
+      translateX.setValue(0) // 추후 리스트 애니메이션 값 재설정
+    })
   }
 
+  const translateX = new Animated.Value(0)
+
   return (
-    <GestureHandlerRootView>
-      <Swipeable renderRightActions={renderRightActions} onSwipeableRightOpen={handleDelete}>
-      <View style={styles.alarmItem}>
-        <Text style={styles.alarmTime}>
-          {moment(item.time).tz('Asia/Seoul').format('hh:mm A')}
-        </Text>
-        <Text style={styles.alarmTitle} numberOfLines={1} ellipsizeMode='tail'>
-          {item.title}
-        </Text>
-      </View>
-    </Swipeable>
+    <GestureHandlerRootView style={styles.swipe}>
+      <Swipeable renderRightActions={rightActions}>
+        <Animated.View // Animated.View로 리스트 래핑
+          style={[
+            styles.alarmItem,
+            { transform: [{ translateX }] } // 변환 적용
+          ]}
+        >
+          <Text style={styles.alarmTime}>
+            {moment(item.time).tz('Asia/Seoul').format('hh:mm A')}
+          </Text>
+          <Text style={styles.alarmTitle} numberOfLines={1} ellipsizeMode='tail'>
+            {item.title}
+          </Text>
+        </Animated.View>
+      </Swipeable>
     </GestureHandlerRootView>
   )
 }
@@ -46,6 +64,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
     marginBottom: 10,
+    backgroundColor: '#fff',
   },
   alarmTime: {
     fontSize: 16,
@@ -57,14 +76,20 @@ const styles = StyleSheet.create({
     width: 170,
     fontWeight: 'bold'
   },
-  delete: {
+  swipe: {
+    backgroundColor: '#fff',
+  },
+  deleteButton: {
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 80,
+    width: 60,
+    height: 45,
+    borderRadius: 10,
+    right: -16,
   },
   deleteText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: 'bold',
   },
 })
