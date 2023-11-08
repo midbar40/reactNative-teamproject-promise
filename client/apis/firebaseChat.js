@@ -1,4 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import { getUser } from './auth';
 
 export const creatChatRoom = async (roomTitle) => { // 현재는 룸 타이틀로 해서 같은 제목이 있는경우는 안만들게 했지만 추 후 캘린더 아이디값을 받을 예정
@@ -22,7 +23,7 @@ export const creatChatRoom = async (roomTitle) => { // 현재는 룸 타이틀�
   }
 }
 
-export const sendMessageToFirebase = async (selectRoomId, message) => {
+export const sendMessageToFirebase = async (selectRoomId, message, uploadFilePath = '') => {
   try {
     const getChatRoom = await firestore().collection(`chat`).doc(`${selectRoomId}`).get();
     console.log(getChatRoom.exists)
@@ -35,6 +36,7 @@ export const sendMessageToFirebase = async (selectRoomId, message) => {
         date : Date.now(),
         userUID : getUser().uid,
         userEmail : getUser().email,
+        uploadFilePath : uploadFilePath,
       }
       await firestore().collection(`chat`).doc(`${selectRoomId}`).update({
         messages : [...messages, newMessage]
@@ -81,4 +83,28 @@ export const getChatRoomList = async () => {
   const chatRoomList = await firestore().collection('chat').where('joinUser','array-contains',`${getUser().uid}`).get();
   // console.log(chatRoomList.docs)
   return chatRoomList.docs;
+}
+
+export const uploadFileToFirebaseStorage = async (fileAsset, roomId) => {
+  // console.log('f asset : ',fileAsset)
+  const splitArr = fileAsset.uri.split('/');
+  const refName = splitArr[splitArr.length - 1];
+  const reference = storage().ref(`/uploadFileByChat/${roomId}/${refName}`);
+  // console.log(fileAsset.base64)
+  await reference.putString(fileAsset.base64, "base64", {
+    contentType : fileAsset.type
+  })
+  sendMessageToFirebase(roomId, '', refName);
+}
+
+export const getChatFile = async (roomId, filePath) => {
+  try {
+    // console.log(filePath)
+    const reference = storage().ref(`/uploadFileByChat/${roomId}/${filePath}`);
+    const url = await reference.getDownloadURL();
+    console.log('ref : ',url);
+    return Promise.resolve(url);
+  } catch (error) {
+    console.log(error)
+  }
 }

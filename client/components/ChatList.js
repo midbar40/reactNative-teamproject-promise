@@ -1,15 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { getUser } from '../apis/auth';
 
-function ChatList({ message, userUID, userEmail }){
+function ChatList({ message, userUID, userEmail, uploadFilePath }){
   const myUserUID = getUser().uid;
+  // console.log(uploadFilePath)
   return (
     <>
     {myUserUID === userUID ?
       <View style={styles.myMessageContainer}>
         <View style={styles.myMessageBox}>
-          <Text style={styles.chatText}>{message}</Text>
+          {uploadFilePath === '' ?
+            <Text style={styles.chatText}>{message}</Text> :
+            <Image src={`${uploadFilePath}`} style={{width : 100, height : 100}}/>
+          }
         </View>
       </View>
       :

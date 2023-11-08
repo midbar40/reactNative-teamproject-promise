@@ -6,27 +6,35 @@ import ChatList from './ChatList';
 
 import { sendMessageToFirebase, getMessage } from '../apis/firebaseChat';
 import ImagePicker, { launchImageLibrary } from 'react-native-image-picker';
+import { uploadFileToFirebaseStorage, getChatFile } from '../apis/firebaseChat';
 
 function ChatRoom({ navigation, roomTitle, selectRoomId }){
   const [message, setMessage] = useState('');
   const [messageList , setMessageList] = useState([]);
   const [uploadFile, setUploadFile] = useState({})
 
-  const flatList = useRef()
+  const flatList = useRef();
 
   const sendMessage = async () => {
-    try {
-      await sendMessageToFirebase(selectRoomId, message);
-      setMessage('');
-    } catch (error) {
-      console.log(error)
+    if(message.trim() !== ''){
+      try {
+        await sendMessageToFirebase(selectRoomId, message);
+        setMessage('');
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      uploadFileToFirebaseStorage(uploadFile.fileData, selectRoomId);
     }
-    
+    // getChatFile();
   }
 
 
   const openImageLibrary = () => {
+    setMessage('');
     let options = {
+      mediaType: "photo",
+      includeBase64: true,
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -48,7 +56,7 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
         // console.log('uri : ',  response.assets[0].uri)
         setUploadFile({
           filePath: response,
-          fileData: response.data,
+          fileData: response.assets[0],
           fileUri: response.assets[0].uri
         });
       }
@@ -56,16 +64,28 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
 
   }
 
-  console.log(uploadFile)
+  // console.log(uploadFile)
 
   useEffect(() => {
-    function onResult(querySnapshot){
+    async function onResult(querySnapshot){
       // querySnapshot.forEach(doc => {
       //   list.push({
       //     ...doc.data(),
       //     id : doc.id
       //   })
       // });
+      // console.log(querySnapshot.data().messages)
+      await Promise.all(querySnapshot.data().messages.map(async (doc) => {
+        if(doc.message !== ''){
+          return doc;
+        } else {
+            const url = await getChatFile(selectRoomId, doc.uploadFilePath);
+            console.log('url : ',url)
+            doc.uploadFilePath = url;
+            return doc;
+        }
+      })) 
+      console.log(querySnapshot.data().messages)
       setMessageList(querySnapshot.data())
     }
 
@@ -85,8 +105,8 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
         <Text style={styles.chatRoomNameText}>{messageList?.roomTitle} 채팅방</Text>
       </View>
       <FlatList
-        data={messageList?.messages}
-        renderItem={({ item }) => {return <ChatList message={item.message} userUID={item.userUID} userEmail={item.userEmail}/>}}
+        data={messageList.messages}
+        renderItem={({ item }) => {return <ChatList message={item.message} userUID={item.userUID} userEmail={item.userEmail} uploadFilePath={item.uploadFilePath}/>}}
         keyExtractor={item => item.date}
         ref={flatList}
         onContentSizeChange={()=> flatList.current.scrollToEnd()}
@@ -105,8 +125,9 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
           onChangeText={setMessage}
           value={message}
           style={styles.chatTextInput}
+          editable={uploadFile.fileUri ? false : true}
         />
-        <TouchableOpacity onPress={sendMessage} style={styles.chatSubmitButton}>
+        <TouchableOpacity onPress={sendMessage} style={[styles.chatSubmitButton, !uploadFile.fileUri && !message.trim() && {backgroundColor : 'lightgray'} ]}>
           <View>
             <Text style={styles.chatSubmitButtonText}>보내기</Text>
           </View>
