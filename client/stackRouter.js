@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 // import { View, StyleSheet, SafeAreaView, Text } from 'react-native';
 
 import LandingScreen from './screens/LandingScreen';
@@ -20,13 +20,23 @@ function stackRouter() {
           headerShown: false,
         }}>
         <Stack.Screen name="Landing">
-          {props => <LandingScreen {...props} />}
+          {props => (
+            <LandingScreen
+              {...props}
+              naverLoginLink={naverLoginLink}
+              setNaverLoginLink={setNaverLoginLink}
+            />
+          )}
         </Stack.Screen>
-        <Stack.Screen name="App">
-          {props => <App {...props} />}
-        </Stack.Screen>
+        <Stack.Screen name="App">{props => <App {...props} />}</Stack.Screen>
         <Stack.Screen name="Web">
-          {props => <WebScreen {...props}/>}
+          {props => (
+            <WebScreen
+              {...props}
+              naverLoginLink={naverLoginLink}
+              setNaverLoginLink={setNaverLoginLink}
+            />
+          )}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

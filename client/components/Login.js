@@ -23,7 +23,7 @@ function Login({
   isRegister,
   setIsRegister,
   setNaverLoginLink,
-  isNaverLoginLink,
+  naverLoginLink,
 }) {
   const [isSnsLogin, setIsSnsLogin] = useState(false);
   // const navigation = useNavigation();
@@ -57,7 +57,7 @@ function Login({
   };
   const moveToSnsLogin = () => {
     setIsSnsLogin(true);
-  }
+  };
   return (
     <View style={styles.contentBox}>
       <Text style={styles.appName}>KAIROS</Text>
@@ -83,26 +83,26 @@ function Login({
       </View>
       <View style={styles.loginBtnBox}>
         {isSnsLogin ? (
-          <SnsLogin 
-          navigation={navigation}
-          setNaverLoginLink={setNaverLoginLink}
-          isNaverLoginLink={isNaverLoginLink}
+          <SnsLogin
+            navigation={navigation}
+            setNaverLoginLink={setNaverLoginLink}
+            naverLoginLink={naverLoginLink}
           />
         ) : (
           <>
-          <TouchableOpacity
-            style={styles.button}
-            activeOpacity={0.7}
-            onPress={loginAndMoveToApp}>
-            <Text style={styles.loginBtn}>로그인</Text>
-          </TouchableOpacity>
-             <TouchableOpacity
-             style={styles.snsLoginButton}
-             activeOpacity={0.7}
-             onPress={moveToSnsLogin}>
-             <Text style={styles.snsLoginBtn}>SNS 로그인</Text>
-           </TouchableOpacity>
-           </>
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.7}
+              onPress={loginAndMoveToApp}>
+              <Text style={styles.loginBtn}>로그인</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.snsLoginButton}
+              activeOpacity={0.7}
+              onPress={moveToSnsLogin}>
+              <Text style={styles.snsLoginBtn}>SNS 로그인</Text>
+            </TouchableOpacity>
+          </>
         )}
       </View>
       <View style={styles.signUpAndFindEmail}>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  snsLoginButton:{
+  snsLoginButton: {
     width: '80%',
     height: 50,
     backgroundColor: '#c7c7c7',
@@ -187,11 +187,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 10,
   },
-  snsLoginBtn:{
+  snsLoginBtn: {
     fontSize: 18,
     color: 'white',
     fontWeight: 'bold',
-  }
+  },
 });
 
 export default Login;

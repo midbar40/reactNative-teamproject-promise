@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 
 function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
-
   const googleLogin = () => {
     console.log('google 로그인');
   };
@@ -11,26 +10,36 @@ function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
     console.log('kakao 로그인');
   };
 
- 
-
   const naverLogin = async () => {
     const getNaverLoginLink = async () => {
-      try{
-        await fetch('http://192.168.200.17:5300/naverlogin')
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
-        })
-        
-        navigation.navigate('Web')
-        
-      }catch(err){
-        console.log(err)
-      }
-    } 
-    await getNaverLoginLink();    
-  };
+      try {
+        await fetch('http://192.168.0.172:5300/naverlogin') // http://192.168.200.17:5300/naverlogin
+          .then(res => res.json())
+          .then(data => {
+            setNaverLoginLink(data.API_URL);
+            fetch(data.API_URL, {
+              headers: {
+                method: 'GET',
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+            })
+              .then(res => {
+                res.send();
+              })
+              .then(text => {
+                console.log(text);
+              });
+          });
 
+        navigation.navigate('Web');
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    await getNaverLoginLink();
+  };
+  // console.log('sns로그인스테이트 :' ,naverLoginLink)
 
   return (
     <View style={styles.loginBtnBox}>

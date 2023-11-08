@@ -5,7 +5,7 @@ const config = require('../config.js')
 const axios = require('axios')
 const client_id = config.NAVER_CLIENT_ID;
 const client_secret = config.NAVER_CLIENT_SECRET;
-let state = 'abcde'
+let state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 const redirectURI = encodeURI(`${config.NAVER_REDIRECT_URI}`);
 
@@ -40,13 +40,14 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
       .then((res) => res.json())
       .then((responseData) => {
         // console.log(responseData)
-        // res.json(responseData)
-        const callbackURL = 'http://192.168.200.17:8081'
-        console.log(responseData?.response?.name)
-        // const queryText = responseData?.response?.email
-       const querystring = responseData?.response?.name
-       console.log(querystring)
-       res.redirect(`${callbackURL}?${JSON.stringify(querystring)}`);
+        res.json(responseData.response)
+        console.log(responseData.response)
+      //   const callbackURL = 'http://192.168.0.172:8081' // http://192.168.200.17:8081
+      //   console.log(responseData?.response)
+      //   // const queryText = responseData?.response?.email
+      //  const querystring = responseData?.response
+      //  console.log(querystring)
+      //  res.redirect(`${callbackURL}?${JSON.stringify(querystring)}`);
       })
       .catch((error) => {
         console.error(error);
