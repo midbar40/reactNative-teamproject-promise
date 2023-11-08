@@ -22,14 +22,14 @@ export const creatChatRoom = async (roomTitle) => { // 현재는 룸 타이틀�
   }
 }
 
-export const sendMessageToFirebase = async (selectRoomId, roomTitle, message) => {
+export const sendMessageToFirebase = async (selectRoomId, message) => {
   try {
     const getChatRoom = await firestore().collection(`chat`).doc(`${selectRoomId}`).get();
     console.log(getChatRoom.exists)
     if(getChatRoom.exists){
       // console.log(getChatRoom);
       // console.log(getChatRoom.data());
-      const messages = getChatRoom.data().message;
+      const messages = getChatRoom.data().messages;
       const newMessage = {
         message : message,
         date : Date.now(),
