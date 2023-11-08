@@ -1,11 +1,17 @@
 const express = require('express');
-
+const cors = require('cors');
 const app = express();
 const port = 5300;
+
+const corsOptions = {
+  origin : '*',
+  credentials : true,
+}
 
 // 미들웨어 설정
 app.use(express.json());
 app.use(express.urlencoded({extended:true})) // true: qs, false: querystring
+app.use(cors(corsOptions))
 
 // 라우터 설정
 const naverLoginRouter = require('./router/naverLogin');

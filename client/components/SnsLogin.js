@@ -11,21 +11,26 @@ function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
     console.log('kakao 로그인');
   };
 
+ 
+
   const naverLogin = async () => {
     const getNaverLoginLink = async () => {
-      await fetch('http://192.168.200.17:5300/naverlogin')
+      try{
+        await fetch('http://192.168.200.17:5300/naverlogin')
         .then(res => res.json())
         .then(data => {
-          console.log(data);
-          setNaverLoginLink(data.API_URL); // 이게 비동기라서 undefined 
+          console.log(data)
         })
-        .catch(err => console.log(err));
-        navigation.navigate('Web'); // route로 값을 넘길까?
-    };
-    await getNaverLoginLink();
-    console.log(naverLoginLink) // 왜 undefined? 
-    
+        
+        navigation.navigate('Web')
+        
+      }catch(err){
+        console.log(err)
+      }
+    } 
+    await getNaverLoginLink();    
   };
+
 
   return (
     <View style={styles.loginBtnBox}>
