@@ -102,6 +102,9 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
   return (
     <SafeAreaView style={styles.block}>
       <View style={styles.chatRoomNameContainer}>
+        <TouchableOpacity style={styles.returnBtnContainer} onPress={() => navigation.navigate('ChatRoomList')}>
+          <Text style={styles.returnBtnText}>◀</Text>
+        </TouchableOpacity>
         <Text style={styles.chatRoomNameText}>{messageList?.roomTitle} 채팅방</Text>
       </View>
       <FlatList
@@ -157,10 +160,23 @@ const styles = StyleSheet.create({
     flex : 1,
   },
   chatRoomNameContainer : {
-    paddingLeft : 20,
     backgroundColor : '#43B2DB',
     height : 40,
     marginBottom : 5,
+    flexDirection : 'row'
+  },
+  returnBtnContainer : {
+    width : 40,
+    height : 40,
+    marginRight : 10,
+    backgroundColor : '#B0CEFA',
+  },
+  returnBtnText : {
+    color : '#fff',
+    fontSize : 20,
+    fontWeight : 'bold',
+    lineHeight : 40,
+    textAlign : 'center',
   },
   chatRoomNameText : {
     fontSize : 20,
