@@ -13,7 +13,7 @@ function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
   const naverLogin = async () => {
     const getNaverLoginLink = async () => {
       try {
-        await fetch('http://192.168.0.172:5300/naverlogin') // http://192.168.200.17:5300/naverlogin
+        await fetch('http://192.168.200.17:5300/naverlogin') // http://192.168.200.17:5300/naverlogin // http://192.168.0.172:5300/naverlogin
           .then(res => res.json())
           .then(data => {
             setNaverLoginLink(data.API_URL);
@@ -25,11 +25,12 @@ function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
               },
             })
               .then(res => {
-                res.send();
+    
+                // res.json();
               })
-              .then(text => {
-                console.log(text);
-              });
+              // .then(data => {
+              //   console.log(data);
+              // });
           });
 
         navigation.navigate('Web');
@@ -39,7 +40,7 @@ function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
     };
     await getNaverLoginLink();
   };
-  // console.log('sns로그인스테이트 :' ,naverLoginLink)
+  console.log('sns로그인스테이트 :' ,naverLoginLink)
 
   return (
     <View style={styles.loginBtnBox}>
