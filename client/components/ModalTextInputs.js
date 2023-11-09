@@ -1,8 +1,9 @@
 import React from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 
-function ModalTextInputs({title, setScheduleTitle, setScheduleContent}){
+function ModalTextInputs({title, scheduleTitle, setScheduleTitle, scheduleContent, setScheduleContent, itemKey}){
  
+  console.log('itemkey',itemKey)
   const handleChange = (text) => {
     if(title === '할일 제목'){
       setScheduleTitle(text)
@@ -11,20 +12,50 @@ function ModalTextInputs({title, setScheduleTitle, setScheduleContent}){
     }
 
   }
+  
 
-  return(
-    <View style={styles.horizontalView}>
-      <Text style={styles.title}>{title} : </Text>
-        <TextInput
-          // placeholder={'할일ㅇ'}
-          autoCorrect={false}
-          style={styles.textInput}
-          selectionColor={'#E7BFFF'}
-          onChangeText={handleChange}
-          blurOnSubmit={false}
-        />
-    </View>
-  )
+  if(itemKey === ''){
+    return(
+      <View style={styles.horizontalView}>
+        <Text style={styles.title}>{title} : </Text>
+          <TextInput
+            // placeholder={'할일ㅇ'}
+            autoCorrect={false}
+            style={styles.textInput}
+            selectionColor={'#E7BFFF'}
+            onChangeText={handleChange}
+            blurOnSubmit={false}
+          />
+      </View>
+    )
+  }else{
+    return(
+      <View style={styles.horizontalView}>
+        <Text style={styles.title}>{title} : </Text>
+        {title === '할일 제목' ? 
+          <TextInput
+            // placeholder={'할일ㅇ'}
+            autoCorrect={false}
+            style={styles.textInput}
+            selectionColor={'#E7BFFF'}
+            onChangeText={handleChange}
+            blurOnSubmit={false}
+            defaultValue={scheduleTitle}
+          />
+          :
+          <TextInput
+            // placeholder={'할일ㅇ'}
+            autoCorrect={false}
+            style={styles.textInput}
+            selectionColor={'#E7BFFF'}
+            onChangeText={handleChange}
+            blurOnSubmit={false}
+            defaultValue={scheduleContent}
+          />
+        }
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({

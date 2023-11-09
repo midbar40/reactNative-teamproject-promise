@@ -10,6 +10,7 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
     
     if(modalTitle === '시작날짜'){
       if(title === '년'){
+        // console.log(category)
         setStartDate((prev) => ({...prev, year:category}))
       }else if(title === '월'){
         setStartDate((prev) => ({...prev, month:category}))

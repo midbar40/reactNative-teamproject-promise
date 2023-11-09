@@ -9,7 +9,7 @@ const caretdownComponent = (props) => <AntIcon name='caretdown' {...props} size=
 const caretupComponent = (props) => <AntIcon name='caretup' {...props} size={15}/>
 
 
-function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpen, setDropYearOpen, dropMonthOpen, setDropMonthOpen, dropDateOpen, setDropDateOpen, startDate, setStartDate, endDate, setEndDate}){
+function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpen, setDropYearOpen, dropMonthOpen, setDropMonthOpen, dropDateOpen, setDropDateOpen, startDate, setStartDate, endDate, setEndDate, itemKey}){
 
   //드롭다운 닫기
   const closeDropdown = () => {

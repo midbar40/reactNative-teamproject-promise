@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Text, FlatList, Pressable, Modal, TouchableOpacity, Keyboard } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Text, FlatList, Pressable, Modal, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import { Calendar,  CalendarList, Agenda, LocaleConfig } from 'react-native-calendars'
 import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth'
 
@@ -8,7 +8,8 @@ import AntIcon from 'react-native-vector-icons/AntDesign'
 import PickDate from '../components/PickDate';
 import ModalInputs from '../components/ModalInputs';
 import ModalTextInputs from '../components/ModalTextInputs'
-import { addSchedule, getSchedules } from '../apis/firebaseCalendar'
+import PickColor from '../components/PickColor';
+import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule } from '../apis/firebaseCalendar'
 import { getCurrentTime } from '../apis/firebase';
 
 
@@ -27,6 +28,8 @@ function CalendarScreen() {
   const [loadSchedule, setLoadSchedule] = useState([]) //불러온 스케쥴 담기
   const [markedDate, setMarkDate] = useState(null) //마크할 날짜 담기
   const [showSchedule, setShowSchedule] = useState([]) //선택한 날짜 스케쥴 담기
+  const [itemKey, setItemKey] = useState('') //삭제할 스케쥴 key 저장
+  const [pickColor, setPcikColor] = useState('pink') //스케쥴 적용할 색상 default: pink
   
   const today = new Date()
   const pickDay = new Date(selectedDate)
@@ -52,7 +55,7 @@ function CalendarScreen() {
   //마크 찍기 테스트
   // console.log('마크',markedDate)
   
-  //두사이의 날짜 구하기
+  //시작 날짜와 끝 날짜 사이의 날짜 구하기
   const getDateRange = (startDate, endDate) => {
     let regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)
     if(!regex.test(startDate) && regex.test(endDate)) return 'not date format'
@@ -87,6 +90,8 @@ function CalendarScreen() {
 
   //모달창 닫기
   const closeModal = () => {
+    setItemKey('')
+    setPcikColor('pink')
     setOpenModal(false)
   }
 
@@ -100,6 +105,7 @@ function CalendarScreen() {
     return `${(date.year).slice(0,4)}-${(date.month).slice(0,2)}-${(date.date).slice(0,2)}`
   }
   
+  //스케쥴 시작날짜, 끝날짜 설정후 할일 쓸때 betweenDate 실시간 업데이트
   useEffect(() => {
     startDate && endDate && 
     getDateRange(sliceDate(startDate), sliceDate(endDate))
@@ -124,20 +130,34 @@ function CalendarScreen() {
         members: [user], //추후 유저조회하여 배열에 추가해줄것
         title: scheduleTitle,
         content: scheduleContent,
+        pickColor: pickColor,
         createdAt: getCurrentTime(),
         createdUser: user
-
       }
-      await addSchedule('CalendarSchedule', newSchedule)
+      try{
+        //스케쥴 새로 등록
+        if(itemKey === ''){
+          await addSchedule('CalendarSchedule', newSchedule)
+        }else{
+          //스케쥴 수정
+          await updateOneSchedule('CalendarSchedule', itemKey, newSchedule)
+        }
+      }catch(err){
+        console.log('스케줄등록/수정 에러',err)
+      }
+
       Keyboard.dismiss()
       console.log(`데이터 추가 : ${newSchedule}`)
       setStartDate({ year:'', month: '', date: '' })
       setEndDate({ year:'', month: '', date: '' })
       setScheduleTitle('')
       setScheduleContent('')
+      setItemKey('')
+      setPcikColor('pink')
       setOpenModal(false)
     }else{
       console.log('제목&내용이 빈칸입니다.')
+      Alert.alert('경고!', '할일 제목이나 내용을 입력해주세요.')
     }
   }
 
@@ -171,38 +191,52 @@ function CalendarScreen() {
         
         //데이터 불러와서 캘린더에 마킹
         let marking = list.reduce((acc, leave) => {
-          let { startDay, betweenDay, endDay } = leave
+          let { startDay, betweenDay, endDay, pickColor } = leave
           //하루안에 끝나지 않을때
           if(startDay !== endDay){
-            let betweenDayObj = {
-                ...acc,
-                
-                [betweenDay.length >= 2 ? betweenDay.forEach(day => day) : betweenDay]: {
-                ...(acc[betweenDay.length >= 2 ? betweenDay.forEach(day => day) : betweenDay] || {}),
-                color: 'pink'
-                
-                // startingDay: false,
-                // endingDay: false,
-                // color: 'pink'
+            // && (betweenDay.length !== 0 && betweenDay.length < betweenDay.length + 2)
+            // if(!acc[startDay])
+              let betweenDayObj = {
+                  ...acc,
+                  
+                  [betweenDay[0]]: {
+                  ...([betweenDay[0]] || {}),
+                  color: pickColor ? pickColor : 'pink'
+  
+                  }
                 }
-              }
+              // let betweenDayObj = betweenDay.length !== 0 && betweenDay.reduce((acc, cur) => {
+              //   console.log('betweenreduce', acc, 'cur', cur)
+              //   return (
+              //     {
+              //       ...acc,
+              //       [cur] : {
+              //       ...(acc[cur] || {}),
+              //       color: 'pink'
+              //       }
+              //     }
+              //   )
+                
+              // })
+            
+              console.log('btndayObj', betweenDayObj)
             let startDayObj = {
               ...betweenDayObj,
               [startDay]: {
                 ...(betweenDayObj[startDay] || {}),
-                startingDay: startDay !== endDay ? true : '',
-                endingDay: startDay !== endDay ? false : '',
-                color: 'pink' //추후 데이터에저장
+                startingDay: betweenDayObj[startDay] ? false : startDay !== endDay ? true : false,
+                endingDay: false,
+                color: pickColor ? pickColor : 'pink' 
               }
             }
             return {
               ...startDayObj,
-              // ...betweenDayObj,
+
               [endDay]:{
                 ...(startDayObj[endDay] || {}),
-                startingDay: false,
-                endingDay: true,
-                color: 'pink'
+                startingDay:  false ,
+                endingDay: startDay !== endDay ? true : startDayObj[endDay] ? false : '',
+                color: pickColor ? pickColor : 'pink'
               }
             }
           }else{
@@ -212,7 +246,7 @@ function CalendarScreen() {
               [startDay]:{
                 ...(acc[startDay] || {}),
                 marked: true,
-                dotColor: 'blue'
+                dotColor: pickColor ? pickColor : 'red'
               }
             }
           }
@@ -291,7 +325,7 @@ function CalendarScreen() {
       />
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}  onTouchEnd={onTouch}>
-        <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule}/>
+        <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal}/>
         {/* <Pressable style={styles.todayBtn} onPress={goToday}>
             <Text style={{textAlign:'center'}}>오늘</Text>
         </Pressable> */}
@@ -320,6 +354,21 @@ function CalendarScreen() {
             month:`${selectedDate.slice(5,7)}월`,
             date:`${selectedDate.slice(8,10)}일`
           })
+
+          itemKey !== '' && getOneSchedule('CalendarSchedule', itemKey, 
+          function onResult(querySnapshot){
+            const list = []
+            list.push(querySnapshot.data())
+            // console.log(list[0].title, list[0].content, list[0].startDay.slice(0,4), list[0].startDay.slice(5,7), list[0].startDay.slice(8,10), list[0].endDay)
+            setScheduleTitle(list[0].title)
+            setScheduleContent(list[0].content)
+            setStartDate({year: `${list[0].startDay.slice(0,4)}년`, month: `${list[0].startDay.slice(5,7)}월`, date: `${list[0].startDay.slice(8,10)}일`})
+            setEndDate({year: `${list[0].endDay.slice(0,4)}년`, month: `${list[0].endDay.slice(5,7)}월`, date: `${list[0].endDay.slice(8,10)}일`})
+          },
+          function onError(err){
+            console.log('err', err)
+          })
+
         }}
       >
         <View style={styles.centerView}>
@@ -329,19 +378,22 @@ function CalendarScreen() {
                 {selectedDate}
               </Text>
               <View style={styles.inputs}>
-                <ModalInputs modalTitle='시작날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate}/>
-                <ModalInputs modalTitle='종료날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate}/>
+                <ModalInputs modalTitle='시작날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+                <ModalInputs modalTitle='종료날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
               </View>
               <View style={styles.textInputs}>
-                <ModalTextInputs title='할일 제목' setScheduleTitle={setScheduleTitle}/>
-                <ModalTextInputs title='할일 내용' setScheduleContent={setScheduleContent}/>
+                <ModalTextInputs title='할일 제목' scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} itemKey={itemKey}/>
+                <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
+              </View>
+              <View>
+                <PickColor pickColor={pickColor} setPcikColor={setPcikColor}/>
               </View>
               <View style={styles.horizontalView}>
                 <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
                   <Text style={styles.btnText}>취소</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalBtn, styles.addBtn]} onPress={addScheduleClick}>
-                  <Text style={styles.btnText}>등록</Text>
+                  <Text style={styles.btnText}>{itemKey !=='' ? '수정' : '등록'}</Text>
                 </TouchableOpacity>
               </View>
             </View>

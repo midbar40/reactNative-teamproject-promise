@@ -3,11 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view'
 
 import PickItem from './PickItem'
-import { removeData } from '../apis/firebaseCalendar'
+import { removeSchedule } from '../apis/firebaseCalendar'
 
-function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule}){
-
-  const [itemKey, setItemKey] = useState('') //삭제할 스케쥴 key 저장
+function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey}){
 
   const clickDelete = () => {
     console.log('삭제', itemKey)
@@ -17,7 +15,8 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule}
         {text: '취소', style: 'cancel'},
         {text: '삭제', onPress: () => {
           try{
-            removeData('CalendarSchedule', itemKey)
+            removeSchedule('CalendarSchedule', itemKey)
+            //화면에서도 삭제
             const newSchedule = showSchedule.filter(show => itemKey !== show.id)
             setShowSchedule(newSchedule)
           }catch(err){console.log('err:', err)}
@@ -29,6 +28,10 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule}
   const onRowOpen = (rowKey) => {
     console.log('row open', rowKey)
     setItemKey(rowKey)
+  }
+
+  const onRowClose = () => {
+    setItemKey('')
   }
 
   const hiddenItem = () => {
@@ -48,7 +51,7 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule}
       style={styles.block}
       keyExtractor={item => item.id}
       renderItem={({item}) => (
-        <PickItem {...item} itemKey={itemKey}/>
+        <PickItem {...item} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal}/>
       )}
       renderHiddenItem={hiddenItem}
       rightOpenValue={-70}
@@ -56,6 +59,7 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule}
       previewOpenValue={-40}
       previewOpenDelay={1000}
       onRowOpen={onRowOpen}
+      onRowClose={onRowClose}
     />
 
     // <ScrollView style={styles.block} onTouchStart={onTouchStart}>
