@@ -97,7 +97,7 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
     
   }, []);
 
-  // console.log(messageList)
+  // console.log(uploadFile.fileUri)
 
   return (
     <SafeAreaView style={styles.block}>
@@ -106,7 +106,7 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
       </View>
       <FlatList
         data={messageList.messages}
-        renderItem={({ item }) => {return <ChatList message={item.message} userUID={item.userUID} userEmail={item.userEmail} uploadFilePath={item.uploadFilePath}/>}}
+        renderItem={({ item }) => {return <ChatList message={item.message} userUID={item.userUID} userEmail={item.userEmail} date={item.date} uploadFilePath={item.uploadFilePath}/>}}
         keyExtractor={item => item.date}
         ref={flatList}
         onContentSizeChange={()=> flatList.current.scrollToEnd()}
@@ -116,18 +116,27 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
         } */}
       
       <View style={styles.chatInputContainer}>
-        <TouchableOpacity onPress={openImageLibrary} style={styles.addFileButtonContainer} on>
-          <View style={{ flex : 1 }}>
-            <Text style={styles.addFileButtonText}>+</Text>
-          </View>
-        </TouchableOpacity>
+        {uploadFile?.fileUri ? 
+          <TouchableOpacity onPress={() => setUploadFile({})} style={styles.addFileButtonContainer} on>
+            <View style={{ flex : 1 }}>
+              <Text style={styles.addFileButtonText}>x</Text>
+            </View>
+          </TouchableOpacity>
+        :
+          <TouchableOpacity onPress={openImageLibrary} style={styles.addFileButtonContainer} on>
+            <View style={{ flex : 1 }}>
+              <Text style={styles.addFileButtonText}>+</Text>
+            </View>
+          </TouchableOpacity>
+        }
+        
         <TextInput 
           onChangeText={setMessage}
           value={message}
           style={styles.chatTextInput}
-          editable={uploadFile.fileUri ? false : true}
+          editable={uploadFile?.fileUri ? false : true}
         />
-        <TouchableOpacity onPress={sendMessage} style={[styles.chatSubmitButton, !uploadFile.fileUri && !message.trim() && {backgroundColor : 'lightgray'} ]}>
+        <TouchableOpacity onPress={sendMessage} style={[styles.chatSubmitButton, !uploadFile?.fileUri && !message.trim() && {backgroundColor : 'lightgray'} ]}>
           <View>
             <Text style={styles.chatSubmitButtonText}>보내기</Text>
           </View>
@@ -196,7 +205,7 @@ const styles = StyleSheet.create({
   addImage : {
     width : '50%',
     height : '100%',
-    alignSelf : 'center'
+    alignSelf : 'center',
   }
 })
 

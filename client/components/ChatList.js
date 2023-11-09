@@ -2,17 +2,22 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { getUser } from '../apis/auth';
 
-function ChatList({ message, userUID, userEmail, uploadFilePath }){
+function ChatList({ message, userUID, userEmail, date, uploadFilePath }){
   const myUserUID = getUser().uid;
-  // console.log(uploadFilePath)
+  const chatDate = new Date(date);
   return (
     <>
     {myUserUID === userUID ?
       <View style={styles.myMessageContainer}>
+        <View style={styles.myMessageTimeContainer}>
+          <Text style={{fontSize : 12}}>{chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes()}` : 
+          (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes()}` :
+          `오후 ${chatDate.getHours()} : ${chatDate.getMinutes()}`)}</Text>
+        </View>
         <View style={styles.myMessageBox}>
           {uploadFilePath === '' ?
             <Text style={styles.chatText}>{message}</Text> :
-            <Image src={`${uploadFilePath}`} style={{width : 100, height : 100}}/>
+            <Image src={`${uploadFilePath}`} style={{width : 100, height : 100, marginVertical : 2}}/>
           }
         </View>
       </View>
@@ -21,8 +26,18 @@ function ChatList({ message, userUID, userEmail, uploadFilePath }){
         <View style={styles.otherMessageUserName}>
           <Text>{userEmail}</Text>
         </View>
-        <View style={styles.otherMessageBox}>
-          <Text>{message}</Text>
+        <View style={{ flexDirection : 'row'}}>
+          <View style={styles.otherMessageBox}>
+            {uploadFilePath === '' ?
+              <Text style={styles.chatText}>{message}</Text> :
+              <Image src={`${uploadFilePath}`} style={{width : 100, height : 100, marginVertical : 2}}/>
+            }
+          </View>
+          <View style={styles.otherMessageTimeContainer}>
+            <Text style={{fontSize : 12}}>{chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes()}` : 
+            (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes()}` :
+            `오후 ${chatDate.getHours()} : ${chatDate.getMinutes()}`)}</Text>
+          </View>
         </View>
       </View>
     }
@@ -32,9 +47,14 @@ function ChatList({ message, userUID, userEmail, uploadFilePath }){
 
 const styles = StyleSheet.create({
   myMessageContainer : {
-    alignItems : 'flex-end',
+    justifyContent : 'flex-end',
     marginBottom : 12,
-    paddingRight : 10
+    paddingRight : 10,
+    flexDirection: 'row'
+  },
+  myMessageTimeContainer : {
+    marginRight : 3,
+    alignSelf : 'flex-end'
   },
   myMessageBox : {
     paddingHorizontal : 8,
@@ -59,6 +79,10 @@ const styles = StyleSheet.create({
     borderRadius : 5,
     backgroundColor : '#C7A1DB',
     maxWidth : '70%',
+  },
+  otherMessageTimeContainer : {
+    marginLeft : 3,
+    alignSelf : 'flex-end'
   },
   chatText : {
     lineHeight : 22,

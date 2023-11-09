@@ -33,7 +33,7 @@ export const sendMessageToFirebase = async (selectRoomId, message, uploadFilePat
       const messages = getChatRoom.data().messages;
       const newMessage = {
         message : message,
-        date : Date.now(),
+        date : Date.now() + 32400000,
         userUID : getUser().uid,
         userEmail : getUser().email,
         uploadFilePath : uploadFilePath,
