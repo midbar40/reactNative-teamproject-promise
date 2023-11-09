@@ -4,7 +4,7 @@ import { View, Text, SafeAreaView, TextInput, Button, FlatList, TouchableOpacity
 import { creatChatRoom, getChatRoomList } from '../apis/firebaseChat';
 
 function ChatRoomList({ navigation, setRoomTitle, roomTitle, chatRoomList, setChatRoomList, setSelectRoomId }){
-  const creatRoom = () => {
+  const createRoom = () => {
     if(roomTitle.trim() !== ''){
       creatChatRoom(roomTitle.trim());
       getChatRoomList()
@@ -27,7 +27,7 @@ function ChatRoomList({ navigation, setRoomTitle, roomTitle, chatRoomList, setCh
         style={{ backgroundColor : '#ffb'}}
         placeholder='임시 방 이름을 입력하세요!'
       />
-      <Button onPress={creatRoom} title='만들기'></Button>
+      <Button onPress={createRoom} title='만들기'></Button>
       <View style={styles.chatRoomListHeader}>
         <Text style={styles.chatRoomListHeaderText}>채팅방 목록</Text>
       </View>

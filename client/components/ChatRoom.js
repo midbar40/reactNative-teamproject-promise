@@ -25,6 +25,7 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
       }
     } else {
       uploadFileToFirebaseStorage(uploadFile.fileData, selectRoomId);
+      setUploadFile({});
     }
     // getChatFile();
   }

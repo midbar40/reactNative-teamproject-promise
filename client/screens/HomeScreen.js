@@ -50,7 +50,7 @@ function HomeScreen({props, navigation, loginInfo}) {
 
   useEffect(() => {
     function onResult(querySnapshot){
-      console.log(querySnapshot.data().friends)
+      console.log(querySnapshot.data()?.friends)
       // setFriendList(querySnapshot.data().friends)
     }
 
