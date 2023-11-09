@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
 import moment from 'moment-timezone'
 import AddAlarm from './AddAlarm'
 import AlarmList from './AlarmList'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { addData, getCollection, getCurrentTime, removeData } from './apis/firebase'
+import messaging from '@react-native-firebase/messaging'
 
 function Time() {
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
@@ -35,7 +36,7 @@ function Time() {
   const removeAlarm = (id) => {
     const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id)
     setAlarmTimes(updatedAlarms)
-    removeData('Alarms', id)
+    removeData('Alarms', id)   
   }
 
   // 실시간 한국시간으로 보여주기
@@ -49,6 +50,7 @@ function Time() {
     }
   }, [])
 
+  // 알람 리스트 조회
   useEffect(() => {
     const fetchAlarms = getCollection(
       'Alarms',
@@ -80,10 +82,10 @@ function Time() {
         </Text>
       </View>
 
-      <ScrollView style={styles.alarmsContainer}>
+      <View style={styles.alarmsContainer}>
         <Text style={styles.alarmsText}>Alarms : </Text>
         <AlarmList alarms={alarmTimes} onRemoveAlarm={removeAlarm} />
-      </ScrollView>
+      </View>
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => setAddAlarmModal(true)}
