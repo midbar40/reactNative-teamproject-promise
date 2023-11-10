@@ -35,12 +35,12 @@ function ChatRoomList({ navigation, setRoomTitle, roomTitle, chatRoomList, setCh
         data={chatRoomList}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => enterRoom(item?._ref._documentPath._parts[1])}
+            onPress={() => enterRoom(item?.chatRoomUID)}
           >
-            <View style={styles.chatRoomListContainer}><Text style={styles.chatRoomListText}>{item?._data.roomTitle}</Text></View>
+            <View style={styles.chatRoomListContainer}><Text style={styles.chatRoomListText}>{item?.title}</Text></View>
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => item?._ref._documentPath._parts[1]}
+        keyExtractor={(item) => item?.chatRoomUID}
       />
     </SafeAreaView>
     

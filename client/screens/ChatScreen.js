@@ -16,8 +16,22 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
   const [chatRoomList, setChatRoomList] = useState([]);
   
   useEffect(() => {
-    getChatRoomList()
-    .then(r => setChatRoomList(r))
+    const onResult = (querySnapshot) => {
+      const chatRoomList = querySnapshot.docs.map(d => {
+        return {
+          chatRoomUID : d._ref._documentPath._parts[1],
+          title : d._data.title
+        }
+      })
+      // console.log('data : ',chatRoomList)
+      setChatRoomList(chatRoomList);
+    }
+
+    const onError = (error) => {
+      console.log(error)
+    }
+
+    return getChatRoomList(onResult, onError)
   }, [])
   
   return (

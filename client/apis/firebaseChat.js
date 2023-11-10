@@ -81,10 +81,17 @@ export const getMessage = (roomid, onResult, onError) => {
 }
 
 // 로그인 한 유저가 참가한 채팅방 얻기
-export const getChatRoomList = async () => {
-  const chatRoomList = await firestore().collection('chat').where('joinUser','array-contains',`${getUser().uid}`).get();
+export const getChatRoomList = (onResult, onError) => {
+  // const chatRoomList = await firestore().collection('chat').where('joinUser','array-contains',`${getUser().uid}`).get();
+  return firestore().collection('chat').where('joinUser','array-contains',`${getUser().uid}`).onSnapshot(onResult, onError);
+  // try {
+    
+  // } catch (error) {
+  //   console.log(error);
+  // }
   // console.log(chatRoomList.docs)
-  return chatRoomList.docs;
+  
+  // return chatRoomList.docs;
 }
 
 export const uploadFileToFirebaseStorage = async (fileAsset, roomId) => {
