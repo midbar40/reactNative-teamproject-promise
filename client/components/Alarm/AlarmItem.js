@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import moment from 'moment-timezone'
+import { useFocusEffect } from '@react-navigation/native'
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler'
 
-function AlarmItem({ item, onDelete }){  
+function AlarmItem({ item, onDelete, isFocused }) {
+  const swipeableRef = useRef(null)
+
+  // 오른쪽으로 스와이프
   const rightActions = () => {
     return (
       <TouchableOpacity
@@ -15,6 +19,7 @@ function AlarmItem({ item, onDelete }){
     )
   }
 
+  // 리스트 삭제
   const handleDelete = () => {
     // 리스트 삭제 애니메이션
     Animated.timing(translateX, {
@@ -29,9 +34,21 @@ function AlarmItem({ item, onDelete }){
 
   const translateX = new Animated.Value(0)
 
+  // 다른화면 갔다가 왔을때
+  useFocusEffect(
+    React.useCallback(() => {
+      if (swipeableRef.current && !isFocused) {
+        swipeableRef.current.close()
+      }
+    }, [isFocused])
+  )
+
   return (
     <GestureHandlerRootView style={styles.swipe}>
-      <Swipeable renderRightActions={rightActions}>
+      <Swipeable
+        ref={swipeableRef}
+        renderRightActions={rightActions}
+      >
         <Animated.View // Animated.View로 리스트 래핑
           style={[
             styles.alarmItem,

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import moment from 'moment-timezone'
 import AddAlarm from './AddAlarm'
 import AlarmList from './AlarmList'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { addData, getCollection, getCurrentTime, removeData } from './apis/firebase'
 import messaging from '@react-native-firebase/messaging'
+import PushNotification from 'react-native-push-notification'
+import { Notifications } from 'react-native-notifications'
 
-function Time() {
+function Time({isFocused}){
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
   const [alarmTimes, setAlarmTimes] = useState([])
   const [addAlarmModal, setAddAlarmModal] = useState(false)
+  const [openSwipeableItem, setOpenSwipeableItem] = useState(null)
 
   // 시간을 AM/PM으로 나누어 보여주기 
   const getFormattedTime = (time) => {
@@ -28,15 +31,33 @@ function Time() {
       title,
       createdAt: getCurrentTime(),
     }
+
+    const scheduleNotification = async() => {
+      const notificationTime = alarmTime.toDate()
+      await messaging().scheduleNotification({
+        title: 'Alarm',
+        body: `Time for: ${title}`,
+        android: {
+          channelId : 'Id'
+        },
+        schedule: {
+          fireDate: notificationTime.getTime()
+        }
+      })
+    }
+    scheduleNotification()
+
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
     addData('Alarms', alarm)
-  }
+    scheduleNotification(alarmTime, title)
+  }  
+
   //알람 삭제
   const removeAlarm = (id) => {
     const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id)
     setAlarmTimes(updatedAlarms)
-    removeData('Alarms', id)   
+    removeData('Alarms', id)
   }
 
   // 실시간 한국시간으로 보여주기
@@ -66,9 +87,57 @@ function Time() {
         console.error('알람 조회중 오류: ', error)
       }
     )
+    // Handle foreground messages
+  const messageListener = messaging().onMessage(async remoteMessage => {
+    console.log('Foreground Message:', remoteMessage);
+    // Handle the foreground message here
+  });
     return () => {
       fetchAlarms()
+      messageListener()
     }
+  }, [])
+
+  // 다시 터치했을때 스와이프 닫기
+  const closeSwipeableItem = () => {
+    if (openSwipeableItem) {
+      openSwipeableItem.close()
+      setOpenSwipeableItem(null)
+    }
+  }
+
+  useEffect(() => {
+    const requestPermission = async() => {
+      try{
+        await messaging().requestPermission()
+      }catch(error){
+        console.log('Permission rejected', error)
+      }
+    }
+
+    const subscribeToTopic = async() => {
+      await messaging().subscribeToTopic('your_topic_name')
+    }
+
+    requestPermission()
+    subscribeToTopic()
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('FCM Message Data:', remoteMessage.data)
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      // Handle the incoming message here, e.g., show a local notification.
+    });
+
+    return unsubscribe;
   }, [])
 
   return (
@@ -82,9 +151,17 @@ function Time() {
         </Text>
       </View>
 
-      <View style={styles.alarmsContainer}>
+      <View
+        style={styles.alarmsContainer}
+        onTouchStart={closeSwipeableItem}
+      >
         <Text style={styles.alarmsText}>Alarms : </Text>
-        <AlarmList alarms={alarmTimes} onRemoveAlarm={removeAlarm} />
+        <AlarmList
+          alarms={alarmTimes}
+          onRemoveAlarm={removeAlarm}
+          onOpen={(swipeable) => setOpenSwipeableItem(swipeable)}
+          isFocused={isFocused}
+        />
       </View>
       <TouchableOpacity
         style={styles.addButton}
@@ -133,7 +210,7 @@ const styles = StyleSheet.create({
   },
   alarmsContainer: {
     alignItems: 'center',
-    flex: 1,
+    flex: 1,    
   },
   alarmsText: {
     fontSize: 20,

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { AppRegistry, View, Alert } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen, CalendarScreen, AlarmScreen, TodoScreen, ChatScreen } from './screens';
 import messaging from '@react-native-firebase/messaging'
-import { setFcmToken } from 'services/fcm'
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import Icon2 from 'react-native-vector-icons/FontAwesome6'
@@ -11,19 +11,37 @@ import Icon2 from 'react-native-vector-icons/FontAwesome6'
 const Tab = createBottomTabNavigator();
 
 function App({ navigation, route }) {
-  // console.log(route.params.email)
-  const [pushToken, setPushToken] = useState(null)
-  const [isAuthorized, setIsAuthorized] = useState(false)
-
+  // console.log(route.params.email) 
   const [isLogin, setIsLogin] = useState(false); 
-  const foregroundListener = useCallback(() => {
-    messaging().onMessage(async message => {
-      console.log(message)
-    })
+    
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
+    });
+
+    return unsubscribe;
   }, [])
 
   useEffect(() => {
-    foregroundListener()
+    const requestPermission = async () => {
+      try {
+        await messaging().requestPermission();
+        console.log('Permission granted');
+      } catch (error) {
+        console.error('Permission denied', error);
+      }
+    };
+  
+    requestPermission();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = messaging().onTokenRefresh((newToken) => {
+      // Save the new token to your backend
+      console.log('Token refreshed:', newToken);
+    });
+  
+    return unsubscribe;
   }, [])
 
   return (
