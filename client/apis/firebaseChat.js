@@ -15,7 +15,7 @@ export const creatChatRoom = async (title, calendarUID, friends) => { // 현재�
       await firestore().collection(`chat`).add({
         title : title,
         invitedUser : [],
-        joinUser : [friends],
+        joinUser : friends,
         messages : [],
         calendarUID : calendarUID,
       })
