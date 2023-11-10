@@ -12,6 +12,7 @@ function App({navigation, route}) {
   // console.log(route.params.email)
 
   const [isLogin, setIsLogin] = useState(false);
+  const [selectRoomId, setSelectRoomId] = useState('');
 
   return (
       <Tab.Navigator
@@ -61,7 +62,13 @@ function App({navigation, route}) {
         />      
         <Tab.Screen 
           name="Chat" 
-          component={ChatScreen} 
+          children={(props) => (
+            <ChatScreen 
+             {...props}
+             selectRoomId={selectRoomId}
+             setSelectRoomId={setSelectRoomId}
+            />
+          )}
           options={{
             title:'Chat',
             tabBarIcon:({color, size}) => <Icon name='chatbubbles-sharp' color={color} size={size}/>

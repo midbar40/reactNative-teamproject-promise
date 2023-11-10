@@ -11,11 +11,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-function ChatScreen({ navigation }){
+function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
   const [roomTitle, setRoomTitle] = useState('');
   const [chatRoomList, setChatRoomList] = useState([]);
-  const [selectRoomId, setSelectRoomId] = useState('');
-
+  
   useEffect(() => {
     getChatRoomList()
     .then(r => setChatRoomList(r))
