@@ -24,6 +24,7 @@
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-calendars": "^1.1302.0",
+    "react-native-image-picker": "^7.0.2",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-notifications": "^5.1.0",
     "react-native-push-notification": "^8.1.1",
