@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { creatChatRoom } from '../apis/firebaseChat';
 
-function ChatCreateBtn({ title, calendarUID, friends }){
+function ChatCreateBtn({ title, calendarUID, friends}){
+  // console.log(friends)
   const moveToCalendarTalk = () => {
     creatChatRoom(title, calendarUID, friends)
   }
@@ -17,9 +18,15 @@ function ChatCreateBtn({ title, calendarUID, friends }){
 
 const styles = StyleSheet.create({
   calendarTalkContainer : {
-    width : 50,
-    height : 30,
-    backgroundColor : 'lightgreen'
+    backgroundColor : 'lightgreen',
+    right: 0,
+    width: 70,
+    height: '100%',
+    padding: 5,
+    position: 'absolute',
+    top: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   calendarTalkText : {
     color : '#fff',

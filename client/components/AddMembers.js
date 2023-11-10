@@ -6,12 +6,13 @@ import { getFriendsRealtimeChange } from '../apis/firebase'
 
 import AddMembersItem from './AddMembersItem'
 
-function AddMembers({pickFriends, setPickFriends}){
+function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
 
   const [open, setOpen] = useState(false) //모달 open
   const [friendLists, setFriendLists] = useState() //친구목록 전체 저장
   const [selectedId, setSelectedId] = useState(null)
 
+  console.log('show', showSchedule)
 
 
   const openModal = () => {
@@ -41,7 +42,8 @@ function AddMembers({pickFriends, setPickFriends}){
 
   return(
     <View style={styles.horizontalView}>
-      <Text>함께하는 멤버 : {pickFriends !== '' ? pickFriends.map(friend => friend.name.split(', ')) : '없음'}</Text>
+      {/* <Text>함께하는 멤버 : {pickFriends !== '' ? pickFriends.map(friend => friend.name.split(', ')) : '없음'}</Text> */}
+      <Text>함께하는 멤버 : {pickFriends ? pickFriends.map(friend => friend.name) : showSchedule.map(schedule => schedule.id === itemKey && schedule.members.map(member => member.name))} </Text>
       <TouchableOpacity style={styles.modalBtn} onPress={openModal}>
         <Text style={styles.btnText}>추가</Text>
       </TouchableOpacity>

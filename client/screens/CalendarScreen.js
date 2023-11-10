@@ -264,7 +264,7 @@ function CalendarScreen() {
           selectedDayBackgroundColor: '#00adf5',
           selectedDayTextColor: '#fff',
           // dotColor: 'red',
-          selectedDotColor: 'red',
+          // selectedDotColor: 'red',
           todayTextColor: 'orange',
           // indicatorColor: 'yellow',
           arrowColor: 'lightgreen',
@@ -361,7 +361,7 @@ function CalendarScreen() {
               <View style={styles.textInputs}>
                 <ModalTextInputs title='할일 제목' scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} itemKey={itemKey}/>
                 <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
-                <AddMembers pickFriends={pickFriends} setPickFriends={setPickFriends}/>
+                <AddMembers showSchedule={showSchedule} itemKey={itemKey} pickFriends={pickFriends} setPickFriends={setPickFriends}/>
               </View>
               <View>
                 <PickColor pickColor={pickColor} setPcikColor={setPcikColor}/>
