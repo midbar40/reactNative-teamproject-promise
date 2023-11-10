@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { getUser } from '../apis/auth';
 
-function ChatList({ message, userUID, userEmail, date, uploadFilePath }){
+function ChatList({ message, userUID, userEmail, date, uploadFilePath, toggleImgModal, setToggleImgModal }){
   const myUserUID = getUser().uid;
   const chatDate = new Date(date);
-  const [toggleImgModal, setToggleImgModal] = useState(false);
 
   const clickImageHandle = () => {
-    setToggleImgModal(true);
+    setToggleImgModal(uploadFilePath);
   }
 
   return (
@@ -33,7 +32,7 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath }){
           <Text>{userEmail}</Text>
         </View>
         <View style={{ flexDirection : 'row'}}>
-          <TouchableOpacity style={styles.otherMessageBox}>
+          <TouchableOpacity style={styles.otherMessageBox} onPress={clickImageHandle}>
             {uploadFilePath === '' ?
               <Text style={styles.chatText}>{message}</Text> :
               <Image src={`${uploadFilePath}`} style={{width : 100, height : 100, marginVertical : 2}}/>
@@ -47,21 +46,7 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath }){
         </View>
       </View>
     }
-    <Modal
-      visible={toggleImgModal}
-      transparent={false}
-    >
-      <SafeAreaView style={{ flex : 1 }}>
-        <View>
-          <TouchableOpacity onPress={() => {setToggleImgModal(false)}}>
-            <Text>취소</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.focusImageContainer}>
-          <Image src={`${uploadFilePath}`} style={styles.focusImage}/>
-        </View>
-      </SafeAreaView>
-    </Modal>
+    
     </>
   )
 }
@@ -107,13 +92,6 @@ const styles = StyleSheet.create({
   },
   chatText : {
     lineHeight : 22,
-  },
-  focusImageContainer : {
-    flex : 1,
-  },
-  focusImage : {
-    width : '80%',
-    height : '95%',
   },
 })
 

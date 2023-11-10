@@ -17,14 +17,14 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
   
   useEffect(() => {
     const onResult = (querySnapshot) => {
-      const chatRoomList = querySnapshot.docs.map(d => {
+      const list = querySnapshot.docs.map(d => {
         return {
           chatRoomUID : d._ref._documentPath._parts[1],
           title : d._data.title
         }
       })
       // console.log('data : ',chatRoomList)
-      setChatRoomList(chatRoomList);
+      setChatRoomList(list);
     }
 
     const onError = (error) => {

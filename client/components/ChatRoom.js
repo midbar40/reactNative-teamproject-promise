@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal } from 'react-native';
 
 // 컴포넌트
 import ChatList from './ChatList';
@@ -11,7 +11,8 @@ import { uploadFileToFirebaseStorage, getChatFile } from '../apis/firebaseChat';
 function ChatRoom({ navigation, roomTitle, selectRoomId }){
   const [message, setMessage] = useState('');
   const [messageList , setMessageList] = useState([]);
-  const [uploadFile, setUploadFile] = useState({})
+  const [uploadFile, setUploadFile] = useState({});
+  const [toggleImgModal, setToggleImgModal] = useState('');
 
   const flatList = useRef();
 
@@ -42,7 +43,7 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
       },
     };
     launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
+      // console.log('Response = ', response);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -65,7 +66,7 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
 
   }
 
-  // console.log(uploadFile)
+  console.log('modal : ',toggleImgModal)
 
   useEffect(() => {
     async function onResult(querySnapshot){
@@ -110,7 +111,7 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
       </View>
       <FlatList
         data={messageList.messages}
-        renderItem={({ item }) => {return <ChatList message={item.message} userUID={item.userUID} userEmail={item.userEmail} date={item.date} uploadFilePath={item.uploadFilePath}/>}}
+        renderItem={({ item }) => {return <ChatList message={item.message} userUID={item.userUID} userEmail={item.userEmail} date={item.date} uploadFilePath={item.uploadFilePath} toggleImgModal={toggleImgModal} setToggleImgModal={setToggleImgModal} />}}
         keyExtractor={item => item.date}
         ref={flatList}
         onContentSizeChange={()=> flatList.current.scrollToEnd()}
@@ -152,6 +153,21 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
           <Image source={{ uri : uploadFile.fileUri }} style={styles.addImage}/>
         </View>
       }
+      <Modal
+        visible={toggleImgModal === ''? false : true}
+        transparent={false}
+      >
+        <SafeAreaView style={{ flex : 1 }}>
+          <View style={{ paddingTop : 10}}>
+            <TouchableOpacity onPress={() => {setToggleImgModal('')}} style={styles.foucusImageCancelBtnContainer}>
+              <Text style={styles.foucusImageCancelBtnText}>취소</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.focusImageContainer}>
+            {toggleImgModal !== '' && <Image src={`${toggleImgModal}`} style={styles.focusImage}/>}
+          </View>
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   )
 }
@@ -223,6 +239,22 @@ const styles = StyleSheet.create({
     width : '50%',
     height : '100%',
     alignSelf : 'center',
+  },
+  focusImageContainer : {
+    flex : 1,
+    justifyContent : 'center'
+  },
+  focusImage : {
+    width : '100%',
+    height : '50%',
+  },
+  foucusImageCancelBtnContainer : {
+    width : 50,
+    height : 30,
+  },
+  foucusImageCancelBtnText : {
+    fontSize : 18,
+    paddingLeft : 10
   }
 })
 
