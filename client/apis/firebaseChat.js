@@ -8,6 +8,7 @@ export const creatChatRoom = async (title, calendarUID, friends) => { // 현재�
     console.log(getChatRoom);
     if(getChatRoom.docs.length !== 0){
       console.log('room is exists');
+      const chatRoomUID = getChatRoom.docs[0].ref._documentPath._parts[1];
       return false;
     } else {
       console.log('room is not exist');
@@ -18,7 +19,10 @@ export const creatChatRoom = async (title, calendarUID, friends) => { // 현재�
         messages : [],
         calendarUID : calendarUID,
       })
-      .then(r => console.log('r:',r.id))
+      .then(r => {
+        console.log('r:',r.id);
+        return r.id;
+      })
     }
   } catch (error) {
     console.log(error);
@@ -119,7 +123,7 @@ export const getChatFile = async (roomId, filePath) => {
 }
 
 export const getChatRoomUIDByCalendarUID = async (calendarUID) => {
-  const getChatRoom = await firestore().collection('chat').where('calendarUID','==','4NRU3yCCOfH2rwsocU0X').get();
+  const getChatRoom = await firestore().collection('chat').where('calendarUID','==',calendarUID).get();
   if(getChatRoom.docs.length === 0){
     console.log('캘린더 채팅방이 없습니다.');
   } else {
