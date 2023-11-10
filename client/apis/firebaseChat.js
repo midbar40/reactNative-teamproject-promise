@@ -110,3 +110,14 @@ export const getChatFile = async (roomId, filePath) => {
     console.log(error)
   }
 }
+
+export const getChatRoomUIDByCalendarUID = async (calendarUID) => {
+  const getChatRoom = await firestore().collection('chat').where('calendarUID','==','4NRU3yCCOfH2rwsocU0X').get();
+  if(getChatRoom.docs.length === 0){
+    console.log('캘린더 채팅방이 없습니다.');
+  } else {
+    const chatRoomUID = getChatRoom.docs[0].ref._documentPath._parts[1]
+    // console.log('캘린더아이디로 찾음 : ', chatRoomUID);
+    return chatRoomUID;
+  }
+}
