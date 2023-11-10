@@ -9,7 +9,7 @@ export const creatChatRoom = async (title, calendarUID, friends) => { // 현재�
     if(getChatRoom.docs.length !== 0){
       console.log('room is exists');
       const chatRoomUID = getChatRoom.docs[0].ref._documentPath._parts[1];
-      return false;
+      return chatRoomUID;
     } else {
       console.log('room is not exist');
       await firestore().collection(`chat`).add({

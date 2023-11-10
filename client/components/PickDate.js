@@ -6,7 +6,7 @@ import PickItem from './PickItem'
 import ChatCreateBtn from './ChatCreateBtn'
 import { removeSchedule } from '../apis/firebaseCalendar'
 
-function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey}){
+function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId }){
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
@@ -60,7 +60,7 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule,
     return(
       <>
         <View style={styles.rowBack}>
-          <ChatCreateBtn title={title} calendarUID={itemKey} friends={friends}/>
+          <ChatCreateBtn title={title} calendarUID={itemKey} friends={friends} navigation={navigation} setSelectRoomId={setSelectRoomId}/>
         </View>
         <View style={styles.rowBack}>
           <TouchableOpacity style={styles.deleteBtn} onPress={clickDelete}>

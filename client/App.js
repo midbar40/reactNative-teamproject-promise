@@ -37,7 +37,12 @@ function App({navigation, route}) {
         
         <Tab.Screen 
           name="Calendar" 
-          component={CalendarScreen}
+          children={(props) => (
+            <CalendarScreen
+              navigation={navigation}
+              setSelectRoomId={setSelectRoomId}
+            />
+          )}
           options={{
             title:'Calendar',
             tabBarIcon:({color, size}) => <Icon name='calendar-number' color={color} size={size}/>

@@ -16,7 +16,7 @@ import { getCurrentTime } from '../apis/firebase';
 
 const auth = getAuth()
 
-function CalendarScreen() {
+function CalendarScreen({ navigation, setSelectRoomId }) {
 
   const [selectedDate, setSelectedDate] = useState('') //선택한 날짜 담기
   const [openModal, setOpenModal] = useState(false) //모달창 열기
@@ -302,7 +302,7 @@ function CalendarScreen() {
       />
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}  onTouchEnd={onTouch}>
-        <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends}/>
+        <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId}/>
         {/* <Pressable style={styles.todayBtn} onPress={goToday}>
             <Text style={{textAlign:'center'}}>오늘</Text>
         </Pressable> */}

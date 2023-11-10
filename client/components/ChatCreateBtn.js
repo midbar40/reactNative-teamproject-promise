@@ -3,10 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { creatChatRoom } from '../apis/firebaseChat';
 
-function ChatCreateBtn({ title, calendarUID, friends}){
+function ChatCreateBtn({ title, calendarUID, friends, navigation, setSelectRoomId }){
   // console.log(friends)
-  const moveToCalendarTalk = () => {
-    creatChatRoom(title, calendarUID, friends)
+  const moveToCalendarTalk = async () => {
+    const chatRoomUID = await creatChatRoom(title, calendarUID, friends);
+    setSelectRoomId(chatRoomUID);
+    navigation.navigate('ChatRoom');
   }
 
   return (
