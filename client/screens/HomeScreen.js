@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {View, StyleSheet, SafeAreaView, Text, StatusBar, TextInput, TouchableOpacity, Alert, FlatList } from 'react-native';
 import Logout from '../components/Logout';
 
-import { searchUserByEmail, addFriend, getFriends } from '../apis/firebase';
+import { searchUserByEmail, addFriend, getFriendsRealtimeChange } from '../apis/firebase';
 
 function HomeScreen({props, navigation, loginInfo}) {
   const [friendList, setFriendList] = useState([]);
@@ -58,10 +58,10 @@ function HomeScreen({props, navigation, loginInfo}) {
       console.log(error)
     }
 
-    return getFriends(onResult, onError)
+    return getFriendsRealtimeChange(onResult, onError)
   },[])
 
-  console.log(friendList)
+  // console.log(friendList)
 
   return (
     <SafeAreaView style={styles.container}>

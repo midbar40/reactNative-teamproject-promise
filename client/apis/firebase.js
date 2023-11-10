@@ -40,7 +40,7 @@ export const searchUserByEmail = async (email) => {
     }
     
 }
-
+// 친구 등록
 export const addFriend = async (newFriend) => {
         try {
             const myUID = getUser().uid;
@@ -67,12 +67,21 @@ export const addFriend = async (newFriend) => {
             console.log(error);
         }
 }
-
-export const getFriends = (onResult, onError) => {
+// DB에 있는 나의 친구 조회(실시간)
+export const getFriendsRealtimeChange = (onResult, onError) => {
     const myUID = getUser().uid;
     return firestore()
       .collection(`user`)
       .doc(`${myUID}`)
       // .orderBy('date', 'asc')
       .onSnapshot(onResult, onError);
-  }
+}
+
+export const getFriendsOnce = async () => {
+    const myUID = getUser().uid;
+    const myDBData = await firestore()
+    .collection(`user`)
+    .doc(`${myUID}`).get();
+    // console.log('once : ',myDBData.data().friends)
+    return myDBData.data().friends;
+}
