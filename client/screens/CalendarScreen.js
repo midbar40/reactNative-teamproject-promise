@@ -181,6 +181,23 @@ function CalendarScreen() {
     }
   },[startDate])
 
+    
+  // useEffect(() => {
+
+  //   //선택한 날짜 효과 추가
+  //   if(markedDate !== ''){
+  //     const markedSelected = {
+  //       ...markedDate,
+  //       [selectedDate]: {
+  //         selected: selectedDate ? true : false,
+  //         marked: markedDate[selectedDate]?.marked,
+  //       }
+  //     }
+  
+  //     setMarkDate(markedSelected)
+  //   }
+  // },[selectedDate])
+
   //firebase에 등록된 스케쥴 불러오기
   useEffect(() => {
     function onResult(querySnapshot){
@@ -191,89 +208,49 @@ function CalendarScreen() {
         
         //데이터 불러와서 캘린더에 마킹
         let marking = list.reduce((acc, leave) => {
-          let { startDay, betweenDay, endDay, pickColor } = leave
-          //하루안에 끝나지 않을때
-          if(startDay !== endDay){
-            // && (betweenDay.length !== 0 && betweenDay.length < betweenDay.length + 2)
-            // if(!acc[startDay])
-              let betweenDayObj = {
-                  ...acc,
-                  
-                  [betweenDay[0]]: {
-                  ...([betweenDay[0]] || {}),
-                  color: pickColor ? pickColor : 'pink'
-  
-                  }
-                }
-              // let betweenDayObj = betweenDay.length !== 0 && betweenDay.reduce((acc, cur) => {
-              //   console.log('betweenreduce', acc, 'cur', cur)
-              //   return (
-              //     {
-              //       ...acc,
-              //       [cur] : {
-              //       ...(acc[cur] || {}),
-              //       color: 'pink'
-              //       }
-              //     }
-              //   )
-                
-              // })
-            
-              console.log('btndayObj', betweenDayObj)
-            let startDayObj = {
-              ...betweenDayObj,
-              [startDay]: {
-                ...(betweenDayObj[startDay] || {}),
-                startingDay: betweenDayObj[startDay] ? false : startDay !== endDay ? true : false,
-                endingDay: false,
-                color: pickColor ? pickColor : 'pink' 
-              }
-            }
-            return {
-              ...startDayObj,
-
-              [endDay]:{
-                ...(startDayObj[endDay] || {}),
-                startingDay:  false ,
-                endingDay: startDay !== endDay ? true : startDayObj[endDay] ? false : '',
-                color: pickColor ? pickColor : 'pink'
-              }
-            }
-          }else{
-            //하루짜리 일정
+          let { startDay, pickColor } = leave
+            //시작날짜에 마크찍기
             return {
               ...acc,
               [startDay]:{
                 ...(acc[startDay] || {}),
                 marked: true,
-                dotColor: pickColor ? pickColor : 'red'
+                dotColor: pickColor 
               }
             }
-          }
         },{})
         
+        //날짜 빠른순 정렬
         marking = Object.keys(marking)
           .sort()
           .reduce((obj, key) => {
             obj[key] = marking[key]
             return obj
           }, {})
+
+        const markedSelected = {
+          ...marking,
+          [selectedDate]: {
+            selected: true,
+            marked: marking[selectedDate]?.marked,
+          }
+        }
+      
+        setMarkDate(markedSelected)
+
         
-          console.log('mark',JSON.stringify(marking))
-        
-        setMarkDate(marking)
       })
-      console.log('리스트', list)
+      console.log('리스트', markedDate)
       setLoadSchedule(list)
-
-
     }
     function onError(error){
         console.error(`불러오다가 에러났음 - ${error}`)
     }
     return getSchedules('CalendarSchedule', onResult, onError)
-  },[])
-
+     
+    
+  },[selectedDate])
+  
   return(
     <SafeAreaView style={styles.block}>
       <Calendar
@@ -301,7 +278,7 @@ function CalendarScreen() {
           // textDisabledColor: 'red',
         }}
         // disableAllTouchEventsForDisabledDays={true} //disabled클릭 안됨
-        markingType={'period'}
+        // markingType={'period'}
         disabledDaysIndexes={[0]}
         onDayPress={(day,state) => {
           console.log('선택한날짜', day)
