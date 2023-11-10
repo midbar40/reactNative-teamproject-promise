@@ -17,14 +17,17 @@ function ChatCreateBtn({ title, calendarUID, friends }){
 
 const styles = StyleSheet.create({
   calendarTalkContainer : {
-    width : 50,
+    width : 80,
     height : 30,
-    backgroundColor : 'lightgreen'
+    backgroundColor : 'lightgreen',
+    borderRadius : 5,
   },
   calendarTalkText : {
     color : '#fff',
     fontWeight : 'bold',
     fontSize : 15,
+    textAlign : 'center',
+    lineHeight : 30,
   },
 })
 

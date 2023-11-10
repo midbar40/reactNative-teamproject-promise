@@ -1,10 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, SafeAreaView } from 'react-native';
 import { getUser } from '../apis/auth';
 
 function ChatList({ message, userUID, userEmail, date, uploadFilePath }){
   const myUserUID = getUser().uid;
   const chatDate = new Date(date);
+  const [toggleImgModal, setToggleImgModal] = useState(false);
+
+  const clickImageHandle = () => {
+    setToggleImgModal(true);
+  }
+
   return (
     <>
     {myUserUID === userUID ?
@@ -14,12 +20,12 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath }){
           (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes()}` :
           `오후 ${chatDate.getHours()} : ${chatDate.getMinutes()}`)}</Text>
         </View>
-        <View style={styles.myMessageBox}>
+        <TouchableOpacity style={styles.myMessageBox} onPress={clickImageHandle}>
           {uploadFilePath === '' ?
             <Text style={styles.chatText}>{message}</Text> :
             <Image src={`${uploadFilePath}`} style={{width : 100, height : 100, marginVertical : 2}}/>
           }
-        </View>
+        </TouchableOpacity>
       </View>
       :
       <View style={styles.otherMessageContainer}>
@@ -27,12 +33,12 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath }){
           <Text>{userEmail}</Text>
         </View>
         <View style={{ flexDirection : 'row'}}>
-          <View style={styles.otherMessageBox}>
+          <TouchableOpacity style={styles.otherMessageBox}>
             {uploadFilePath === '' ?
               <Text style={styles.chatText}>{message}</Text> :
               <Image src={`${uploadFilePath}`} style={{width : 100, height : 100, marginVertical : 2}}/>
             }
-          </View>
+          </TouchableOpacity>
           <View style={styles.otherMessageTimeContainer}>
             <Text style={{fontSize : 12}}>{chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes()}` : 
             (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes()}` :
@@ -41,6 +47,21 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath }){
         </View>
       </View>
     }
+    <Modal
+      visible={toggleImgModal}
+      transparent={false}
+    >
+      <SafeAreaView style={{ flex : 1 }}>
+        <View>
+          <TouchableOpacity onPress={() => {setToggleImgModal(false)}}>
+            <Text>취소</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.focusImageContainer}>
+          <Image src={`${uploadFilePath}`} style={styles.focusImage}/>
+        </View>
+      </SafeAreaView>
+    </Modal>
     </>
   )
 }
@@ -86,6 +107,13 @@ const styles = StyleSheet.create({
   },
   chatText : {
     lineHeight : 22,
+  },
+  focusImageContainer : {
+    flex : 1,
+  },
+  focusImage : {
+    width : '80%',
+    height : '95%',
   },
 })
 
