@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/checkbox": "^0.5.16",
     "@react-native-community/datetimepicker": "^7.6.1",
     "@react-native-firebase/app": "^18.6.1",
     "@react-native-firebase/auth": "^18.6.1",

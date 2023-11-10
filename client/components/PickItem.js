@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 
 import { updateData } from '../apis/firebaseCalendar'
 
-function PickItem({ title, content, startDay, endDay, id, members, itemKey, setItemKey, setOpenModal  }){
+function PickItem({ title, content, startDay, endDay, id, members, itemKey, setItemKey, setOpenModal}){
 
   const longPress = () => {
     console.log('길게누르기', id)
@@ -18,7 +18,7 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
         <Text>제목 : {title}</Text>
         {/* <Text>제목 : {id}</Text> */}
         <Text>내용 : {content}</Text>
-        <Text>멤버 : {members}</Text>
+        <Text>멤버 : {members.map(member => member.name)}</Text>
         <Text>{startDay}  ~  {endDay}</Text>
       </View>
     </Pressable>

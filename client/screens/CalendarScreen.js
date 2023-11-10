@@ -9,6 +9,7 @@ import PickDate from '../components/PickDate';
 import ModalInputs from '../components/ModalInputs';
 import ModalTextInputs from '../components/ModalTextInputs'
 import PickColor from '../components/PickColor';
+import AddMembers from '../components/AddMembers'
 import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule } from '../apis/firebaseCalendar'
 import { getCurrentTime } from '../apis/firebase';
 
@@ -30,6 +31,7 @@ function CalendarScreen() {
   const [showSchedule, setShowSchedule] = useState([]) //선택한 날짜 스케쥴 담기
   const [itemKey, setItemKey] = useState('') //삭제할 스케쥴 key 저장
   const [pickColor, setPcikColor] = useState('pink') //스케쥴 적용할 색상 default: pink
+  const [pickFriends, setPickFriends] = useState('') //내가 고른 친구목록 저장
   
   const today = new Date()
   const pickDay = new Date(selectedDate)
@@ -39,6 +41,7 @@ function CalendarScreen() {
   onAuthStateChanged(auth, (user) => {
     if(user){
         const uid = user.uid
+        // console.log('uid', uid)
         setUser(uid)
     }else{
         console.log(`${user}유저정보가 이상합니다`)
@@ -91,6 +94,7 @@ function CalendarScreen() {
   //모달창 닫기
   const closeModal = () => {
     setItemKey('')
+    setPickFriends('')
     setPcikColor('pink')
     setOpenModal(false)
   }
@@ -117,17 +121,13 @@ function CalendarScreen() {
     console.log('할일제목 :', scheduleTitle, '할일 내용 :', scheduleContent)
     console.log('시작:', startDate, '종료:', endDate)
 
-    // getDateRange(sliceDate(startDate), sliceDate(endDate))
-    // console.log('bet',betweenDate)
-
-    // console.log('123',listDate)
     //파이어베이스에 데이터 추가(제목, 내용 빈칸 아닐때)
     if(scheduleTitle !== '' && scheduleContent !== ''){
       const newSchedule = {
         startDay : sliceDate(startDate),
         endDay :  sliceDate(endDate),
         betweenDay: betweenDate,
-        members: [user], //추후 유저조회하여 배열에 추가해줄것
+        members: pickFriends, //추후 유저조회하여 배열에 추가해줄것 pickFriends
         title: scheduleTitle,
         content: scheduleContent,
         pickColor: pickColor,
@@ -153,6 +153,7 @@ function CalendarScreen() {
       setScheduleTitle('')
       setScheduleContent('')
       setItemKey('')
+      setPickFriends('')
       setPcikColor('pink')
       setOpenModal(false)
     }else{
@@ -182,28 +183,27 @@ function CalendarScreen() {
   },[startDate])
 
     
-  // useEffect(() => {
-
-  //   //선택한 날짜 효과 추가
-  //   if(markedDate !== ''){
-  //     const markedSelected = {
-  //       ...markedDate,
-  //       [selectedDate]: {
-  //         selected: selectedDate ? true : false,
-  //         marked: markedDate[selectedDate]?.marked,
-  //       }
-  //     }
+  useEffect(() => {
+    //선택한 날짜 효과 추가
+    if(markedDate !== null){
+      const markedSelected = {
+        ...markedDate,
+        [selectedDate]: {
+          selected: selectedDate ? true : false,
+          marked: markedDate[selectedDate]?.marked,
+        }
+      }
   
-  //     setMarkDate(markedSelected)
-  //   }
-  // },[selectedDate])
+      setMarkDate(markedSelected)
+    }
+  },[selectedDate])
 
   //firebase에 등록된 스케쥴 불러오기
   useEffect(() => {
     function onResult(querySnapshot){
       const list = []
       querySnapshot.forEach(doc => {
-        console.log(doc.data())
+        // console.log(doc.data())
         list.push({...doc.data(), id: doc.id})
         
         //데이터 불러와서 캘린더에 마킹
@@ -228,19 +228,19 @@ function CalendarScreen() {
             return obj
           }, {})
 
-        const markedSelected = {
-          ...marking,
-          [selectedDate]: {
-            selected: true,
-            marked: marking[selectedDate]?.marked,
-          }
-        }
+        // const markedSelected = {
+        //   ...marking,
+        //   [selectedDate]: {
+        //     selected: true,
+        //     marked: marking[selectedDate]?.marked,
+        //   }
+        // }
       
-        setMarkDate(markedSelected)
+        setMarkDate(marking)
 
         
       })
-      console.log('리스트', markedDate)
+      // console.log('리스트', markedDate)
       setLoadSchedule(list)
     }
     function onError(error){
@@ -302,7 +302,7 @@ function CalendarScreen() {
       />
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}  onTouchEnd={onTouch}>
-        <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal}/>
+        <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends}/>
         {/* <Pressable style={styles.todayBtn} onPress={goToday}>
             <Text style={{textAlign:'center'}}>오늘</Text>
         </Pressable> */}
@@ -361,6 +361,7 @@ function CalendarScreen() {
               <View style={styles.textInputs}>
                 <ModalTextInputs title='할일 제목' scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} itemKey={itemKey}/>
                 <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
+                <AddMembers pickFriends={pickFriends} setPickFriends={setPickFriends}/>
               </View>
               <View>
                 <PickColor pickColor={pickColor} setPcikColor={setPcikColor}/>
