@@ -119,7 +119,7 @@ export const getChatFile = async (roomId, filePath) => {
 }
 
 export const getChatRoomUIDByCalendarUID = async (calendarUID) => {
-  const getChatRoom = await firestore().collection('chat').where('calendarUID','==','4NRU3yCCOfH2rwsocU0X').get();
+  const getChatRoom = await firestore().collection('chat').where('calendarUID','==',calendarUID).get();
   if(getChatRoom.docs.length === 0){
     console.log('캘린더 채팅방이 없습니다.');
   } else {

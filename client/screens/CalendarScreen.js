@@ -364,7 +364,7 @@ function CalendarScreen() {
                 <AddMembers showSchedule={showSchedule} itemKey={itemKey} pickFriends={pickFriends} setPickFriends={setPickFriends}/>
               </View>
               <View>
-                <PickColor pickColor={pickColor} setPcikColor={setPcikColor}/>
+                <PickColor showSchedule={showSchedule} pickColor={pickColor} setPcikColor={setPcikColor}/>
               </View>
               <View style={styles.horizontalView}>
                 <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
