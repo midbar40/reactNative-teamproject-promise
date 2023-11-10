@@ -11,7 +11,7 @@ function PickColor({pickColor, setPcikColor, }){
       <ColorItem title='lightgreen' pickColor={pickColor} setPcikColor={setPcikColor}/>
       <ColorItem title='skyblue' pickColor={pickColor} setPcikColor={setPcikColor}/>
       <ColorItem title='grey' pickColor={pickColor} setPcikColor={setPcikColor}/>
-      <ColorItem title='beige' pickColor={pickColor} setPcikColor={setPcikColor}/>
+      <ColorItem title='red' pickColor={pickColor} setPcikColor={setPcikColor}/>
     </View>
   )
 }
