@@ -182,21 +182,6 @@ function CalendarScreen() {
     }
   },[startDate])
 
-    
-  useEffect(() => {
-    //선택한 날짜 효과 추가
-    if(markedDate !== null){
-      const markedSelected = {
-        ...markedDate,
-        [selectedDate]: {
-          selected: selectedDate ? true : false,
-          marked: markedDate[selectedDate]?.marked,
-        }
-      }
-  
-      setMarkDate(markedSelected)
-    }
-  },[selectedDate])
 
   //firebase에 등록된 스케쥴 불러오기
   useEffect(() => {
@@ -247,10 +232,25 @@ function CalendarScreen() {
         console.error(`불러오다가 에러났음 - ${error}`)
     }
     return getSchedules('CalendarSchedule', onResult, onError)
-     
-    
+ 
   },[selectedDate])
   
+      
+  useEffect(() => {
+    //선택한 날짜 효과 추가
+    if(markedDate !== null){
+      const markedSelected = {
+        ...markedDate,
+        [selectedDate]: {
+          selected: selectedDate ? true : false,
+          marked: markedDate[selectedDate]?.marked,
+        }
+      }
+      setMarkDate(markedSelected)
+    }
+  },[selectedDate])
+
+
   return(
     <SafeAreaView style={styles.block}>
       <Calendar
