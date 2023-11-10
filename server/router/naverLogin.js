@@ -1,5 +1,6 @@
 const express = require('express');
 const expressAsyncHandler = require('express-async-handler');
+const cheerio = require('cheerio');
 const router = express.Router();
 const config = require('../config.js')
 const {signUpUser, listAllUsers, registerFirebaseDB  } = require('./firebaseLogin.js')
@@ -10,13 +11,14 @@ let state = Math.random().toString(36).substring(2, 15) + Math.random().toString
 const redirectURI = encodeURI(`${config.NAVER_REDIRECT_URI}`);
 
 
-
+// 로그인
 router.get('/', expressAsyncHandler(async (req, res) => {
   api_url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirectURI + '&state=' + state;
   res.json({API_URL : api_url})
   console.log("네이버 로그인 버튼 클릭: ",api_url) 
 }))
 
+// 로그인 콜백
 router.get('/callback', expressAsyncHandler(async (req, res) => {
   code = req.query.code;
   state = req.query.state;
@@ -33,6 +35,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
    })
     .then((response) => response.json())
     .then((responseJson) => {
+      console.log('토큰체크 :' , responseJson)
 
       let token = responseJson.access_token
       let header = "Bearer " + token // Bearer 다음에 공백 추가
@@ -49,10 +52,10 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
           // const userEmail = listAllUsers()
           // const userEmailJson = Promise.all(userEmail)
           // console.log('이거실행됨 :', userEmailJson)
-          signUpUser(responseData.response.email, responseData.response.id, responseData.response.nickname) // 네이버 유저정보가 firebase Auth에 등록된다
-          .then(userRecord=>
-           { console.log(userRecord)
-            registerFirebaseDB(userRecord.email, userRecord.uid, userRecord.displayName)}) // 네이버 유저정보가 firebase DB에 등록된다
+          // signUpUser(responseData.response.email, responseData.response.id, responseData.response.nickname) // 네이버 유저정보가 firebase Auth에 등록된다
+          // .then(userRecord=>
+          //  { console.log(userRecord)
+          //   registerFirebaseDB(userRecord.email, userRecord.uid, userRecord.displayName)}) // 네이버 유저정보가 firebase DB에 등록된다
             // sns로 로그인했을때 firebase에 비밀번호를 어떻게 등록해야할지? sns로 로그인했을때 firebase에 login처리를 어떻게 해야할지?
             // 어떤 사이트에서는 sns로 로그인을 하고나서 회원가입 페이지로 이동해서 추가정보를 입력받는다.
             // 다음 화면에서 다시 sns로그인이 아닌 기존 로그인 방식으로 로그인을 하게끔 한다.
@@ -62,8 +65,6 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
         }catch(err){
           console.log(err)
         }
-        
-
       })
       .catch((error) => {
         console.error(error);
@@ -72,6 +73,13 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
     
 }
 ));
+
+// 로그아웃
+router.get('logout', expressAsyncHandler(async (req, res) => {
+  code = req.query.code;
+  state = req.query.state;
+  api_url = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${client_id}&client_secret=${client_secret}&code=${code}&state=${state}`  
+}))
 
   module.exports = router
 

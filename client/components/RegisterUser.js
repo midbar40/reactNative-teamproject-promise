@@ -21,6 +21,7 @@ function RegisterUser({
 }) {
   const [registerInfo, setRegisterInfo] = useState({
     email: '',
+    nickname: '',
     password: '',
     passwordCheck: '',
   });
@@ -37,6 +38,8 @@ function RegisterUser({
 
     if (!email.trim() || email.trim() == null) {
       return Alert.alert('이메일을 입력해주세요');
+    }  else if (!nickname.trim() || nickname.trim() == null) {
+      return Alert.alert('닉네임을 입력해주세요');
     } else if (!password.trim() || password.trim() == null) {
       return Alert.alert('비밀번호를 입력해주세요');
     } else if (!passwordCheck.trim() || passwordCheck.trim() == null) {
@@ -45,7 +48,7 @@ function RegisterUser({
       return Alert.alert('비밀번호가 일치하지 않습니다');
     } else {
         try{
-          await signUp(email.trim(), password.trim(), passwordCheck.trim());
+          await signUp(email.trim(), password.trim(), nickname.trim(), passwordCheck.trim());
           Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
           setIsFindPassword(false);
           setIsRegister(false);
@@ -64,7 +67,7 @@ function RegisterUser({
         }
     }
   };
-  const {email, password, passwordCheck} = registerInfo;
+  const {email, nickname, password, passwordCheck} = registerInfo;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,6 +81,15 @@ function RegisterUser({
             onChangeText={value => handleRegisterInfoChange('email', value)}
             style={styles.input}
             textContentType={'emailAddress'}
+          />
+        </View>
+        <View style={styles.inputBox}>
+          <TextInput
+            placeholder="닉네임을 입력해주세요"
+            placeholderTextColor={'#999'}
+            value={nickname}
+            onChangeText={value => handleRegisterInfoChange('nickname', value)}
+            style={styles.input}
           />
         </View>
         <View style={styles.inputBox}>

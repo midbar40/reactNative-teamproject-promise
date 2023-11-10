@@ -11,6 +11,7 @@ const Stack = createNativeStackNavigator();
 
 function stackRouter() {
   const [naverLoginLink, setNaverLoginLink] = useState('');
+  const [isSnsLogin, setIsSnsLogin] = useState(false);
 
   return (
     <NavigationContainer>
@@ -25,10 +26,20 @@ function stackRouter() {
               {...props}
               naverLoginLink={naverLoginLink}
               setNaverLoginLink={setNaverLoginLink}
+              isSnsLogin={isSnsLogin}
+              setIsSnsLogin={setIsSnsLogin}
             />
           )}
         </Stack.Screen>
-        <Stack.Screen name="App">{props => <App {...props} />}</Stack.Screen>
+        <Stack.Screen name="App">
+          {props => (
+            <App
+              {...props}
+              isSnsLogin={isSnsLogin}
+              setIsSnsLogin={setIsSnsLogin}
+            />
+          )}
+        </Stack.Screen>
         <Stack.Screen name="Web">
           {props => (
             <WebScreen

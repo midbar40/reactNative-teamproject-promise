@@ -40,7 +40,7 @@ const signUpUser = async (email, password, displayName) => {
 const listAllUsers = async () => {
   try{
       const listUsersResult = await admin.auth().listUsers();
-      const emails = listUsersResult.users.map((userRecord) => userRecord.email);
+      const emails = listUsersResult.users.map((userRecord) => console.log(userRecord));
       return emails; // return Promise(emails)
   }
   catch(error){

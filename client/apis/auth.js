@@ -6,9 +6,9 @@ export const signIn = async (email, password) => {
   return await auth().signInWithEmailAndPassword(email, password);
 };
 
-export const signUp = async (email, password) => {
+export const signUp = async (email, password, displayName) => {
   // 회원가입
-  return await auth().createUserWithEmailAndPassword(email, password);
+  return await auth().createUserWithEmailAndPassword(email, password, displayName);
 };
 
 export const subscribeAuth = callback => {

@@ -19,13 +19,12 @@ function Login({
   findEmail,
   setLoginInfo,
   setIsFindPassword,
-  isFindPassword,
-  isRegister,
   setIsRegister,
   setNaverLoginLink,
   naverLoginLink,
+  isSnsLogin,
+  setIsSnsLogin
 }) {
-  const [isSnsLogin, setIsSnsLogin] = useState(false);
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
     // 로그인 정보 확인
@@ -61,35 +60,36 @@ function Login({
   return (
     <View style={styles.contentBox}>
       <Text style={styles.appName}>KAIROS</Text>
-      <View style={styles.inputBox}>
-        <TextInput
-          placeholder="이메일을 입력해주세요"
-          placeholderTextColor={'#999'}
-          value={email}
-          onChangeText={value => handleUserInfoChange('email', value)}
-          style={styles.input}
-          textContentType={'emailAddress'}
+      {isSnsLogin ? (
+        <SnsLogin
+          navigation={navigation}
+          setNaverLoginLink={setNaverLoginLink}
+          naverLoginLink={naverLoginLink}
+          setIsSnsLogin={setIsSnsLogin}
         />
-      </View>
-      <View style={styles.inputBox}>
-        <TextInput
-          placeholder="비밀번호를 입력해주세요"
-          placeholderTextColor={'#999'}
-          value={password}
-          onChangeText={value => handleUserInfoChange('password', value)}
-          style={styles.input}
-          secureTextEntry={true}
-        />
-      </View>
-      <View style={styles.loginBtnBox}>
-        {isSnsLogin ? (
-          <SnsLogin
-            navigation={navigation}
-            setNaverLoginLink={setNaverLoginLink}
-            naverLoginLink={naverLoginLink}
-          />
-        ) : (
-          <>
+      ) : (
+        <>
+          <View style={styles.inputBox}>
+            <TextInput
+              placeholder="이메일을 입력해주세요"
+              placeholderTextColor={'#999'}
+              value={email}
+              onChangeText={value => handleUserInfoChange('email', value)}
+              style={styles.input}
+              textContentType={'emailAddress'}
+            />
+          </View>
+          <View style={styles.inputBox}>
+            <TextInput
+              placeholder="비밀번호를 입력해주세요"
+              placeholderTextColor={'#999'}
+              value={password}
+              onChangeText={value => handleUserInfoChange('password', value)}
+              style={styles.input}
+              secureTextEntry={true}
+            />
+          </View>
+          <View style={styles.loginBtnBox}>
             <TouchableOpacity
               style={styles.button}
               activeOpacity={0.7}
@@ -102,9 +102,9 @@ function Login({
               onPress={moveToSnsLogin}>
               <Text style={styles.snsLoginBtn}>SNS 로그인</Text>
             </TouchableOpacity>
-          </>
-        )}
-      </View>
+          </View>
+        </>
+      )}
       <View style={styles.signUpAndFindEmail}>
         <TouchableOpacity
           onPress={() => {

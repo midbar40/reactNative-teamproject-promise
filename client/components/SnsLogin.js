@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import cheerio from 'cheerio';
 
-function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
+function SnsLogin({navigation, setNaverLoginLink, naverLoginLink, setIsSnsLogin}) {
   const googleLogin = () => {
     console.log('google 로그인');
   };
@@ -17,22 +18,26 @@ function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
           .then(res => res.json())
           .then(data => {
             setNaverLoginLink(data.API_URL);
-            fetch(data.API_URL, {
-              headers: {
-                method: 'GET',
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-              },
-            })
-              .then(res => {
-    
-                // res.json();
-              })
-              // .then(data => {
-              //   console.log(data);
-              // });
-          });
-
+            console.log('1차url :', data)
+            return data.API_URL
+          })
+          .then(url => {
+            console.log('2차url :', url)
+            fetch(url)
+              .then(res => res.text())
+              .then(data => {
+                console.log(data)
+                const html = data;
+                const $ = cheerio.load(html);
+                const naverLoginLink = $('script').text().split('("')[1].split('")')[0]
+                console.log('네이버 로그인 링크 :', naverLoginLink)
+                fetch(naverLoginLink)
+                .then(res => res.text())
+                .then(data => {console.log(data)})
+                }
+                )
+          
+          })
         navigation.navigate('Web');
       } catch (err) {
         console.log(err);
@@ -40,29 +45,41 @@ function SnsLogin({navigation, setNaverLoginLink, naverLoginLink}) {
     };
     await getNaverLoginLink();
   };
-  console.log('sns로그인스테이트 :' ,naverLoginLink)
+  // console.log('sns로그인스테이트(SnsLogin컴포넌트) :', naverLoginLink); 
 
   return (
-    <View style={styles.loginBtnBox}>
-      <TouchableOpacity
-        style={styles.GoogleButton}
-        activeOpacity={0.7}
-        onPress={googleLogin}>
-        <Text style={styles.GoogleLoginBtn}>Google 로그인</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.KakaoButton}
-        activeOpacity={0.7}
-        onPress={kakaoLogin}>
-        <Text style={styles.KakaoLoginBtn}>카카오 로그인</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.NaverButton}
-        activeOpacity={0.7}
-        onPress={naverLogin}>
-        <Text style={styles.NaverLoginBtn}>네이버 로그인</Text>
-      </TouchableOpacity>
-    </View>
+    <>
+      <View style={styles.loginBtnBox}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.7}
+          onPress={() => {
+            setIsSnsLogin(false);
+          }}>
+          <Text style={styles.loginBtn}>가입된 아이디로 로그인</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.loginBtnBox}>
+        <TouchableOpacity
+          style={styles.GoogleButton}
+          activeOpacity={0.7}
+          onPress={googleLogin}>
+          <Text style={styles.GoogleLoginBtn}>Google 로그인</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.KakaoButton}
+          activeOpacity={0.7}
+          onPress={kakaoLogin}>
+          <Text style={styles.KakaoLoginBtn}>카카오 로그인</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.NaverButton}
+          activeOpacity={0.7}
+          onPress={naverLogin}>
+          <Text style={styles.NaverLoginBtn}>네이버 로그인</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 }
 const styles = StyleSheet.create({
@@ -70,7 +87,19 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+  },
+  button: {
+    width: '80%',
+    height: 50,
+    backgroundColor: 'skyblue',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loginBtn: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
   },
   GoogleButton: {
     width: '80%',
