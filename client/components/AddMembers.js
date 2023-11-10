@@ -12,7 +12,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
   const [friendLists, setFriendLists] = useState() //친구목록 전체 저장
   const [selectedId, setSelectedId] = useState(null)
 
-  console.log('show', showSchedule)
+  // console.log('show', showSchedule)
 
 
   const openModal = () => {
@@ -31,11 +31,24 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
   useEffect(() => {
     //친구목록 데이터 불러오기
     getFriendsRealtimeChange(function onResult(querySnapshot){
-      console.log(querySnapshot.data().friends)
+      // console.log('데이터불러오기',querySnapshot.data().friends)
       setFriendLists(querySnapshot.data().friends)
     }, 
     function onError(err){
       console.log('err', err)
+    })
+  },[])
+
+  useEffect(() => {
+    showSchedule.map(schedule => {
+      if(schedule.id === itemKey){
+        const list = [pickFriends]
+        schedule.members.map(member => {
+          list.push(member.name)
+        })
+        setPickFriends(list)
+      }
+
     })
   },[])
   console.log('pick', pickFriends)
@@ -43,7 +56,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
   return(
     <View style={styles.horizontalView}>
       {/* <Text>함께하는 멤버 : {pickFriends !== '' ? pickFriends.map(friend => friend.name.split(', ')) : '없음'}</Text> */}
-      <Text>함께하는 멤버 : {pickFriends ? pickFriends.map(friend => friend.name) : showSchedule.map(schedule => schedule.id === itemKey && schedule.members.map(member => member.name))} </Text>
+      <Text>함께하는 멤버 : {pickFriends} </Text>
       <TouchableOpacity style={styles.modalBtn} onPress={openModal}>
         <Text style={styles.btnText}>추가</Text>
       </TouchableOpacity>
@@ -61,9 +74,9 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
         <View style={[styles.centerView, styles.modal]}>
           <FlatList
             data={friendLists}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.UID}
             renderItem={({item}) => (
-              <AddMembersItem item={item} pickFriends={pickFriends} setPickFriends={setPickFriends}/>
+              <AddMembersItem item={item} pickFriends={pickFriends} setPickFriends={setPickFriends} showSchedule={showSchedule}/>
             )}
             
           />

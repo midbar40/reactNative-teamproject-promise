@@ -3,15 +3,17 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 
 import ColorItem from './ColorItem'
 
-function PickColor({pickColor, setPcikColor, }){
+function PickColor({pickColor, setPcikColor, showSchedule }){
+
+  console.log('show', showSchedule)
 
   return(
     <View style={styles.horizontalView}>
-      <ColorItem title='pink' pickColor={pickColor} setPcikColor={setPcikColor}/>
-      <ColorItem title='lightgreen' pickColor={pickColor} setPcikColor={setPcikColor}/>
-      <ColorItem title='skyblue' pickColor={pickColor} setPcikColor={setPcikColor}/>
-      <ColorItem title='grey' pickColor={pickColor} setPcikColor={setPcikColor}/>
-      <ColorItem title='red' pickColor={pickColor} setPcikColor={setPcikColor}/>
+      <ColorItem title='pink' pickColor={pickColor} setPcikColor={setPcikColor} showSchedule={showSchedule}/>
+      <ColorItem title='lightgreen' pickColor={pickColor} setPcikColor={setPcikColor} showSchedule={showSchedule}/>
+      <ColorItem title='skyblue' pickColor={pickColor} setPcikColor={setPcikColor} showSchedule={showSchedule}/>
+      <ColorItem title='grey' pickColor={pickColor} setPcikColor={setPcikColor} showSchedule={showSchedule}/>
+      <ColorItem title='red' pickColor={pickColor} setPcikColor={setPcikColor} showSchedule={showSchedule}/>
     </View>
   )
 }

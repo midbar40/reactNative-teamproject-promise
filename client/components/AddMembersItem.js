@@ -1,16 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
 
 function AddMembersItem({item, pickFriends, setPickFriends}){
-  // console.log('item', item)
   
   const [pick, setPick] = useState(false)
 
+  useEffect(() => {
+    pickFriends.indexOf(item.name) !== -1 && setPick(!pick)
+  },[])
+
   const onPress = () => {
-    setPick(!pick)
-    if(pickFriends.indexOf(item) === -1){
-      setPickFriends([...pickFriends, item])
+    if(pickFriends.indexOf(item.name) === -1){
+      setPickFriends([...pickFriends, item.name])
+    }else if(pick){
+      //다시 누르면 걸러주기
+      const list = pickFriends
+      const filterd = list.filter(list =>{
+        return list !== item.name
+      } 
+        )
+      setPickFriends(filterd)
     }
+    console.log(pickFriends)
+    setPick(!pick)
   }
 
   return(

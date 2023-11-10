@@ -182,21 +182,6 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
     }
   },[startDate])
 
-    
-  useEffect(() => {
-    //선택한 날짜 효과 추가
-    if(markedDate !== null){
-      const markedSelected = {
-        ...markedDate,
-        [selectedDate]: {
-          selected: selectedDate ? true : false,
-          marked: markedDate[selectedDate]?.marked,
-        }
-      }
-  
-      setMarkDate(markedSelected)
-    }
-  },[selectedDate])
 
   //firebase에 등록된 스케쥴 불러오기
   useEffect(() => {
@@ -247,10 +232,25 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         console.error(`불러오다가 에러났음 - ${error}`)
     }
     return getSchedules('CalendarSchedule', onResult, onError)
-     
-    
+ 
   },[selectedDate])
   
+      
+  useEffect(() => {
+    //선택한 날짜 효과 추가
+    if(markedDate !== null){
+      const markedSelected = {
+        ...markedDate,
+        [selectedDate]: {
+          selected: selectedDate ? true : false,
+          marked: markedDate[selectedDate]?.marked,
+        }
+      }
+      setMarkDate(markedSelected)
+    }
+  },[selectedDate])
+
+
   return(
     <SafeAreaView style={styles.block}>
       <Calendar
@@ -364,7 +364,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
                 <AddMembers showSchedule={showSchedule} itemKey={itemKey} pickFriends={pickFriends} setPickFriends={setPickFriends}/>
               </View>
               <View>
-                <PickColor pickColor={pickColor} setPcikColor={setPcikColor}/>
+                <PickColor showSchedule={showSchedule} pickColor={pickColor} setPcikColor={setPcikColor}/>
               </View>
               <View style={styles.horizontalView}>
                 <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
