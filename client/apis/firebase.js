@@ -77,6 +77,7 @@ export const getFriendsRealtimeChange = (onResult, onError) => {
       .onSnapshot(onResult, onError);
 }
 
+// DB에 있는 나의 친구 조회(1회)
 export const getFriendsOnce = async () => {
     const myUID = getUser().uid;
     const myDBData = await firestore()

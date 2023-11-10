@@ -87,8 +87,8 @@ export const getChatRoomList = async () => {
 
 export const uploadFileToFirebaseStorage = async (fileAsset, roomId) => {
   // console.log('f asset : ',fileAsset)
-  const splitArr = fileAsset.uri.split('/');
-  const refName = splitArr[splitArr.length - 1];
+  const splitPath = fileAsset.uri.split('/');
+  const refName = splitPath[splitPath.length - 1];
   const reference = storage().ref(`/uploadFileByChat/${roomId}/${refName}`);
   // console.log(fileAsset.base64)
   await reference.putString(fileAsset.base64, "base64", {
