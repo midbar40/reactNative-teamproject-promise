@@ -7,7 +7,7 @@ import DropdownList from './DropdownList'
 
 
 
-function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate, setEndDate, }){
+function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate, setEndDate, itemKey, }){
 
   const [dropYearOpen, setDropYearOpen] = useState(false) //드롭다운 오픈(년)
   const [dropMonthOpen, setDropMonthOpen] = useState(false) //드롭다운 오픈(월)
@@ -46,7 +46,7 @@ function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate
       return `0${date}`
     }
   })
-  console.log(yearsRange, monthRange, dateRange)
+  // console.log(yearsRange, monthRange, dateRange)
 
   return(
     <View style={styles.block}>
@@ -54,9 +54,9 @@ function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate
         <View style={[styles.dropDowns]}>
           <Text style={styles.titleText}>{modalTitle}</Text>
           <View style={[styles.dropDownlists]}>
-            <DropdownList title='년' categories={yearsRange} dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
-            <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
-            <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate}/>
+            <DropdownList title='년' categories={yearsRange} dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+            <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+            <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
           </View>
         </View>
       </View>
