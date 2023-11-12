@@ -8,7 +8,6 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import {signUp, verifyUserEmail} from '../apis/auth';
 
 function RegisterUser({
   navigation,
@@ -48,11 +47,23 @@ function RegisterUser({
       return Alert.alert('비밀번호가 일치하지 않습니다');
     } else {
         try{
-          await signUp(email.trim(), password.trim(), nickname.trim(), passwordCheck.trim());
+          await fetch('http://192.168.0.172:5300/firebaseLogin/register', { // FIrebase 회원가입 
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email.trim(),
+              password: password.trim(),
+              displayName: nickname.trim(),
+            }),
+          })
+        
           Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
           setIsFindPassword(false);
           setIsRegister(false);
           setLoginInfo({email: '', password: ''});
+        
         }catch(e){
           switch (e.code) {
             case 'auth/email-already-in-use':

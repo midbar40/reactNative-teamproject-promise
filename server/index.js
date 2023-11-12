@@ -1,8 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 5300;
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
+const port = 5300;
 const corsOptions = {
   origin : '*',
   credentials : true,
@@ -12,6 +14,17 @@ const corsOptions = {
 app.use(express.json());
 app.use(express.urlencoded({extended:true})) // true: qs, false: querystring
 app.use(cors(corsOptions))
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create(
+    { mongoUrl: 'mongodb+srv://inyo0506:kVi2OogRcjwRoWyi@cluster0.14ofbcq.mongodb.net/' ,
+    dbName: 'RNproject',
+    collectionName: 'session',
+  })
+}))
+
 
 // 라우터 설정
 const naverLoginRouter = require('./router/naverLogin');

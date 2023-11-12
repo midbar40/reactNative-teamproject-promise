@@ -14,12 +14,12 @@ admin.initializeApp({
 const db = getFirestore();
 
 // 유저정보 Firestore database에 등록
-const registerFirebaseDB = async (email, uid, displayName) => {
-  const userData = db.collection('user').doc('uid');
+const registerFirebaseDB = async (uid, email, displayName) => {
+  const userData = db.collection('user').doc(uid);
   const res = await userData.set({
+    UID: uid,
     email: email,
-    uid: uid,
-    displayName: displayName,
+    name: displayName,
   }, { merge: true });
 }
 
@@ -36,12 +36,12 @@ const signUpUser = async (email, password, displayName) => {
   return userRecord;
 };
 
-// 등록된 모든 유저의 이메일을 가져오는 함수
+// 등록된 모든 유저의 정보를(이메일, uid, 닉네임) 가져오는 함수
 const listAllUsers = async () => {
   try{
       const listUsersResult = await admin.auth().listUsers();
-      const emails = listUsersResult.users.map((userRecord) => console.log(userRecord));
-      return emails; // return Promise(emails)
+      const userInfo = listUsersResult.users.map((userRecord) => {return {email: userRecord.email, password: userRecord.uid ,displayName: userRecord.displayName}});
+      return userInfo; // return Promise(emails)
   }
   catch(error){
         console.log(error);
@@ -50,11 +50,14 @@ const listAllUsers = async () => {
   }
 };
 
+
+// 이메일 찾기 (가입한 이메일로 새로운 비밀번호 전송)
 router.get('/', expressAsyncHandler (async(req, res) => {
   try {
-    const emails = await listAllUsers();
-    console.log(emails)
-    res.json(emails);
+    const userInfo = await listAllUsers();
+    const userEmail = userInfo.map((user) => { return user.email })
+    console.log('유저이메일 :', userEmail)
+    res.json(userEmail);
   } catch(error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -62,6 +65,35 @@ router.get('/', expressAsyncHandler (async(req, res) => {
   }
 }));
 
+// 유저등록
+router.post('/register', expressAsyncHandler (async(req, res) => {
+  try {
+    const {email, password, displayName} = req.body;
+    const userRecord = await signUpUser(email, password, displayName);
+    res.json(userRecord)
+    console.log('유저레코드 :', userRecord.uid)
+
+    registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
+  } catch(error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+    throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
+  }
+}))
+
+// 로그아웃
+router.get('/logout', expressAsyncHandler (async(req, res) => {
+  try {
+    console.log('쿠키지우기전 :',req.cookies.session)
+    res.clearCookie('session');
+    console.log('쿠키지운후 :',req.cookies.session)
+
+  } catch(error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+    throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
+  }
+}))
 
 module.exports = router
 // 아래를 객체로 묶으면 오류가 난다, 이유는 모르겠음.

@@ -5,14 +5,19 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {signOut} from '../apis/auth';
+import {signOut, getUser} from '../apis/auth';
 
 
 function Logout({navigation, loginInfo}) {
   console.log(loginInfo);
 
   const handleLogout = async () => {
-    // await signOut(); // 파이어베이스 로그아웃
+    console.log('로그아웃');
+    if(getUser() === null){
+
+      await signOut(); // 파이어베이스 로그아웃
+    }
+    // await fetch('http://192.168.200.17:5300/firebaseLogin/logout')
     await fetch('http://nid.naver.com/nidlogin.logout') // 네이버 로그아웃
     await fetch('http://192.168.200.17:5300/naverlogin/logout') // 네이버 로그인 토큰삭제
     navigation.navigate('Landing');
