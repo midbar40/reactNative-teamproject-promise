@@ -82,6 +82,28 @@ function Time({isFocused}){
     }
   }  
 
+  useEffect(() => {
+    // Request FCM permission
+    const requestPermission = async () => {
+      try {
+        await messaging().registerDeviceForRemoteMessages();
+        await messaging().requestPermission();
+      } catch (error) {
+        console.error('FCM permission request error:', error);
+      }
+    };
+
+    requestPermission()
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('Message received in the foreground:', remoteMessage);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.dayContainer}>
