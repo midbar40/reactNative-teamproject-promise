@@ -4,10 +4,13 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 function ColorItem({title, pickColor, setPickColor, showSchedule}){
   
   useEffect(() => {
+    showSchedule ?
     showSchedule.map(schedule => {
       // console.log(schedule.pickColor)
       setPickColor(schedule.pickColor)
     })
+    :
+    setPickColor('pink')
   },[])
 
   const setColor = () => {

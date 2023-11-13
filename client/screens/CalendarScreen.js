@@ -345,20 +345,23 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
             date:`${selectedDate.slice(8,10)}일`
           })
 
-          itemKey !== '' && getOneSchedule('CalendarSchedule', itemKey, 
-          function onResult(querySnapshot){
-            const list = []
-            querySnapshot.data() && 
-            list.push(querySnapshot.data())
-            // console.log(list[0].title, list[0].content, list[0].startDay.slice(0,4), list[0].startDay.slice(5,7), list[0].startDay.slice(8,10), list[0].endDay)
-            setScheduleTitle(list[0].title)
-            setScheduleContent(list[0].content)
-            setStartDate({year: `${list[0].startDay.slice(0,4)}년`, month: `${list[0].startDay.slice(5,7)}월`, date: `${list[0].startDay.slice(8,10)}일`})
-            setEndDate({year: `${list[0].endDay.slice(0,4)}년`, month: `${list[0].endDay.slice(5,7)}월`, date: `${list[0].endDay.slice(8,10)}일`})
-          },
-          function onError(err){
-            console.log('err', err)
-          })
+          if(itemKey !== ''){
+            getOneSchedule('CalendarSchedule', itemKey, 
+            function onResult(querySnapshot){
+              const list = []
+  
+              list.push(querySnapshot.data())
+              // console.log(list[0].title, list[0].content, list[0].startDay.slice(0,4), list[0].startDay.slice(5,7), list[0].startDay.slice(8,10), list[0].endDay)
+              console.log('버그버그버그',list)
+                setScheduleTitle(list[0].title)
+                setScheduleContent(list[0].content)
+                setStartDate({year: `${list[0].startDay.slice(0,4)}년`, month: `${list[0].startDay.slice(5,7)}월`, date: `${list[0].startDay.slice(8,10)}일`})
+                setEndDate({year: `${list[0].endDay.slice(0,4)}년`, month: `${list[0].endDay.slice(5,7)}월`, date: `${list[0].endDay.slice(8,10)}일`})
+            },
+            function onError(err){
+              console.log('err', err)
+            })
+          } 
 
         }}
       >
@@ -373,19 +376,19 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
                 <ModalInputs modalTitle='종료날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
               </View>
               <View style={styles.textInputs}>
-                <ModalTextInputs title='할일 제목' scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} itemKey={itemKey}/>
-                <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
+                <ModalTextInputs title='할일 제목' scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
+                {/* <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/> */}
                 <AddMembers showSchedule={showSchedule} itemKey={itemKey} pickFriends={pickFriends} setPickFriends={setPickFriends}/>
               </View>
               <View>
                 <PickColor showSchedule={showSchedule} pickColor={pickColor} setPickColor={setPickColor}/>
               </View>
               <View style={styles.horizontalView}>
-                <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
-                  <Text style={styles.btnText}>취소</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalBtn, styles.addBtn]} onPress={addScheduleClick}>
                   <Text style={styles.btnText}>{itemKey !=='' ? '수정' : '등록'}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
+                  <Text style={styles.btnText}>취소</Text>
                 </TouchableOpacity>
               </View>
             </View>

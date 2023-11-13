@@ -67,7 +67,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
   return(
     <View style={styles.horizontalView}>
       {/* <Text>함께하는 멤버 : {pickFriends !== '' ? pickFriends.map(friend => friend.name.split(', ')) : '없음'}</Text> */}
-      <Text>함께하는 멤버 : {selectedId ? selectedId.join(', ') : '없음'} </Text>
+      <Text style={styles.memberContainer}>함께하는 멤버 : {selectedId ? selectedId.join(', ') : '없음'} </Text>
       <TouchableOpacity style={styles.modalBtn} onPress={openModal}>
         <Text style={styles.btnText}>추가</Text>
       </TouchableOpacity>
@@ -89,10 +89,12 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
             renderItem={({item}) => (
               <AddMembersItem item={item} pickFriends={pickFriends} setPickFriends={setPickFriends} showSchedule={showSchedule} selectedId={selectedId} setSelectedId={setSelectedId}/>
             )}
-            
+            style={styles.lists}
           />
-          <Pressable onPress={addMember}><Text>등록</Text></Pressable>
-          <Pressable onPress={closeModal}><Text>닫기</Text></Pressable>
+          <View style={styles.horizontalView}>
+            <Pressable style={styles.modalBtn} onPress={addMember}><Text>등록</Text></Pressable>
+            <Pressable style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}><Text>닫기</Text></Pressable>
+          </View>
         </View>
       </Modal>
     </View>
@@ -119,10 +121,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   centerView: {
-    flex: 1,
+    flex: 0.9,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 70,
   },
   modal: {
     backgroundColor: '#fff',
@@ -134,6 +136,15 @@ const styles = StyleSheet.create({
     alignItems:'center',
     elevation: 2,
   },
+  lists: {
+    marginBottom: 10,
+  },
+  closeBtn: {
+    backgroundColor: '#ddd'
+  },
+  memberContainer: {
+    width: 220,
+  }
 })
 
 export default AddMembers

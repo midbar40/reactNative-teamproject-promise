@@ -6,7 +6,7 @@ import PickItem from './PickItem'
 import ChatCreateBtn from './ChatCreateBtn'
 import { removeSchedule } from '../apis/firebaseCalendar'
 
-function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId }){
+function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, }){
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
@@ -23,14 +23,11 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule,
             //화면에서도 삭제
             const newSchedule = showSchedule.filter(show => itemKey !== show.id)
             setShowSchedule(newSchedule)
+            setItemKey('')
           }catch(err){console.log('err:', err)}
         }}
       ]
     )
-  }
-
-  const createdChat = () => {
-    console.log('채팅만들기')
   }
 
   // console.log('show', showSchedule)
@@ -44,7 +41,7 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule,
       if(schedule.id === rowKey){
         setTitle(schedule.title) 
         memberLists.push(schedule.createdUser)
-        schedule.members.map(member => {
+        schedule.members && schedule.members.map(member => {
           memberLists.push(member.UID)
         })
         console.log('member',memberLists)
