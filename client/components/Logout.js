@@ -12,15 +12,15 @@ function Logout({navigation, loginInfo}) {
   console.log(loginInfo);
 
   const handleLogout = async () => {
-    console.log('로그아웃');
-    if(getUser() === null){
-
+    console.log('로그인상태: ', getUser());
+    if(getUser() !== null){
       await signOut(); // 파이어베이스 로그아웃
+      await fetch('http://192.168.200.17:5300/firebaseLogin/logout')
+      console.log('로그아웃 되었습니다');
     }
-    // await fetch('http://192.168.200.17:5300/firebaseLogin/logout')
     await fetch('http://nid.naver.com/nidlogin.logout') // 네이버 로그아웃
     await fetch('http://192.168.200.17:5300/naverlogin/logout') // 네이버 로그인 토큰삭제
-    navigation.navigate('Landing');
+    navigation.navigate('Landing'); // landing state변경 해야함
   };
   return (
     <View style={styles.logoutBtn}>

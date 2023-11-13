@@ -21,6 +21,7 @@ const registerFirebaseDB = async (uid, email, displayName) => {
     email: email,
     name: displayName,
   }, { merge: true });
+  console.log('유저등록(DB)에 성공했습니다(firebaselogin.js):');
 }
 
 
@@ -32,7 +33,7 @@ const signUpUser = async (email, password, displayName) => {
     password: password,
     displayName: displayName,
   });
-  console.log('유저등록에 성공했습니다:', userRecord.uid);
+  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
   return userRecord;
 };
 
@@ -84,10 +85,7 @@ router.post('/register', expressAsyncHandler (async(req, res) => {
 // 로그아웃
 router.get('/logout', expressAsyncHandler (async(req, res) => {
   try {
-    console.log('쿠키지우기전 :',req.cookies.session)
-    res.clearCookie('session');
-    console.log('쿠키지운후 :',req.cookies.session)
-
+    req.session.destroy(); // 세션 삭제
   } catch(error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });

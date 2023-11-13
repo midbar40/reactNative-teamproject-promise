@@ -7,7 +7,6 @@ const {signUpUser, listAllUsers, registerFirebaseDB  } = require('./firebaseLogi
 const client_id = config.NAVER_CLIENT_ID;
 const client_secret = config.NAVER_CLIENT_SECRET;
 let state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-
 const redirectURI = encodeURI(`${config.NAVER_REDIRECT_URI}`);
 
 
@@ -45,8 +44,11 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
       headers: { 'Authorization': header }
     })
     const userData = await userResponse.json() // 네이버 로그인 시 받아온 유저 정보
+    req.session.user = {email : userData.response.email, password: userData.response.id, name: userData.response.name}
+    console.log('세션테스트(서버48줄) :', req.session.user)
     const userInfo = await listAllUsers() // Firebase에 등록된 유저 정보
     const userEmail = userInfo.map((user) => { return user.email }) // Firebase에 등록된 유저 이메일만 추출
+    console.log('유저이메일(서버51줄) :', userEmail)
     if(userEmail.includes(userData.response.email)){ // firebase에 이미 등록된 유저인지 확인
       console.log('이미 가입된 유저입니다')
     }
@@ -54,8 +56,6 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
       await signUpUser(userData.response.email, userData.response.id, userData.response.name) // firebase에 유저 등록, 이미 로그인한 상태에서 들어가야 등록이 되고, 최초 로그인시 등록이 되지 않는다.
       console.log('회원가입 :', userEmail)
       registerFirebaseDB(userData.response.id, userData.response.email, userData.response.name) // firestore(DB)에 유저 등록
-      req.session.user = {email : userData.response.email, password: userData.response.id, name: userData.response.name}  // 세션에 유저 정보 저장
-      console.log('세션테스트 :', req.session.user)
     }
   } 
   catch (error) {
@@ -68,7 +68,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
 // 유저정보
 router.get('/user', expressAsyncHandler(async (req, res) => {
   res.json(req.session.user)
-  console.log('유저정보(서버) :', req.session.user)
+  console.log('유저정보(서버71줄) :', req.session.user)
 }))
 
 
