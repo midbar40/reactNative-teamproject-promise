@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 
-function ColorItem({title, pickColor, setPcikColor, showSchedule}){
+function ColorItem({title, pickColor, setPickColor, showSchedule}){
   
   useEffect(() => {
     showSchedule.map(schedule => {
       // console.log(schedule.pickColor)
-      setPcikColor(schedule.pickColor)
+      setPickColor(schedule.pickColor)
     })
   },[])
 
   const setColor = () => {
     console.log('내가고른색', title)
-    setPcikColor(title)
+    setPickColor(title)
   }
  
 
