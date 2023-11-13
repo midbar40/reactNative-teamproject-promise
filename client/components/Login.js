@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {signIn} from '../apis/auth';
 // import { useNavigation } from '@react-navigation/native';
+import SnsLogin from './SnsLogin';
 
 function Login({
   navigation,
@@ -18,9 +19,11 @@ function Login({
   findEmail,
   setLoginInfo,
   setIsFindPassword,
-  isFindPassword,
-  isRegister,
   setIsRegister,
+  setNaverLoginLink,
+  naverLoginLink,
+  isSnsLogin,
+  setIsSnsLogin
 }) {
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
@@ -51,43 +54,57 @@ function Login({
       // 로그인 성공 시 App으로 이동
     }
   };
+  const moveToSnsLogin = () => {
+    setIsSnsLogin(true);
+  };
   return (
     <View style={styles.contentBox}>
       <Text style={styles.appName}>KAIROS</Text>
-      <View style={styles.inputBox}>
-        <TextInput
-          placeholder="이메일을 입력해주세요"
-          placeholderTextColor={'#999'}
-          value={email}
-          onChangeText={value => handleUserInfoChange('email', value)}
-          style={styles.input}
-          textContentType={'emailAddress'}
+      {isSnsLogin ? (
+        <SnsLogin
+          navigation={navigation}
+          setNaverLoginLink={setNaverLoginLink}
+          naverLoginLink={naverLoginLink}
+          setIsSnsLogin={setIsSnsLogin}
         />
-      </View>
-      <View style={styles.inputBox}>
-        <TextInput
-          placeholder="비밀번호를 입력해주세요"
-          placeholderTextColor={'#999'}
-          value={password}
-          onChangeText={value => handleUserInfoChange('password', value)}
-          style={styles.input}
-          secureTextEntry={true}
-        />
-      </View>
-      <View style={styles.loginBtnBox}>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.7}
-          onPress={loginAndMoveToApp}>
-          <Text style={styles.loginBtn}>로그인</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.GoogleButton}
-          activeOpacity={0.7}
-          onPress={loginAndMoveToApp}>
-          <Text style={styles.GoogleLoginBtn}>Google 로그인</Text>
-        </TouchableOpacity>
-      </View>
+      ) : (
+        <>
+          <View style={styles.inputBox}>
+            <TextInput
+              placeholder="이메일을 입력해주세요"
+              placeholderTextColor={'#999'}
+              value={email}
+              onChangeText={value => handleUserInfoChange('email', value)}
+              style={styles.input}
+              textContentType={'emailAddress'}
+            />
+          </View>
+          <View style={styles.inputBox}>
+            <TextInput
+              placeholder="비밀번호를 입력해주세요"
+              placeholderTextColor={'#999'}
+              value={password}
+              onChangeText={value => handleUserInfoChange('password', value)}
+              style={styles.input}
+              secureTextEntry={true}
+            />
+          </View>
+          <View style={styles.loginBtnBox}>
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.7}
+              onPress={loginAndMoveToApp}>
+              <Text style={styles.loginBtn}>로그인</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.snsLoginButton}
+              activeOpacity={0.7}
+              onPress={moveToSnsLogin}>
+              <Text style={styles.snsLoginBtn}>SNS 로그인</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
       <View style={styles.signUpAndFindEmail}>
         <TouchableOpacity
           onPress={() => {
@@ -136,6 +153,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderRadius: 10,
   },
+  signUpAndFindEmail: {
+    width: '80%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
   loginBtnBox: {
     width: '100%',
     justifyContent: 'center',
@@ -154,23 +176,21 @@ const styles = StyleSheet.create({
   loginBtn: {
     fontSize: 18,
     color: 'white',
+    fontWeight: 'bold',
   },
-  GoogleButton: {
+  snsLoginButton: {
     width: '80%',
     height: 50,
-    backgroundColor: '#4285F4',
+    backgroundColor: '#c7c7c7',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 10,
   },
-  GoogleLoginBtn: {
+  snsLoginBtn: {
     fontSize: 18,
     color: 'white',
-  },
-  signUpAndFindEmail: {
-    width: '80%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    fontWeight: 'bold',
   },
 });
 

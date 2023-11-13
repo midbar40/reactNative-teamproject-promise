@@ -1,104 +1,107 @@
-import React, { useState, useEffect } from 'react';
-import { AppRegistry, View, Alert } from 'react-native'
+import React, {useEffect, useState} from 'react';
+import { Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen, CalendarScreen, AlarmScreen, TodoScreen, ChatScreen } from './screens';
-import messaging from '@react-native-firebase/messaging'
+import {HomeScreen, CalendarScreen, AlarmScreen, TodoScreen, ChatScreen} from './screens';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import Icon2 from 'react-native-vector-icons/FontAwesome6'
 
+import messaging from '@react-native-firebase/messaging';
+import { getToken, notificationListener, requestUserPermission} from './apis/firebaseMessage';
+
 const Tab = createBottomTabNavigator();
 
-function App({ navigation, route }) {
-  // console.log(route.params.email) 
-  const [isLogin, setIsLogin] = useState(false); 
-    
+function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
+  // console.log(route.params.email)
+
+  const [isLogin, setIsLogin] = useState(false);
+  const [selectRoomId, setSelectRoomId] = useState('');
+
+  useEffect(() => {
+    requestUserPermission();
+    notificationListener();
+    getToken();
+  },[])
+
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
-  }, [])
-
-  useEffect(() => {
-    const requestPermission = async () => {
-      try {
-        await messaging().requestPermission();
-        console.log('Permission granted');
-      } catch (error) {
-        console.error('Permission denied', error);
-      }
-    };
-  
-    requestPermission();
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = messaging().onTokenRefresh((newToken) => {
-      // Save the new token to your backend
-      console.log('Token refreshed:', newToken);
-    });
-  
-    return unsubscribe;
-  }, [])
-
   return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarActiveTintColor: 'skyblue',
-      }}
-    >
-      <Tab.Screen
-        name="Home"
-        // component={HomeScreen} 
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size }) => <Icon name='home' color={color} size={size} />
+    
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor : 'skyblue',
         }}
-      >{props => (
-        <HomeScreen
-          {...props}
-          navigation={navigation}
+      >
+        
+        <Tab.Screen 
+          name="Home" 
+          // component={HomeScreen} 
+          options={{
+            title:'Home',
+            tabBarIcon:({color, size}) => <Icon name='home' color={color} size={size}/>
+        }}
+        >{props => (
+          <HomeScreen
+            {...props}
+            navigation={navigation}
+            isSnsLogin={isSnsLogin}
+            setIsSnsLogin={setIsSnsLogin}
+          />
+        )}
+        </Tab.Screen>
+        
+        <Tab.Screen 
+          name="Calendar" 
+          children={(props) => (
+            <CalendarScreen
+              navigation={navigation}
+              setSelectRoomId={setSelectRoomId}
+            />
+          )}
+          options={{
+            title:'Calendar',
+            tabBarIcon:({color, size}) => <Icon name='calendar-number' color={color} size={size}/>
+        }}
         />
-      )}
-      </Tab.Screen>
-
-      <Tab.Screen
-        name="Calendar"
-        component={CalendarScreen}
-        options={{
-          title: 'Calendar',
-          tabBarIcon: ({ color, size }) => <Icon name='calendar-number' color={color} size={size} />
+        <Tab.Screen 
+          name="Alarm" 
+          component={AlarmScreen} 
+          options={{
+            title:'Alarm',
+            tabBarIcon:({color, size}) => <Icon name='alarm' color={color} size={size}/>
         }}
-      />
-      <Tab.Screen
-        name="Alarm"
-        component={AlarmScreen}
-        options={{
-          title: 'Alarm',
-          tabBarIcon: ({ color, size }) => <Icon name='alarm' color={color} size={size} />
+        />
+          
+        <Tab.Screen 
+          name="Todo" 
+          component={TodoScreen}
+          options={{
+            title:'Todo',
+            tabBarIcon:({color, size}) => <Icon2 name='clipboard-list' color={color} size={size}/>
         }}
-      />
-
-      <Tab.Screen
-        name="Todo"
-        component={TodoScreen}
-        options={{
-          title: 'Todo',
-          tabBarIcon: ({ color, size }) => <Icon2 name='clipboard-list' color={color} size={size} />
+        />      
+        <Tab.Screen 
+          name="Chat" 
+          children={(props) => (
+            <ChatScreen 
+             {...props}
+             selectRoomId={selectRoomId}
+             setSelectRoomId={setSelectRoomId}
+            />
+          )}
+          options={{
+            title:'Chat',
+            tabBarIcon:({color, size}) => <Icon name='chatbubbles-sharp' color={color} size={size}/>
         }}
-      />
-      <Tab.Screen
-        name="Chat"
-        component={ChatScreen}
-        options={{
-          title: 'Chat',
-          tabBarIcon: ({ color, size }) => <Icon name='chatbubbles-sharp' color={color} size={size} />
-        }}
-      />
-    </Tab.Navigator>
+        />
+      </Tab.Navigator>
   )
 }
 

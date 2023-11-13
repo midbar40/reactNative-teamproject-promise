@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { FindPassword, Login, RegisterUser } from '../components';
 
-function LandingScreen({ navigation }) {
+function LandingScreen({ navigation, setNaverLoginLink, naverLoginLink, isSnsLogin, setIsSnsLogin  }) {
   const [loginInfo, setLoginInfo] = useState({
     email: '',
     password: '',
@@ -54,9 +54,11 @@ function LandingScreen({ navigation }) {
           navigation={navigation}
           setLoginInfo={setLoginInfo}
           setIsFindPassword={setIsFindPassword}
-          isFindPassword={isFindPassword}
-          isRegister={isRegister}
           setIsRegister={setIsRegister}
+          setNaverLoginLink={setNaverLoginLink}
+          naverLoginLink={naverLoginLink}
+          isSnsLogin={isSnsLogin}
+          setIsSnsLogin={setIsSnsLogin}
         />
       )}
     </SafeAreaView>
