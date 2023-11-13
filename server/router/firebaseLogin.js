@@ -15,17 +15,31 @@ const db = getFirestore();
 
 // 유저정보 Firestore database에 등록
 const registerFirebaseDB = async (uid, email, displayName) => {
-  const userData = db.collection('user').doc(uid);
-  const res = await userData.set({
-    UID: uid,
-    email: email,
-    name: displayName,
-  }, { merge: true });
-  console.log('유저등록(DB)에 성공했습니다(firebaselogin.js):');
+    const userData = db.collection('user').doc(uid);
+    const res = userData.set({
+      UID: uid,
+      email: email,
+      name: displayName,
+    }, { merge: true })
+  
+      console.log('유저등록(DB)에 성공했습니다(firebaselogin.js):');
 }
 
+// 유저정보 Authentication에 등록 (네이버 로그인)
+const signUpUserwithNaver = async (email, password, displayName) => {
+  const auth = admin.auth(); // auth 객체를 가져옵니다.
+  const userRecord = await auth.createUser({
+    email: email,
+    password: password,
+    displayName: displayName,
+  });
+  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
+  registerFirebaseDB(userRecord.uid, email, displayName); // 유저정보 Firestore database에 등록
+  return userRecord;
+};
 
-// 유저정보 Authentication에 등록 
+
+// 유저정보 Authentication에 등록  (일반 회원가입)
 const signUpUser = async (email, password, displayName) => {
   const auth = admin.auth(); // auth 객체를 가져옵니다.
   const userRecord = await auth.createUser({
@@ -95,6 +109,7 @@ router.get('/logout', expressAsyncHandler (async(req, res) => {
 
 module.exports = router
 // 아래를 객체로 묶으면 오류가 난다, 이유는 모르겠음.
+module.exports.signUpUserwithNaver = signUpUserwithNaver;
 module.exports.signUpUser = signUpUser;
 module.exports.listAllUsers = listAllUsers;
 module.exports.registerFirebaseDB = registerFirebaseDB;

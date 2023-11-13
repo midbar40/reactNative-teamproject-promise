@@ -13,13 +13,14 @@ function Logout({navigation, loginInfo}) {
 
   const handleLogout = async () => {
     console.log('로그인상태: ', getUser());
-    await signOut(); // 파이어베이스 로그아웃
     if(getUser() !== null){
-      await fetch('http://192.168.200.17:5300/firebaseLogin/logout')
-      console.log('로그아웃 되었습니다');
+      await signOut(); // 파이어베이스 로그아웃
+      await fetch('http://nid.naver.com/nidlogin.logout') // 네이버 로그아웃
+      await fetch('http://192.168.200.17:5300/naverlogin/logout') // 네이버 로그인 토큰삭제
+      .then(res => res.json())
+      .then(data => console.log('토큰삭제요청 : ', data))
+      console.log('로그아웃 되었습니다 :', getUser());
     }
-    await fetch('http://nid.naver.com/nidlogin.logout') // 네이버 로그아웃
-    await fetch('http://192.168.200.17:5300/naverlogin/logout') // 네이버 로그인 토큰삭제
     navigation.navigate('Landing'); // landing state변경 해야함
   };
   return (
