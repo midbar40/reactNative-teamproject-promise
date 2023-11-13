@@ -135,7 +135,11 @@ export const getChatRoomUIDByCalendarUID = async (calendarUID) => {
 }
 
 export const sendNotification = async (message, roomUID) => {
-  const FCMTokens = await getMemberFCMTokens(roomUID)
+  const FCMTokens = await getMemberFCMTokens(roomUID);
+  const myUID = getUser().uid;
+  const myData = await firestore().collection(user).doc(myUID).get();
+  const myName = myData.data().name;
+  console.log(myName)
   FCMTokens.forEach(t => {
     try {
       fetch('https://fcm.googleapis.com/fcm/send', {
@@ -147,7 +151,7 @@ export const sendNotification = async (message, roomUID) => {
       body : JSON.stringify({
         "to": `${t}`,
         "notification": {
-          "title": "Check this Mobile (title)",
+          "title": `${myName}`,
           "body": `${message.trim() !== ''? message : '사진'}`,
           "mutable_content": true,
           "sound": "Tri-tone"
@@ -164,9 +168,10 @@ export const sendNotification = async (message, roomUID) => {
 
 // 채팅방에 있는 유저들의 FCM토큰 반환
 export const getMemberFCMTokens = async (roomUID) => {
+  const myUID = getUser().uid;
   try {
     const getChatRoomData = await firestore().collection('chat').doc(roomUID).get();
-    const joinUsers = await getChatRoomData.data().joinUser;
+    const joinUsers = getChatRoomData.data().joinUser.filter(u => u !== myUID );
     // console.log(joinUsers)
 
     const FCMTokens = await Promise.all(joinUsers.map(async uid => {
