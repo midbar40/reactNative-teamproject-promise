@@ -12,6 +12,7 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
   // console.log(route.params.email)
 
   const [isLogin, setIsLogin] = useState(false);
+  const [selectRoomId, setSelectRoomId] = useState('');
 
   return (
     
@@ -40,7 +41,12 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
         
         <Tab.Screen 
           name="Calendar" 
-          component={CalendarScreen}
+          children={(props) => (
+            <CalendarScreen
+              navigation={navigation}
+              setSelectRoomId={setSelectRoomId}
+            />
+          )}
           options={{
             title:'Calendar',
             tabBarIcon:({color, size}) => <Icon name='calendar-number' color={color} size={size}/>
@@ -65,7 +71,13 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
         />      
         <Tab.Screen 
           name="Chat" 
-          component={ChatScreen} 
+          children={(props) => (
+            <ChatScreen 
+             {...props}
+             selectRoomId={selectRoomId}
+             setSelectRoomId={setSelectRoomId}
+            />
+          )}
           options={{
             title:'Chat',
             tabBarIcon:({color, size}) => <Icon name='chatbubbles-sharp' color={color} size={size}/>

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
+
+import { getChatRoomList } from '../apis/firebaseChat';
 
 // 컴포넌트
 import ChatRoomList from '../components/ChatRoomList';
@@ -9,22 +11,46 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-function ChatScreen({ navigation }){
-  const [roomName, setRoomName] = useState('');
+function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
+  const [roomTitle, setRoomTitle] = useState('');
+  const [chatRoomList, setChatRoomList] = useState([]);
+  
+  useEffect(() => {
+    const onResult = (querySnapshot) => {
+      const list = querySnapshot.docs.map(d => {
+        return {
+          chatRoomUID : d._ref._documentPath._parts[1],
+          title : d._data.title
+        }
+      })
+      // console.log('data : ',chatRoomList)
+      setChatRoomList(list);
+    }
 
+    const onError = (error) => {
+      console.log(error)
+    }
+
+    return getChatRoomList(onResult, onError)
+  }, [])
+  
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown : false }}>
       <Stack.Screen name="ChatRoomList" children={(props) => 
         <ChatRoomList
           {...props}
-          setRoomName={setRoomName}
-          roomName={roomName}
+          setRoomTitle={setRoomTitle}
+          roomTitle={roomTitle}
+          chatRoomList={chatRoomList}
+          setChatRoomList={setChatRoomList}
+          setSelectRoomId={setSelectRoomId}
         />
       }/>
       <Stack.Screen name="ChatRoom" children={(props) => 
         <ChatRoom 
           {...props}
-          roomName={roomName}
+          roomTitle={roomTitle}
+          selectRoomId={selectRoomId}
         />
       }/>
     </Stack.Navigator>

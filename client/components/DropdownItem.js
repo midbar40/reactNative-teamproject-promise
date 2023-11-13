@@ -10,6 +10,7 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
     
     if(modalTitle === '시작날짜'){
       if(title === '년'){
+        // console.log(category)
         setStartDate((prev) => ({...prev, year:category}))
       }else if(title === '월'){
         setStartDate((prev) => ({...prev, month:category}))
@@ -18,9 +19,6 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
       }
     }else if(modalTitle === '종료날짜'){
       if(title === '년'){
-        console.log('dd',startDate.year)
-        console.log('ff',endDate.year)
-        console.log(startDate.year < endDate.year)
         setEndDate((prev) => ({...prev, year:category}))
       }else if(title === '월'){
         setEndDate((prev) => ({...prev, month:category}))
@@ -41,15 +39,19 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
 
 const styles = StyleSheet.create({
   list: {
-    flex: 1
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    // backgroundColor: 'green'
   },
   DropdownItemContainer: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     padding: 10,
     paddingTop: 0,
-    marginLeft: 5
+    marginLeft: 5,
   },
   text: {
     backgroundColor: '#fff'

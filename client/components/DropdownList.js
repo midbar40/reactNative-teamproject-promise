@@ -9,7 +9,7 @@ const caretdownComponent = (props) => <AntIcon name='caretdown' {...props} size=
 const caretupComponent = (props) => <AntIcon name='caretup' {...props} size={15}/>
 
 
-function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpen, setDropYearOpen, dropMonthOpen, setDropMonthOpen, dropDateOpen, setDropDateOpen, startDate, setStartDate, endDate, setEndDate}){
+function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpen, setDropYearOpen, dropMonthOpen, setDropMonthOpen, dropDateOpen, setDropDateOpen, startDate, setStartDate, endDate, setEndDate, itemKey}){
 
   //드롭다운 닫기
   const closeDropdown = () => {
@@ -21,7 +21,7 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
   
   //드롭다운 클릭
   const onPress = () => {
-    console.log(title)
+    // console.log(title)
     if(title === '년'){
       setDropYearOpen(!dropYearOpen)
     }else if(title === '월'){
@@ -31,6 +31,7 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
     }
   }
 
+  // console.log(categories)
   return(
     <TouchableOpacity style={[styles.horizontalAlign, (dropYearOpen || dropMonthOpen || dropDateOpen) && styles.drops ]} onPress={onPress}>
         {dropYearOpen || dropMonthOpen || dropDateOpen ? caretupComponent() : caretdownComponent()}
@@ -53,7 +54,6 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
            )}
            style={[styles.list, dropYearOpen && styles.yearOpen]}
          />
-
         </View>
         :
         modalTitle === '시작날짜' ? 
@@ -135,6 +135,10 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
 }
 
 const styles = StyleSheet.create({
+  view: {
+    // flex: 1,
+    height: 200,
+  },
   horizontalAlign: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -162,16 +166,19 @@ const styles = StyleSheet.create({
     position:'absolute', 
     left: -15,
     top: 90,
+    height: 200,
   },
   monthOpen: {
     position:'absolute', 
     left: -15,
     top: 90,
+    height: 200,
   },
   dateOpen: {
     position:'absolute', 
     left: -15,
     top: 90,
+    height: 200,
   },
   nodrops: {
     padding: 5,
