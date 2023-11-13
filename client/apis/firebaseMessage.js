@@ -1,11 +1,16 @@
 
 import messaging from '@react-native-firebase/messaging';
 import {PermissionsAndroid} from 'react-native';
+import { getUser } from '../apis/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export const getToken = async () => {
   await messaging().registerDeviceForRemoteMessages();
   const token = await messaging().getToken();
   console.log('token : ', token)
+  firestore().collection('user').doc(getUser().uid).update({
+    FCMToken : token
+  })
 }
 
 export const notificationListener = () => {

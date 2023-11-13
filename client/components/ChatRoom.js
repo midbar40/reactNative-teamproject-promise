@@ -5,10 +5,10 @@ import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, Flat
 import ChatList from './ChatList';
 
 import { sendMessageToFirebase, getMessage } from '../apis/firebaseChat';
-import ImagePicker, { launchImageLibrary } from 'react-native-image-picker';
-import { uploadFileToFirebaseStorage, getChatFile } from '../apis/firebaseChat';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { uploadFileToFirebaseStorage, getChatFile, sendNotification } from '../apis/firebaseChat';
 
-function ChatRoom({ navigation, roomTitle, selectRoomId }){
+function ChatRoom({ navigation, selectRoomId }){
   const [message, setMessage] = useState('');
   const [messageList , setMessageList] = useState([]);
   const [uploadFile, setUploadFile] = useState({});
@@ -20,15 +20,17 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
     if(message.trim() !== ''){
       try {
         await sendMessageToFirebase(selectRoomId, message);
+        sendNotification(message ,selectRoomId)
         setMessage('');
       } catch (error) {
         console.log(error)
       }
     } else {
       uploadFileToFirebaseStorage(uploadFile.fileData, selectRoomId);
+      sendNotification(message ,selectRoomId)
       setUploadFile({});
     }
-    // getChatFile();
+    
   }
 
 
@@ -66,7 +68,7 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
 
   }
 
-  console.log('modal : ',toggleImgModal)
+  // console.log('modal : ',toggleImgModal)
 
   useEffect(() => {
     async function onResult(querySnapshot){
@@ -82,12 +84,12 @@ function ChatRoom({ navigation, roomTitle, selectRoomId }){
           return doc;
         } else {
             const url = await getChatFile(selectRoomId, doc.uploadFilePath);
-            console.log('url : ',url)
+            // console.log('url : ',url)
             doc.uploadFilePath = url;
             return doc;
         }
       })) 
-      console.log(querySnapshot.data().messages)
+      // console.log(querySnapshot.data().messages)
       setMessageList(querySnapshot.data())
     }
 

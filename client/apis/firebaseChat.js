@@ -1,6 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { getUser } from './auth';
+import { MESSAGE_SERVICE_KEY } from '@env';
 
 export const creatChatRoom = async (title, calendarUID, friends) => { // 현재는 룸 타이틀로 해서 같은 제목이 있는경우는 안만들게 했지만 추 후 캘린더 아이디값을 받을 예정
   try {
@@ -115,7 +116,7 @@ export const getChatFile = async (roomId, filePath) => {
     // console.log(filePath)
     const reference = storage().ref(`/uploadFileByChat/${roomId}/${filePath}`);
     const url = await reference.getDownloadURL();
-    console.log('ref : ',url);
+    // console.log('ref : ',url);
     return Promise.resolve(url);
   } catch (error) {
     console.log(error)
@@ -131,4 +132,57 @@ export const getChatRoomUIDByCalendarUID = async (calendarUID) => {
     // console.log('캘린더아이디로 찾음 : ', chatRoomUID);
     return chatRoomUID;
   }
+}
+
+export const sendNotification = async (message, roomUID) => {
+  const FCMTokens = await getMemberFCMTokens(roomUID)
+  FCMTokens.forEach(t => {
+    try {
+      fetch('https://fcm.googleapis.com/fcm/send', {
+      method : 'POST',
+      headers : {
+        'Content-Type' : 'application/json',
+        'Authorization' : `Bearer ${MESSAGE_SERVICE_KEY}`
+      },
+      body : JSON.stringify({
+        "to": `${t}`,
+        "notification": {
+          "title": "Check this Mobile (title)",
+          "body": `${message.trim() !== ''? message : '사진'}`,
+          "mutable_content": true,
+          "sound": "Tri-tone"
+          }
+      })
+    })
+    .catch(e => console.log(e))
+    .then(r => console.log(r))
+    } catch (error) {
+      console.log('noti error : ',error)
+    }
+  })
+}
+
+// 채팅방에 있는 유저들의 FCM토큰 반환
+export const getMemberFCMTokens = async (roomUID) => {
+  try {
+    const getChatRoomData = await firestore().collection('chat').doc(roomUID).get();
+    const joinUsers = await getChatRoomData.data().joinUser;
+    // console.log(joinUsers)
+
+    const FCMTokens = await Promise.all(joinUsers.map(async uid => {
+      try {
+        const token = await firestore().collection('user').doc(uid).get();
+        // console.log(token.data().FCMToken);
+        return token.data().FCMToken;
+      } catch (error) {
+        console.log(error)
+      }
+    }))
+    return FCMTokens;
+    
+  } catch (error) {
+    console.log('getMemberFCMTokens : ',error)
+  }
+  
+  
 }

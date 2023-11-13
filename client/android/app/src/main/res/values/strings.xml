@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RNproject</string>
+    <string name="kakao_app_key">a49f2e0bebda765b60e4247a349c1f00</string>
 </resources>

@@ -15,9 +15,9 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath, toggleImg
     {myUserUID === userUID ?
       <View style={styles.myMessageContainer}>
         <View style={styles.myMessageTimeContainer}>
-          <Text style={{fontSize : 12}}>{chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes()}` : 
-          (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes()}` :
-          `오후 ${chatDate.getHours()} : ${chatDate.getMinutes()}`)}</Text>
+          <Text style={{fontSize : 12}}>{chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` : 
+          (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` :
+          `오후 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}`)}</Text>
         </View>
         <TouchableOpacity style={styles.myMessageBox} onPress={clickImageHandle}>
           {uploadFilePath === '' ?
