@@ -7,7 +7,7 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
   //카테고리 클릭
   const onPress = () => {
     console.log('아이템',selectedDate)
-    
+    console.log('ahekfxkdl', modalTitle)
     if(modalTitle === '시작날짜'){
       if(title === '년'){
         // console.log(category)
@@ -17,7 +17,7 @@ function DropdownItem({title, modalTitle, selectedDate, category, closeDropdown,
       }else if(title === '일'){
         setStartDate((prev) => ({...prev, date:category}))
       }
-    }else if(modalTitle === '종료날짜'){
+    }else{
       if(title === '년'){
         setEndDate((prev) => ({...prev, year:category}))
       }else if(title === '월'){
@@ -43,6 +43,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     // backgroundColor: 'green'
+    // height:200,
+    elevation:2,
+    zIndex:2,
   },
   DropdownItemContainer: {
     flex: 1,
@@ -52,10 +55,12 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 0,
     marginLeft: 5,
+    // elevation:2,
   },
   text: {
     backgroundColor: '#fff'
-  }
+  },
+  
 })
 
 export default DropdownItem

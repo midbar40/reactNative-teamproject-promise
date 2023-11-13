@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Pressable } from 'react-native'
 
 import { updateData } from '../apis/firebaseCalendar'
@@ -7,12 +7,23 @@ import { updateData } from '../apis/firebaseCalendar'
 
 function PickItem({ title, content, startDay, endDay, id, members, itemKey, setItemKey, setOpenModal}){
 
+  const [memberList, setmemberList] = useState('')
+
   const longPress = () => {
     console.log('길게누르기', id)
     setItemKey(id)
     setOpenModal(true)
-
+    console.log(memberList)
   }
+
+  useEffect(() => {
+    const list = []
+    members && members.map(member => {
+      list.push(member.name)
+    })
+    console.log('뭐지', list)
+    setmemberList(list)
+  },[])
 
   return(
     <Pressable onLongPress={longPress}>
@@ -21,7 +32,7 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
           <Text>제목 : {title}</Text>
           {/* <Text>제목 : {id}</Text> */}
           <Text>내용 : {content}</Text>
-          <Text>멤버 : {members !== '' ? members.map(member => member.name) : '없음'}</Text>
+          <Text>멤버 : {memberList ? memberList.join(', ') : '없음'}</Text>
           <Text>{startDay}  ~  {endDay}</Text>
         </View>
         {/* <View>
