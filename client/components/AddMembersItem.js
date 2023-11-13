@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
 
-function AddMembersItem({item, pickFriends, setPickFriends}){
+function AddMembersItem({item, pickFriends, setPickFriends, selectedId, setSelectedId}){
   
   const [pick, setPick] = useState(false)
 
+  //이미 스케쥴에 등록된 친구는 클릭되어있게
   useEffect(() => {
     pickFriends.indexOf(item.name) !== -1 && setPick(!pick)
   },[])
 
+  console.log('item',item)
   const onPress = () => {
     if(pickFriends.indexOf(item.name) === -1){
       setPickFriends([...pickFriends, item.name])
@@ -19,9 +21,8 @@ function AddMembersItem({item, pickFriends, setPickFriends}){
         return list !== item.name
       } 
         )
-      setPickFriends(filterd)
+        setPickFriends(filterd)
     }
-    console.log(pickFriends)
     setPick(!pick)
   }
 

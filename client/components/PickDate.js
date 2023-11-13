@@ -39,6 +39,7 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule,
     setItemKey(rowKey)
     showSchedule.filter(schedule => {
       console.log(schedule)
+      //채팅방 멤버 구성
       const memberLists = []
       if(schedule.id === rowKey){
         setTitle(schedule.title) 

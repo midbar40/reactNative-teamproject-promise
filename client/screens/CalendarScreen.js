@@ -132,6 +132,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         content: scheduleContent,
         pickColor: pickColor,
         createdAt: getCurrentTime(),
+        lastModifiedAt : itemKey === '' ? null : getCurrentTime(),
         createdUser: user
       }
       try{

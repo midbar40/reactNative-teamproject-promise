@@ -10,7 +10,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
 
   const [open, setOpen] = useState(false) //모달 open
   const [friendLists, setFriendLists] = useState() //친구목록 전체 저장
-  const [selectedId, setSelectedId] = useState(null)
+  const [selectedId, setSelectedId] = useState()
 
   // console.log('show', showSchedule)
 
@@ -39,16 +39,16 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
     })
   },[])
 
+  //스케쥴에 이미 있는 친구 자동으로 데이터 넣기
   useEffect(() => {
     showSchedule.map(schedule => {
-      if(schedule.id === itemKey){
-        const list = [pickFriends]
-        schedule.members.map(member => {
-          list.push(member.name)
-        })
-        setPickFriends(list)
-      }
-
+        if(schedule.id === itemKey){
+          const list = pickFriends ? [pickFriends] : []
+          schedule.members.map(member => {
+            list.push(member.name)
+          })
+          setSelectedId(list)
+        }
     })
   },[])
   console.log('pick', pickFriends)
@@ -76,7 +76,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
             data={friendLists}
             keyExtractor={(item) => item.UID}
             renderItem={({item}) => (
-              <AddMembersItem item={item} pickFriends={pickFriends} setPickFriends={setPickFriends} showSchedule={showSchedule}/>
+              <AddMembersItem item={item} pickFriends={pickFriends} setPickFriends={setPickFriends} showSchedule={showSchedule} selectedId={selectedId} setSelectedId={setSelectedId}/>
             )}
             
           />

@@ -21,7 +21,7 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
           <Text>제목 : {title}</Text>
           {/* <Text>제목 : {id}</Text> */}
           <Text>내용 : {content}</Text>
-          <Text>멤버 : {members !== '' ? members.map(member => member.name) : '없음'}</Text>
+          <Text>멤버 : {members !== '' ? members.map(member => `${member.name}, `) : '없음'}</Text>
           <Text>{startDay}  ~  {endDay}</Text>
         </View>
         {/* <View>
