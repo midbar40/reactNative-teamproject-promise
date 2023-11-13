@@ -1,3 +1,5 @@
+package-lock.json
+
 # OSX
 #
 .DS_Store
@@ -65,4 +67,3 @@ yarn-error.log
 # testing
 /coverage
 
-package-lock.json

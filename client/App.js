@@ -8,18 +8,20 @@ import Icon2 from 'react-native-vector-icons/FontAwesome6'
 
 const Tab = createBottomTabNavigator();
 
-function App({navigation, route}) {
+function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
   // console.log(route.params.email)
 
   const [isLogin, setIsLogin] = useState(false);
   const [selectRoomId, setSelectRoomId] = useState('');
 
   return (
+    
       <Tab.Navigator
         screenOptions={{
           tabBarActiveTintColor : 'skyblue',
         }}
       >
+        
         <Tab.Screen 
           name="Home" 
           // component={HomeScreen} 
@@ -31,6 +33,8 @@ function App({navigation, route}) {
           <HomeScreen
             {...props}
             navigation={navigation}
+            isSnsLogin={isSnsLogin}
+            setIsSnsLogin={setIsSnsLogin}
           />
         )}
         </Tab.Screen>
