@@ -33,6 +33,8 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
       cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
+        'cache-control':'no-cache, must-revalidate, post-check=0, pre-check=0',
+
       },
     });
     const json = await response.json();
@@ -43,7 +45,9 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
     const userResponse = await fetch('https://openapi.naver.com/v1/nid/me', {
       method: 'GET',
       cache: 'no-store',
-      headers: { 'Authorization': header }
+      headers: { 'Authorization': header,
+      'cache-control':'no-cache, must-revalidate, post-check=0, pre-check=0',
+    }
     })
     const userData = await userResponse.json() // 네이버 로그인 시 받아온 유저 정보
     req.session.user = {email : userData.response.email, password: userData.response.id, name: userData.response.name}

@@ -11,6 +11,7 @@ const Stack = createNativeStackNavigator();
 
 function stackRouter() {
   const [naverLoginLink, setNaverLoginLink] = useState('');
+  const [kakaoLoginLink, setKakaoLoginLink] = useState('');
   const [isSnsLogin, setIsSnsLogin] = useState(false);
 
   return (
@@ -26,6 +27,8 @@ function stackRouter() {
               {...props}
               naverLoginLink={naverLoginLink}
               setNaverLoginLink={setNaverLoginLink}
+              kakaoLoginLink={kakaoLoginLink}
+              setKakaoLoginLink={setKakaoLoginLink}
               isSnsLogin={isSnsLogin}
               setIsSnsLogin={setIsSnsLogin}
             />
@@ -46,6 +49,8 @@ function stackRouter() {
               {...props}
               naverLoginLink={naverLoginLink}
               setNaverLoginLink={setNaverLoginLink}
+              kakaoLoginLink={kakaoLoginLink}
+              setKakaoLoginLink={setKakaoLoginLink}
             />
           )}
         </Stack.Screen>

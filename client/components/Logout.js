@@ -8,8 +8,8 @@ import {
 import {signOut, getUser} from '../apis/auth';
 
 
-function Logout({navigation, loginInfo}) {
-  console.log(loginInfo);
+function Logout({navigation}) {
+
 
   const handleLogout = async () => {
     console.log('로그인상태: ', getUser());
@@ -17,8 +17,9 @@ function Logout({navigation, loginInfo}) {
       await fetch('http://192.168.200.17:5300/naverlogin/logout') // 네이버 로그인 토큰삭제
       await fetch('http://nid.naver.com/nidlogin.logout') // 네이버 로그아웃
       console.log('로그아웃 되었습니다 :', getUser());
-    
+
     navigation.navigate('Landing'); // landing state변경 해야함
+
   };
   return (
     <View style={styles.logoutBtn}>

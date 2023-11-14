@@ -29,12 +29,12 @@ app.use(session({
 
 // 라우터 설정
 const naverLoginRouter = require('./router/naverLogin');
-// const kakaoLoginRouter = require('./router/kakaologin');
+const kakaoLoginRouter = require('./router/kakaologin');
 const firebaseLoginRouter = require('./router/firebaseLogin');
 
 // 라우터 적용
 app.use('/naverlogin', naverLoginRouter);
-// app.use('/kakaoLogin', kakaoLoginRouter);
+app.use('/kakaoLogin', kakaoLoginRouter);
 app.use('/firebaseLogin', firebaseLoginRouter);
 
 

@@ -11,7 +11,6 @@ const Tab = createBottomTabNavigator();
 function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
   // console.log(route.params.email)
 
-  const [isLogin, setIsLogin] = useState(false);
   const [selectRoomId, setSelectRoomId] = useState('');
 
   return (

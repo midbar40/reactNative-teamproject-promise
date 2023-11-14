@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {signIn} from '../apis/auth';
 
@@ -6,33 +6,53 @@ function SnsLogin({
   navigation,
   setNaverLoginLink,
   setIsSnsLogin,
+  setKakaoLoginLink,
 }) {
+  const [isNaverLogin, setIsNaverLogin] = useState(false);
+  const [isKakaoLogin, setIsKakaoLogin] = useState(false);
+
   const googleLogin = () => {
     console.log('google 로그인');
   };
 
   const kakaoLogin = async () => {
-    console.log('kakao 로그인');
+    setIsKakaoLogin(true);
+    setIsNaverLogin(false);
+    try {
+      const response = await fetch('http://192.168.200.17:5300/kakaologin', {
+        cache: 'no-store',
+      })
+      setKakaoLoginLink(response.url);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const naverLogin = async () => {
+    setIsNaverLogin(true);
+    setIsKakaoLogin(false);
     const getNaverLoginLink = async () => {
       try {
-        const response = await fetch('http://192.168.200.17:5300/naverlogin', 
-        {
+        const response = await fetch('http://192.168.200.17:5300/naverlogin', {
           cache: 'no-store',
-        }
-        );
+        });
         const data = await response.json();
         setNaverLoginLink(data.API_URL);
       } catch (err) {
         console.log(err);
       }
     };
-  
+
     await getNaverLoginLink();
-    navigation.navigate('Web');
   };
+
+  useEffect(() => {
+    if (isKakaoLogin) {
+      navigation.navigate('Web', {isKakaoLogin: isKakaoLogin});
+    } else if (isNaverLogin) {
+      navigation.navigate('Web', {isNaverLogin: isNaverLogin});
+    }
+  }, [isKakaoLogin, isNaverLogin]);
 
   return (
     <>
