@@ -13,7 +13,6 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
     console.log('길게누르기', id)
     setItemKey(id)
     setOpenModal(true)
-    console.log(memberList)
   }
 
   useEffect(() => {
@@ -21,7 +20,6 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
     members && members.map(member => {
       list.push(member.name)
     })
-    console.log('뭐지', list)
     setmemberList(list)
   },[])
 

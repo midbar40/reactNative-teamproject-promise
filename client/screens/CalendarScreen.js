@@ -376,7 +376,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
                 <ModalInputs modalTitle='종료날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
               </View>
               <View style={styles.textInputs}>
-                <ModalTextInputs title='할일 제목' scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
+                <ModalTextInputs scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
                 {/* <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/> */}
                 <AddMembers showSchedule={showSchedule} itemKey={itemKey} pickFriends={pickFriends} setPickFriends={setPickFriends}/>
               </View>

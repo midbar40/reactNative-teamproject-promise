@@ -15,31 +15,6 @@ function AddMembersItem({item, pickFriends, setPickFriends, selectedId, setSelec
   console.log('item',item)
 
   //member추가
-  // const onPress = () => {
-  //   console.log('pickfr', pick)
-  //   if(pick){
-  //     //다시 누르면 걸러주기 (체크해제)
-      
-  //     console.log('1', pick)
-  //     const list = pickFriends
-  //     // const filterd = list.filter(list =>{
-  //       //   return list !== item.name
-  //       // })
-  //       // setPickFriends(filterd)
-  //     }else if(selectedId !== '' && selectedId.indexOf(item.name) === -1){
-  //     const picklist = pickFriends ? [...pickFriends] : []
-  //     console.log('2')
-  //     picklist.push(...picklist, item)
-  //     console.log('list',picklist)
-  //     setSelectedId(picklist)
-  //     console.log('-----',selectedId)
-  //     // setPickFriends(list)
-  //   }else{
-  //     console.log('첫추가')
-  //     picklist.push(item)
-  //   }
-  //   setPick(!pick)
-  // }
   const onPress = () => {
     if(selectedId.indexOf(item.name) === -1 || selectedId=== ''){
       setSelectedId([...selectedId, item.name])
