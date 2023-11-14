@@ -7,7 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 export const getToken = async () => {
   await messaging().registerDeviceForRemoteMessages();
   const token = await messaging().getToken();
-  console.log('token : ', token)
+  // console.log('token : ', token)
   firestore().collection('user').doc(getUser().uid).update({
     FCMToken : token
   })

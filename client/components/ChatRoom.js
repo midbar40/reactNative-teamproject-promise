@@ -13,6 +13,8 @@ function ChatRoom({ navigation, selectRoomId }){
   const [messageList , setMessageList] = useState([]);
   const [uploadFile, setUploadFile] = useState({});
   const [toggleImgModal, setToggleImgModal] = useState('');
+  const [showingChatList, setShowingChatList] = useState('');
+  const [chatIndex, setChatIndex] = useState(1);
 
   const flatList = useRef();
 
@@ -33,7 +35,7 @@ function ChatRoom({ navigation, selectRoomId }){
     
   }
 
-
+  // 이미지 갤러리 오픈
   const openImageLibrary = () => {
     setMessage('');
     let options = {
@@ -68,8 +70,7 @@ function ChatRoom({ navigation, selectRoomId }){
 
   }
 
-  // console.log('modal : ',toggleImgModal)
-
+  // 채팅방 메세지 받아오기
   useEffect(() => {
     async function onResult(querySnapshot){
       // querySnapshot.forEach(doc => {
@@ -91,6 +92,7 @@ function ChatRoom({ navigation, selectRoomId }){
       })) 
       // console.log(querySnapshot.data().messages)
       setMessageList(querySnapshot.data())
+      
     }
 
     function onError(error){
@@ -109,14 +111,24 @@ function ChatRoom({ navigation, selectRoomId }){
         <TouchableOpacity style={styles.returnBtnContainer} onPress={() => navigation.navigate('ChatRoomList')}>
           <Text style={styles.returnBtnText}>◀</Text>
         </TouchableOpacity>
-        <Text style={styles.chatRoomNameText}>{messageList?.roomTitle} 채팅방</Text>
+        <Text style={styles.chatRoomNameText}>{messageList?.title} 채팅방</Text>
       </View>
       <FlatList
         data={messageList.messages}
-        renderItem={({ item }) => {return <ChatList message={item.message} userUID={item.userUID} userEmail={item.userEmail} date={item.date} uploadFilePath={item.uploadFilePath} toggleImgModal={toggleImgModal} setToggleImgModal={setToggleImgModal} />}}
+        renderItem={({ item }) => (
+          <ChatList 
+            message={item.message} 
+            userUID={item.userUID} 
+            useName={item.name} 
+            date={item.date} 
+            uploadFilePath={item.uploadFilePath} 
+            setToggleImgModal={setToggleImgModal}
+          />)}
         keyExtractor={item => item.date}
         ref={flatList}
-        onContentSizeChange={()=> flatList.current.scrollToEnd()}
+        // onContentSizeChange={() => flatList.current.scrollToEnd()}
+        // onLayout={() => flatList.current.scrollToEnd()}
+        inverted
       />
         {/* {messageList?.length !== 0 &&
           messageList?.map(chat => <ChatList key={chat.date} message={chat.message} user={chat.user}/>)

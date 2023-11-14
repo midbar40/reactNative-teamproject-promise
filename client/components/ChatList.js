@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { getUser } from '../apis/auth';
 
-function ChatList({ message, userUID, userEmail, date, uploadFilePath, toggleImgModal, setToggleImgModal }){
+function ChatList({ message, userUID, userName, date, uploadFilePath, setToggleImgModal }){
   const myUserUID = getUser().uid;
   const chatDate = new Date(date);
+  const todayYear = new Date().getFullYear();
+  const todayMonth = new Date().getMonth();
+  const todayDate = new Date().getDate();
 
   const clickImageHandle = () => {
     setToggleImgModal(uploadFilePath);
@@ -15,9 +18,12 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath, toggleImg
     {myUserUID === userUID ?
       <View style={styles.myMessageContainer}>
         <View style={styles.myMessageTimeContainer}>
-          <Text style={{fontSize : 12}}>{chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` : 
+          <Text style={{fontSize : 12}}>{(todayYear === chatDate.getFullYear() && todayMonth === chatDate.getMonth() && todayDate === chatDate.getDate()) ? 
+          (chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` : 
           (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` :
-          `오후 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}`)}</Text>
+          `오후 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}`)) :
+          `${chatDate.getMonth() + 1}월 ${chatDate.getDate()}일`
+        }</Text>
         </View>
         <TouchableOpacity style={styles.myMessageBox} onPress={clickImageHandle}>
           {uploadFilePath === '' ?
@@ -29,7 +35,7 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath, toggleImg
       :
       <View style={styles.otherMessageContainer}>
         <View style={styles.otherMessageUserName}>
-          <Text>{userEmail}</Text>
+          <Text>{userName}</Text>
         </View>
         <View style={{ flexDirection : 'row'}}>
           <TouchableOpacity style={styles.otherMessageBox} onPress={clickImageHandle}>
@@ -39,14 +45,16 @@ function ChatList({ message, userUID, userEmail, date, uploadFilePath, toggleImg
             }
           </TouchableOpacity>
           <View style={styles.otherMessageTimeContainer}>
-            <Text style={{fontSize : 12}}>{chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes()}` : 
-            (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes()}` :
-            `오후 ${chatDate.getHours()} : ${chatDate.getMinutes()}`)}</Text>
+            <Text style={{fontSize : 12}}>{(todayYear === chatDate.getFullYear() && todayMonth === chatDate.getMonth() && todayDate === chatDate.getDate()) ? 
+          (chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` : 
+          (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` :
+          `오후 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}`)) :
+          `${chatDate.getMonth() + 1}월 ${chatDate.getDate()}일`
+        }</Text>
           </View>
         </View>
       </View>
     }
-    
     </>
   )
 }
@@ -56,7 +64,7 @@ const styles = StyleSheet.create({
     justifyContent : 'flex-end',
     marginBottom : 12,
     paddingRight : 10,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   myMessageTimeContainer : {
     marginRight : 3,
