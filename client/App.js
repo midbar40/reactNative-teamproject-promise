@@ -98,6 +98,7 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
           )}
           options={{
             title:'Chat',
+            headerShown:false,
             tabBarIcon:({color, size}) => <Icon name='chatbubbles-sharp' color={color} size={size}/>
         }}
         />

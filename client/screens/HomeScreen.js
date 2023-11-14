@@ -61,7 +61,7 @@ function HomeScreen({props, navigation, loginInfo}) {
     return getFriendsRealtimeChange(onResult, onError)
   },[])
 
-  console.log(friendList)
+  // console.log(friendList)
 
   return (
     <SafeAreaView style={styles.container}>

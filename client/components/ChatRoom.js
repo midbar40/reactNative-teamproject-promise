@@ -119,7 +119,7 @@ function ChatRoom({ navigation, selectRoomId }){
           <ChatList 
             message={item.message} 
             userUID={item.userUID} 
-            useName={item.name} 
+            userName={item.name} 
             date={item.date} 
             uploadFilePath={item.uploadFilePath} 
             setToggleImgModal={setToggleImgModal}

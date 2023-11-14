@@ -16,15 +16,21 @@ function ChatRoomList({ navigation, chatRoomList, setSelectRoomId }){
   return(
     <SafeAreaView>
       <View style={styles.chatRoomListHeader}>
-        <Text style={styles.chatRoomListHeaderText}>캘린더 톡</Text>
+        <Text style={styles.chatRoomListHeaderText}>채팅</Text>
       </View>
       <FlatList 
         data={chatRoomList}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => enterRoom(item?.chatRoomUID)}
+            style={styles.chatRoomListContainer}
           >
-            <View style={styles.chatRoomListContainer}><Text style={styles.chatRoomListText}>{item?.title}</Text></View>
+            <View>
+              <Text style={styles.chatRoomListText}>{item?.title}</Text>
+            </View>
+            <View style={styles.chatRoomNumUsersContainer}>
+              <Text style={{color : '#fff'}}>{`${item?.joinUser.length}명 참가중`}</Text>
+            </View>
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item?.chatRoomUID}
@@ -38,9 +44,7 @@ const styles = StyleSheet.create({
   chatRoomListHeader : {
     width : '100%',
     height : 40,
-    marginBottom : 10,
-    borderBottomWidth : 1,
-    borderBottomColor : '#333'
+    marginVertical : 20,
   },
   chatRoomListHeaderText : {
     color : '#333',
@@ -52,8 +56,11 @@ const styles = StyleSheet.create({
   chatRoomListContainer : {
     width : '100%',
     height : 50,
-    borderColor : '#000',
-    backgroundColor : '#00B7FA',
+    borderColor : '#fff',
+    backgroundColor : '#5160F5',
+    borderBottomWidth : 2,
+    flexDirection : 'row',
+    justifyContent : 'space-between'
   },
   chatRoomListText : {
     fontSize : 20,
@@ -62,6 +69,11 @@ const styles = StyleSheet.create({
     color : '#fff',
     fontWeight : 'bold',
   },
+  chatRoomNumUsersContainer : {
+    alignSelf : 'flex-end',
+    paddingRight : 5,
+    paddingBottom : 5,
+  }
 })
 
 export default ChatRoomList;
