@@ -206,7 +206,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       <Calendar
         style={styles.calendar}
         monthFormat={'yyyy년 MM월'}
-        markedDates={markandSelected}
+        markedDates={markandSelected ? markandSelected : markedDate}
         renderArrow={(direction) => direction === 'left' ? <AntIcon name='left' size={25} color='lightgreen'/> : <AntIcon name='right' size={25} color='lightgreen'/>}
         theme={{
           backgroundColor: '#eeeeee',
