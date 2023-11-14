@@ -43,6 +43,8 @@ function WebScreen({route, navigation, naverLoginLink, setNaverLoginLink}) {
     
     if(getUser() == null){
     await getUserInfo();
+    } else {
+      navigation.navigate('App');
     }
   };
 

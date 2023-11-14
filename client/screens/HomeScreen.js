@@ -48,20 +48,20 @@ function HomeScreen({props, navigation, loginInfo}) {
     });
   }
 
-  // useEffect(() => {
-  //   function onResult(querySnapshot){
-  //     console.log(querySnapshot.data()?.friends)
-  //     // setFriendList(querySnapshot.data().friends)
-  //   }
+  useEffect(() => {
+    function onResult(querySnapshot){
+      console.log(querySnapshot.data()?.friends)
+      // setFriendList(querySnapshot.data().friends)
+    }
 
-  //   function onError(error){
-  //     console.log(error)
-  //   }
+    function onError(error){
+      console.log(error)
+    }
 
-  //   return getFriendsRealtimeChange(onResult, onError)
-  // },[])
+    return getFriendsRealtimeChange(onResult, onError)
+  },[])
 
-  // console.log(friendList)
+  console.log(friendList)
 
   return (
     <SafeAreaView style={styles.container}>
