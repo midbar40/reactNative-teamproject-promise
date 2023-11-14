@@ -7,9 +7,15 @@ function SnsLogin({
   setNaverLoginLink,
   setIsSnsLogin,
   setKakaoLoginLink,
+  isKakaoLogin,
+  setIsKakaoLogin,
+  isNaverLogin,
+  setIsNaverLogin,
 }) {
-  const [isNaverLogin, setIsNaverLogin] = useState(false);
-  const [isKakaoLogin, setIsKakaoLogin] = useState(false);
+  // const [isNaverLogin, setIsNaverLogin] = useState(false);
+  // const [isKakaoLogin, setIsKakaoLogin] = useState(false);
+  const homeIP = '192.168.0.172:5300'
+  const academyIP = '192.168.200.17:5300'
 
   const googleLogin = () => {
     console.log('google 로그인');
@@ -19,7 +25,7 @@ function SnsLogin({
     setIsKakaoLogin(true);
     setIsNaverLogin(false);
     try {
-      const response = await fetch('http://192.168.200.17:5300/kakaologin', {
+      const response = await fetch(`http://${homeIP}/kakaologin`, {
         cache: 'no-store',
       })
       setKakaoLoginLink(response.url);
@@ -33,7 +39,7 @@ function SnsLogin({
     setIsKakaoLogin(false);
     const getNaverLoginLink = async () => {
       try {
-        const response = await fetch('http://192.168.200.17:5300/naverlogin', {
+        const response = await fetch(`http://${homeIP}/naverlogin`, {
           cache: 'no-store',
         });
         const data = await response.json();

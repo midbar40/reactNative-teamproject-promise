@@ -26,6 +26,10 @@ function Login({
   setIsSnsLogin,
   kakaoLoginLink,
   setKakaoLoginLink,
+  isKakaoLogin,
+  setIsKakaoLogin,
+  isNaverLogin,
+  setIsNaverLogin,
 }) {
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
@@ -70,6 +74,10 @@ function Login({
           setIsSnsLogin={setIsSnsLogin}
           kakaoLoginLink={kakaoLoginLink}
           setKakaoLoginLink={setKakaoLoginLink}
+          isKakaoLogin={isKakaoLogin}
+          setIsKakaoLogin={setIsKakaoLogin}
+          isNaverLogin={isNaverLogin}
+          setIsNaverLogin={setIsNaverLogin}
         />
       ) : (
         <>

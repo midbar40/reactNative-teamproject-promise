@@ -2,12 +2,27 @@ const express = require('express');
 const router = express.Router();
 const config = require('../config.js')
 const qs = require("qs");
-
-
+const session = require('express-session');
+const cors = require('cors');
+const axios = require("axios");
+const homeIP = '192.168.0.172:5300'
+const academyIP = '192.168.200.17:5300'
 const client_id = config.KAKAO_CLIENT_ID
 const redirect_uri = config.KAKAO_REDIRECT_URI
 const token_uri = 'https://kauth.kakao.com/oauth/token';
 const api_host = "https://kapi.kakao.com";
+
+router.use(session({
+    secret: 'kakao session secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
+let corsOptions = {
+    origin: 'http://192.168.0.172:5300',
+    credentials: true
+}
+router.use(cors(corsOptions));
 
 router.get('/', function (req, res) {
     res.status(302).redirect(`https://kauth.kakao.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code`)
@@ -27,6 +42,7 @@ async function call(method, uri, param, header){
 }
 
 router.get('/redirect', async function (req, res) {
+    console.log('코드 :',req.query.code)
     const param = qs.stringify({
         "grant_type": 'authorization_code',
         "client_id": client_id,
@@ -36,8 +52,9 @@ router.get('/redirect', async function (req, res) {
     const header = { 'content-type': 'application/x-www-form-urlencoded' };
     var rtn = await call('POST', token_uri, param, header);
     req.session.key = rtn?.access_token;
-    console.log('토큰값 (서버39번줄): ', req.session.key)
-    res.status(302).redirect(`http://192.168.200.17:5300/kakaologin/profile`);
+    console.log('토큰값 (서버39번줄): ', rtn)
+    // res.status(302).res.json(rtn?.access_token)
+    res.status(302).redirect('http://192.168.0.172:5300');
 })
 
 router.get('/profile', async function (req, res) {
@@ -49,7 +66,7 @@ router.get('/profile', async function (req, res) {
     }
     var rtn = await call('POST', uri, param, header);
     res.json(rtn);
-    console.log(' 유저정보(서버52번줄) : ',rtn)
+    // console.log(' 유저정보(서버52번줄) : ',rtn)
 })
 
 router.get('/friends', async function (req, res) {

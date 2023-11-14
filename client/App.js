@@ -8,7 +8,7 @@ import Icon2 from 'react-native-vector-icons/FontAwesome6'
 
 const Tab = createBottomTabNavigator();
 
-function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
+function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsKakaoLogin, isNaverLogin, setIsNaverLogin}) {
   // console.log(route.params.email)
 
   const [selectRoomId, setSelectRoomId] = useState('');
@@ -34,6 +34,10 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
             navigation={navigation}
             isSnsLogin={isSnsLogin}
             setIsSnsLogin={setIsSnsLogin}
+            isKakaoLogin={isKakaoLogin}
+            setIsKakaoLogin={setIsKakaoLogin}
+            isNaverLogin={isNaverLogin}
+            setIsNaverLogin={setIsNaverLogin}
           />
         )}
         </Tab.Screen>

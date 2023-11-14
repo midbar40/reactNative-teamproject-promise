@@ -4,8 +4,11 @@ import {WebView} from 'react-native-webview';
 import {signIn, getUser} from '../apis/auth';
 
 function WebScreen({route, navigation, naverLoginLink, kakaoLoginLink}) {
+  const homeIP = '192.168.0.172:5300'
+  const academyIP = '192.168.200.17:5300'
   let isNaverLogin = route.params?.isNaverLogin;
   let isKakaoLogin = route.params?.isKakaoLogin;
+
   console.log(' 라우트params :', route.params);
   console.log('isNaverLogin :', isNaverLogin);
   console.log('isKakaoLogin :', isKakaoLogin);
@@ -15,7 +18,7 @@ function WebScreen({route, navigation, naverLoginLink, kakaoLoginLink}) {
     // gpt가 짜준 코드
     try {
       const userResponse = await fetch(
-        'http://192.168.200.17:5300/naverlogin/user',
+        `http://${homeIP}/naverlogin/user`,
         {
           method: 'GET',
           headers: {
@@ -65,7 +68,7 @@ function WebScreen({route, navigation, naverLoginLink, kakaoLoginLink}) {
   const showKakaoLogin = async () => {
     try {
       const response = await fetch(
-        'http://192.168.200.17:5300/kakaologin/profile',
+        `http://${homeIP}/kakaologin/profile`,
         {
           method: 'GET',
           headers: {
@@ -77,17 +80,20 @@ function WebScreen({route, navigation, naverLoginLink, kakaoLoginLink}) {
           cache: 'no-store',
         },
       );
-      const finalResponse = await fetch(response.url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'cache-control':
-            'no-cache, must-revalidate, post-check=0, pre-check=0',
-        },
-        credentials: 'include',
-        cache: 'no-store',
-      });
-      console.log('카카오 유저데이터 :', finalResponse);
+      console.log('카카오 유저데이터 :', response);
+
+      // const finalResponse = await fetch(response.url, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'cache-control':
+      //       'no-cache, must-revalidate, post-check=0, pre-check=0',
+      //   },
+      //   credentials: 'include',
+      //   cache: 'no-store',
+      // });
+
+      
     } catch (err) {
       console.log(err);
     }
