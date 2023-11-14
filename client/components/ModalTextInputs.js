@@ -3,19 +3,18 @@ import { View, Text, StyleSheet, TextInput } from 'react-native'
 
 import DateTimePicker from 'react-native-modal-datetime-picker'
 
-function ModalTextInputs({title, scheduleTitle, setScheduleTitle, scheduleContent, setScheduleContent, itemKey}){
+function ModalTextInputs({scheduleTitle, setScheduleTitle, scheduleContent, setScheduleContent, itemKey}){
  
-  console.log('itemkey',itemKey)
+  // console.log('itemkey',itemKey)
+
+  //제목 입력
   const titleInput = (text) => {
-    console.log(text)
     setScheduleTitle(text)
-    console.log(scheduleTitle)
   }
 
+  //내용 입력
   const contentInput = (text) => {
-    console.log(text)
     setScheduleContent(text)
-    console.log(scheduleContent)
   }
   
 

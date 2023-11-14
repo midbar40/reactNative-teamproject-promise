@@ -5,7 +5,7 @@ import { updateData } from '../apis/firebaseCalendar'
 
 
 
-function PickItem({ title, content, startDay, endDay, id, members, itemKey, setItemKey, setOpenModal}){
+function PickItem({ title, content, startDay, endDay, id, members, setItemKey, setOpenModal}){
 
   const [memberList, setmemberList] = useState('')
 
@@ -28,14 +28,10 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
       <View>
         <View style={styles.content}>
           <Text>제목 : {title}</Text>
-          {/* <Text>제목 : {id}</Text> */}
           <Text>내용 : {content}</Text>
           <Text>멤버 : {memberList ? memberList.join(', ') : '없음'}</Text>
           <Text>{startDay}  ~  {endDay}</Text>
         </View>
-        {/* <View>
-          <ChatCreateBtn title={title} calendarUID={itemKey} friends={members} />
-        </View> */}
       </View>
     </Pressable>
   )

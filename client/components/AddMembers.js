@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Pressable,FlatList } from 'react-native'
-import CheckBox from '@react-native-community/checkbox'
 
 import { getFriendsRealtimeChange } from '../apis/firebase'
 
@@ -10,7 +9,7 @@ function AddMembers({setPickFriends, itemKey, showSchedule}){
 
   const [open, setOpen] = useState(false) //모달 open
   const [friendLists, setFriendLists] = useState() //친구목록 전체 저장
-  const [selectedId, setSelectedId] = useState('')
+  const [selectedId, setSelectedId] = useState('') //선택 친구 이름 저장
 
   // console.log('show', showSchedule)
 

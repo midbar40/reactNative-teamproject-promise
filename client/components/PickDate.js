@@ -87,20 +87,6 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule,
       onRowClose={onRowClose}
       
     />
-
-    // <ScrollView style={styles.block} onTouchStart={onTouchStart}>
-    //   {showSchedule.map((show,id) => {
-    //     return(
-    //       <View style={styles.content} key={id}>
-    //         <Text>제목 : {show.title}</Text>
-    //         <Text>내용 : {show.content}</Text>
-    //         {/* <Text>멤버 : {show.members}</Text> */}
-    //         <Text>{show.startDay}  ~  {show.endDay}</Text>
-    //       </View>  
-    //     )
-    //   })
-    //   }
-    // </ScrollView>
   )
 }
 
