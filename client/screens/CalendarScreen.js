@@ -10,6 +10,7 @@ import ModalInputs from '../components/ModalInputs';
 import ModalTextInputs from '../components/ModalTextInputs'
 import PickColor from '../components/PickColor';
 import AddMembers from '../components/AddMembers'
+
 import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule } from '../apis/firebaseCalendar'
 import { getCurrentTime } from '../apis/firebase';
 
@@ -20,8 +21,8 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
 
   const [selectedDate, setSelectedDate] = useState('') //선택한 날짜 담기
   const [openModal, setOpenModal] = useState(false) //모달창 열기
-  const [startDate, setStartDate] = useState({ year:'', month: '', date: '' }) //시작날짜
-  const [endDate, setEndDate] = useState({ year:'', month: '', date: '' }) //종료날짜
+  const [startDate, setStartDate] = useState('') //시작날짜
+  const [endDate, setEndDate] = useState('') //종료날짜
   const [betweenDate, setBetweenDate] = useState('') //시작날짜와 종료날짜 사이의 날짜
   const [scheduleTitle, setScheduleTitle] = useState('') //할일 제목
   const [scheduleContent, setScheduleContent] = useState('') //할일 내용
@@ -35,13 +36,11 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   
   const today = new Date()
   const pickDay = new Date(selectedDate)
-  
-  // console.log('오늘',today, '선택:',selectedDate, '이번달')
+
   //현재 로그인한 유저 uid 불러오기
   onAuthStateChanged(auth, (user) => {
     if(user){
         const uid = user.uid
-        // console.log('uid', uid)
         setUser(uid)
     }else{
         console.log(`${user}유저정보가 이상합니다`)
@@ -53,10 +52,6 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
        && date1.getMonth() === date2.getMonth()
        && date1.getDate() === date2.getDate();
   }
-  // console.log(today, pickDay, '미래?', today < pickDay, '같은날짜', isSameDate(today, pickDay))
-  //   console.log('스케쥴조회',loadSchedule.map(load => load.startDay))
-  //마크 찍기 테스트
-  // console.log('마크',markedDate)
   
   //시작 날짜와 끝 날짜 사이의 날짜 구하기
   const getDateRange = (startDate, endDate) => {
@@ -85,12 +80,6 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   }
   LocaleConfig.defaultLocale = 'fr'
 
-  //모달창 열기 - 버튼 사용유무 보류
-  // const open = () => {
-  //     console.log('모달창열기')
-  //     setOpenModal(true)
-  // }
-
   //모달창 닫기
   const closeModal = () => {
     setItemKey('')
@@ -99,21 +88,11 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
     setOpenModal(false)
   }
 
-  //오늘 날짜의 달력 보여주기
-  const goToday = () => {
-    console.log('오늘날짜보여주기')
-  }
-
-  //'YYYY-MM-DD' 형식
-  const sliceDate = (date) => {
-    return `${(date.year).slice(0,4)}-${(date.month).slice(0,2)}-${(date.date).slice(0,2)}`
-  }
-  
   //스케쥴 시작날짜, 끝날짜 설정후 할일 쓸때 betweenDate 실시간 업데이트
   useEffect(() => {
     startDate && endDate && 
-    getDateRange(sliceDate(startDate), sliceDate(endDate))
-    console.log('bet',betweenDate)
+    getDateRange(startDate, endDate)
+    // console.log('bet',betweenDate)
   },[scheduleContent])
   
   //해당 스케쥴 등록
@@ -121,11 +100,11 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
     console.log('할일제목 :', scheduleTitle, '할일 내용 :', scheduleContent)
     console.log('시작:', startDate, '종료:', endDate)
 
-    //파이어베이스에 데이터 추가(제목, 내용 빈칸 아닐때)
+    //파이어베이스에 데이터 추가/수정(제목, 내용 빈칸 아닐때)
     if(scheduleTitle !== '' && scheduleContent !== ''){
       const newSchedule = {
-        startDay : sliceDate(startDate),
-        endDay :  sliceDate(endDate),
+        startDay : startDate,
+        endDay :  endDate,
         betweenDay: betweenDate,
         members: pickFriends ? pickFriends : null,
         title: scheduleTitle,
@@ -136,8 +115,8 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         createdUser: user
       }
       const updateSchedule = {
-        startDay : sliceDate(startDate),
-        endDay :  sliceDate(endDate),
+        startDay : startDate,
+        endDay :  endDate,
         betweenDay: betweenDate,
         members: pickFriends ? pickFriends : null,
         title: scheduleTitle,
@@ -150,9 +129,11 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       try{
         //스케쥴 새로 등록
         if(itemKey === ''){
+          console.log(`데이터 추가 : ${newSchedule}`)
           await addSchedule('CalendarSchedule', newSchedule)
         }else{
           //스케쥴 수정
+          console.log(`데이터 수정 : ${updateSchedule}`)
           await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
         }
       }catch(err){
@@ -160,9 +141,8 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       }
 
       Keyboard.dismiss()
-      console.log(`데이터 추가 : ${newSchedule}`)
-      setStartDate({ year:'', month: '', date: '' })
-      setEndDate({ year:'', month: '', date: '' })
+      setStartDate('')
+      setEndDate('')
       setScheduleTitle('')
       setScheduleContent('')
       setItemKey('')
@@ -183,15 +163,8 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   
   //시작날짜가 종료날짜보다 느릴시 종료날짜가 시작날짜로 자동 셋팅
   useEffect(() => {
-    if(startDate.year > endDate.year){
-      setEndDate((prev) => ({...prev, year:startDate.year}))
-      // console.log('연도빠름', startDate.year > endDate.year, endDate)
-    }else if(startDate.month > endDate.month){
-      setEndDate((prev) => ({...prev, month:startDate.month}))
-      // console.log('월빠름', startDate.month > endDate.month, endDate)
-    }else if(startDate.date > endDate.date){
-      setEndDate((prev) => ({...prev, date:startDate.date}))
-      // console.log('일빠름', startDate.date > endDate.date, endDate)
+    if(startDate > endDate){
+      setEndDate((prev) => [...prev, startDate])
     }
   },[startDate])
 
@@ -225,18 +198,8 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
             obj[key] = marking[key]
             return obj
           }, {})
-
-        // const markedSelected = {
-        //   ...marking,
-        //   [selectedDate]: {
-        //     selected: true,
-        //     marked: marking[selectedDate]?.marked,
-        //   }
-        // }
       
-        setMarkDate(marking)
-
-        
+        setMarkDate(marking)   
       })
       // console.log('리스트', markedDate)
       setLoadSchedule(list)
@@ -293,7 +256,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         // disableAllTouchEventsForDisabledDays={true} //disabled클릭 안됨
         // markingType={'period'}
         disabledDaysIndexes={[0]}
-        onDayPress={(day,state) => {
+        onDayPress={day => {
           console.log('선택한날짜', day)
           let arr = []
           loadSchedule.forEach(date => {
@@ -316,15 +279,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}  onTouchEnd={onTouch}>
         <PickDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId}/>
-        {/* <Pressable style={styles.todayBtn} onPress={goToday}>
-            <Text style={{textAlign:'center'}}>오늘</Text>
-        </Pressable> */}
       </View>
-      {/* <Pressable style={styles.plusBtn} onPress={open}>
-        <Text style={styles.icon}>
-            <AntIcon name='plus' size={20}/>
-        </Text>
-      </Pressable> */}
       <Modal
         animationType='fade'
         transparent={true}
@@ -334,29 +289,19 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           setBetweenDate('')
         }}
         onShow={() => {
-          setStartDate({
-            year:`${selectedDate.slice(0,4)}년`,
-            month:`${selectedDate.slice(5,7)}월`,
-            date:`${selectedDate.slice(8,10)}일`
-          })
-          setEndDate({
-            year:`${selectedDate.slice(0,4)}년`,
-            month:`${selectedDate.slice(5,7)}월`,
-            date:`${selectedDate.slice(8,10)}일`
-          })
+          setStartDate(selectedDate)
+          setEndDate(selectedDate)
 
           if(itemKey !== ''){
             getOneSchedule('CalendarSchedule', itemKey, 
             function onResult(querySnapshot){
               const list = []
-  
               list.push(querySnapshot.data())
               // console.log(list[0].title, list[0].content, list[0].startDay.slice(0,4), list[0].startDay.slice(5,7), list[0].startDay.slice(8,10), list[0].endDay)
-              console.log('버그버그버그',list)
                 setScheduleTitle(list[0].title)
                 setScheduleContent(list[0].content)
-                setStartDate({year: `${list[0].startDay.slice(0,4)}년`, month: `${list[0].startDay.slice(5,7)}월`, date: `${list[0].startDay.slice(8,10)}일`})
-                setEndDate({year: `${list[0].endDay.slice(0,4)}년`, month: `${list[0].endDay.slice(5,7)}월`, date: `${list[0].endDay.slice(8,10)}일`})
+                setStartDate(list[0].startDay)
+                setEndDate(list[0].endDay)
             },
             function onError(err){
               console.log('err', err)
@@ -372,13 +317,12 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
                 {selectedDate}
               </Text>
               <View style={styles.inputs}>
-                <ModalInputs modalTitle='시작날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
-                <ModalInputs modalTitle='종료날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+                <ModalInputs selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+                {/* <ModalInputs modalTitle='종료날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/> */}
               </View>
               <View style={styles.textInputs}>
                 <ModalTextInputs scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
-                {/* <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/> */}
-                <AddMembers showSchedule={showSchedule} itemKey={itemKey} pickFriends={pickFriends} setPickFriends={setPickFriends}/>
+                <AddMembers showSchedule={showSchedule} itemKey={itemKey} setPickFriends={setPickFriends}/>
               </View>
               <View>
                 <PickColor showSchedule={showSchedule} pickColor={pickColor} setPickColor={setPickColor}/>

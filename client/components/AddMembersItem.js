@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
 
-function AddMembersItem({item, pickFriends, setPickFriends, selectedId, setSelectedId}){
+function AddMembersItem({item, selectedId, setSelectedId}){
   
   const [pick, setPick] = useState(false)
 
@@ -10,9 +10,6 @@ function AddMembersItem({item, pickFriends, setPickFriends, selectedId, setSelec
     selectedId && selectedId.indexOf(item.name) !== -1 && setPick(!pick)
   },[])
 
-  console.log('pickfreinds', pickFriends)
-  console.log('selec', selectedId)
-  console.log('item',item)
 
   //member추가
   const onPress = () => {

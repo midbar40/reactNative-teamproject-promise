@@ -1,86 +1,86 @@
-import React,{ useState } from 'react'
+import React,{ useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native'
 
-import DropdownList from './DropdownList'
+import DateTimePicker from 'react-native-modal-datetime-picker'
 
 
 
-function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate, setEndDate, itemKey, }){
+function ModalInputs({selectedDate, startDate, setStartDate, endDate, setEndDate, itemKey, }){
 
-  const [dropYearOpen, setDropYearOpen] = useState(false) //드롭다운 오픈(년)
-  const [dropMonthOpen, setDropMonthOpen] = useState(false) //드롭다운 오픈(월)
-  const [dropDateOpen, setDropDateOpen] = useState(false) //드롭다운 오픈(일)
+  const [startVisible, setStartVisible] = useState(false)
+  const [endVisible, setEndVisible] = useState(false)
+  const [startPick, setStartPick] = useState('')
+  const [endPick, setEndPick] = useState('')
 
-  // console.log('시작', startDate)
-  // console.log('끝', endDate)
 
-  //날짜 가져오기
-  const N = 10
   const pickDay = new Date(selectedDate)
-  const pickYear = pickDay.getFullYear()
-  const pickMonth = pickDay.getMonth() + 1
-  const pickDate = pickDay.getDate()
-  
-  console.log(pickYear, '-', pickMonth, '-', pickDate)
 
-  //드롭다운 범위 설정(년,월,일)
-  const offset = pickYear
-  const yearsRange = Array(2*N).fill(0).map((_, id) => `${id+offset}년`)
-  const monthRangeTest = Array(12).fill(0).map((_, id) => `${id+1}월`)
-  //1~9월 01~09월로 변환
-  const monthRange = monthRangeTest.map(month => {
-    if(month.length > 2){
-      return month
-    }else{
-      return `0${month}`
-    }
-  })
-  const dateRangeTest = Array(31).fill(0).map((_, id) => `${id+1}일`)
-  //1~9일 01~09일로 변환
-  const dateRange = dateRangeTest.map(date => {
-    if(date.length > 2){
-      return date
-    }else{
-      return `0${date}`
-    }
-  })
-  // console.log(yearsRange, monthRange, dateRange)
+  const hideDatePicker = () => {
+    setDatePickerVisible(false)
+  }
+  
+  const pressStart = () => {
+    console.log('start',startDate)
+    setStartVisible(true)
+  }
+  
+  const pressEnd = () => {
+    console.log('end', endDate)
+    setEndVisible(true)
+  }
+
+  //시작 날짜 고르기
+  const handleConfirm = (date) => {
+    console.log('pickdate', date)
+    setStartPick(date)
+    setStartVisible(false)
+  }
+
+  //종료 날짜 고르기
+  const handleConfirm2 = (date) => {
+    console.log('end', endDate)
+    setEndPick(date)
+    setEndVisible(false)
+  }
+
+  //시작 날짜 바꾸기
+  useEffect(() => {
+    startPick && setStartDate(startPick)
+  },[startPick])
+
+  //종료 날짜 바꾸기
+  useEffect(() => {
+    console.log('useEffect2', endPick)
+
+    endPick && setEndDate(`${endPick.getFullYear()}-${(endPick.getMonth()+1)}-${endPick.getDate()}`)
+    console.log('zzzzzz',endDate)
+  },[endPick])
 
   return(
     <View style={styles.block}>
       <View style={styles.horizontalView}>
-        <View style={[styles.dropDowns]}>
-          <Text style={styles.titleText}>{modalTitle}</Text>
-            <View style={[styles.dropDownlists]}>
-              <DropdownList 
-                title='년'
-                categories={yearsRange}
-                dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} 
-                startDate={startDate} setStartDate={setStartDate} 
-                endDate={endDate} setEndDate={setEndDate} 
-                selectedDate={selectedDate} 
-                modalTitle={modalTitle} 
-                itemKey={itemKey}/>
-              <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
-              <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
-            </View>
-        </View>
-        {/* <View style={[styles.dropDowns]}>
-          <Text style={styles.titleText}>종료 :</Text>
-            <View style={[styles.dropDownlists]}>
-              <DropdownList 
-                title='년'
-                yearsRange={yearsRange} monthRange={monthRange} dateRange={dateRange}
-                dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} 
-                startDate={startDate} setStartDate={setStartDate} 
-                endDate={endDate} setEndDate={setEndDate} 
-                selectedDate={selectedDate} 
-                modalTitle={modalTitle} 
-                itemKey={itemKey}/>
-              <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
-              <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
-            </View>
-        </View> */}
+        <TouchableOpacity style={styles.picker} onPress={pressStart}>
+          <Text style={styles.titleText}>시작 날짜 : </Text>
+          <Text>{startDate}</Text>
+          <DateTimePicker
+            isVisible={startVisible}
+            mode='date'
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+            date={pickDay}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.picker} onPress={pressEnd}>
+          <Text style={styles.titleText}>종료 날짜 : </Text>
+          <Text>{endDate}</Text>
+          <DateTimePicker
+            isVisible={endVisible}
+            mode='date'
+            onConfirm={handleConfirm2}
+            onCancel={hideDatePicker}
+            date={new Date(endDate)}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -108,7 +108,20 @@ const styles = StyleSheet.create({
   horizontalView: {
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
   },
+  picker: {
+    margin: 20,
+    marginHorizontal: 30,
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'lightgreen',
+    justifyContent: 'center', 
+    alignItems: 'center',
+    elevation: 2,
+  }
 })
 
 export default ModalInputs
