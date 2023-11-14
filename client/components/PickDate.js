@@ -6,7 +6,7 @@ import PickItem from './PickItem'
 import ChatCreateBtn from './ChatCreateBtn'
 import { removeSchedule } from '../apis/firebaseCalendar'
 
-function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, }){
+function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, }){
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
@@ -34,8 +34,8 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule,
   const onRowOpen = (rowKey) => {
     console.log('row open', rowKey)
     setItemKey(rowKey)
+
     showSchedule.filter(schedule => {
-      console.log(schedule)
       //채팅방 멤버 구성
       const memberLists = []
       if(schedule.id === rowKey){
@@ -76,7 +76,7 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule,
       style={styles.block}
       keyExtractor={item => item.id}
       renderItem={({item}) => (
-        <PickItem {...item} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal}/>
+        <PickItem {...item} setItemKey={setItemKey} setOpenModal={setOpenModal}/>
       )}
       renderHiddenItem={hiddenItem}
       rightOpenValue={-70}
@@ -87,20 +87,6 @@ function PickDate({selectedDate, setSelectedDate, showSchedule, setShowSchedule,
       onRowClose={onRowClose}
       
     />
-
-    // <ScrollView style={styles.block} onTouchStart={onTouchStart}>
-    //   {showSchedule.map((show,id) => {
-    //     return(
-    //       <View style={styles.content} key={id}>
-    //         <Text>제목 : {show.title}</Text>
-    //         <Text>내용 : {show.content}</Text>
-    //         {/* <Text>멤버 : {show.members}</Text> */}
-    //         <Text>{show.startDay}  ~  {show.endDay}</Text>
-    //       </View>  
-    //     )
-    //   })
-    //   }
-    // </ScrollView>
   )
 }
 

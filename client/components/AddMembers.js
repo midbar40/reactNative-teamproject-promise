@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Pressable,FlatList } from 'react-native'
-import CheckBox from '@react-native-community/checkbox'
 
 import { getFriendsRealtimeChange } from '../apis/firebase'
 
 import AddMembersItem from './AddMembersItem'
 
-function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
+function AddMembers({setPickFriends, itemKey, showSchedule}){
 
   const [open, setOpen] = useState(false) //모달 open
   const [friendLists, setFriendLists] = useState() //친구목록 전체 저장
-  const [selectedId, setSelectedId] = useState('')
+  const [selectedId, setSelectedId] = useState('') //선택 친구 이름 저장
 
   // console.log('show', showSchedule)
 
@@ -25,17 +24,13 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
   }
 
   const addMember = () => {
-    // console.log(selectedId)
-    // console.log('frilist',friendLists)
     const list = []
     friendLists.map(fList => {
-      // console.log(fList)
-      // console.log(fList.name)
       if(selectedId && selectedId.indexOf(fList.name) !== -1 ){
         list.push(fList)
       }
     })
-    console.log('하',list)
+    // console.log('친구목록',list)
     setPickFriends(list)
     setOpen(false)
   }
@@ -43,7 +38,6 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
   useEffect(() => {
     //친구목록 데이터 불러오기
     getFriendsRealtimeChange(function onResult(querySnapshot){
-      // console.log('데이터불러오기',querySnapshot.data().friends)
       setFriendLists(querySnapshot.data().friends)
     }, 
     function onError(err){
@@ -56,17 +50,19 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
     showSchedule.map(schedule => {
         if(schedule.id === itemKey){
           const list = []
+          const memberLists = []
           schedule.members && schedule.members.map(member => {
             list.push(member.name)
+            memberLists.push(member)
           })
           setSelectedId(list)
+          setPickFriends(memberLists)
         }
     })
   },[])
 
   return(
     <View style={styles.horizontalView}>
-      {/* <Text>함께하는 멤버 : {pickFriends !== '' ? pickFriends.map(friend => friend.name.split(', ')) : '없음'}</Text> */}
       <Text style={styles.memberContainer}>함께하는 멤버 : {selectedId ? selectedId.join(', ') : '없음'} </Text>
       <TouchableOpacity style={styles.modalBtn} onPress={openModal}>
         <Text style={styles.btnText}>추가</Text>
@@ -87,7 +83,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule}){
             data={friendLists}
             keyExtractor={(item) => item.UID}
             renderItem={({item}) => (
-              <AddMembersItem item={item} pickFriends={pickFriends} setPickFriends={setPickFriends} showSchedule={showSchedule} selectedId={selectedId} setSelectedId={setSelectedId}/>
+              <AddMembersItem item={item} selectedId={selectedId} setSelectedId={setSelectedId}/>
             )}
             style={styles.lists}
           />

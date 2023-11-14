@@ -3,17 +3,18 @@ import { View, Text, StyleSheet, TextInput } from 'react-native'
 
 import DateTimePicker from 'react-native-modal-datetime-picker'
 
-function ModalTextInputs({title, scheduleTitle, setScheduleTitle, scheduleContent, setScheduleContent, itemKey}){
+function ModalTextInputs({scheduleTitle, setScheduleTitle, scheduleContent, setScheduleContent, itemKey}){
  
-  console.log('itemkey',itemKey)
-  const handleChange = (text) => {
-    if(title === '할일 제목'){
-      setScheduleTitle(text)
-    // }else if(title === '할일 내용'){
-    }else{
-      setScheduleContent(text)
-    }
+  // console.log('itemkey',itemKey)
 
+  //제목 입력
+  const titleInput = (text) => {
+    setScheduleTitle(text)
+  }
+
+  //내용 입력
+  const contentInput = (text) => {
+    setScheduleContent(text)
   }
   
 
@@ -21,12 +22,12 @@ function ModalTextInputs({title, scheduleTitle, setScheduleTitle, scheduleConten
     return(
       <>
         <View style={styles.horizontalView}>
-          <Text style={styles.title}>{title} : </Text>
+          <Text style={styles.title}>할일 제목 : </Text>
             <TextInput
               autoCorrect={false}
               style={styles.textInput}
               selectionColor={'#E7BFFF'}
-              onChangeText={handleChange}
+              onChangeText={titleInput}
               blurOnSubmit={false}
             />
         </View>
@@ -36,7 +37,7 @@ function ModalTextInputs({title, scheduleTitle, setScheduleTitle, scheduleConten
               autoCorrect={false}
               style={styles.textInput}
               selectionColor={'#E7BFFF'}
-              onChangeText={handleChange}
+              onChangeText={contentInput}
               blurOnSubmit={false}
             />
         </View>
@@ -46,25 +47,23 @@ function ModalTextInputs({title, scheduleTitle, setScheduleTitle, scheduleConten
     return(
       <>
         <View style={styles.horizontalView}>
-          <Text style={styles.title}>{title} : </Text>
+          <Text style={styles.title}>할일 제목 : </Text>
             <TextInput
-              // placeholder={'할일ㅇ'}
               autoCorrect={false}
               style={styles.textInput}
               selectionColor={'#E7BFFF'}
-              onChangeText={handleChange}
+              onChangeText={titleInput}
               blurOnSubmit={false}
               defaultValue={scheduleTitle}
             />
         </View>
         <View style={styles.horizontalView}>
-          <Text style={styles.title}>할일내용 : </Text>
+          <Text style={styles.title}>할일 내용 : </Text>
             <TextInput
-              // placeholder={'할일ㅇ'}
               autoCorrect={false}
               style={styles.textInput}
               selectionColor={'#E7BFFF'}
-              onChangeText={handleChange}
+              onChangeText={contentInput}
               blurOnSubmit={false}
               defaultValue={scheduleContent}
             />

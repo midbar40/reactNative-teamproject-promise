@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 
 function ColorItem({title, pickColor, setPickColor, showSchedule}){
   
+  //스케쥴 수정시 전에 골랐던 색 자동 담기
   useEffect(() => {
     showSchedule ?
     showSchedule.map(schedule => {
