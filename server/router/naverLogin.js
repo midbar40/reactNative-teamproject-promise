@@ -65,9 +65,8 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
     console.error(error);
     res.status(500).send('오류가 발생했습니다');
   }
-return res.json(req.session.user)
+  return res.json(req.session.user)
 }
-
 ));
 
 // 유저정보
