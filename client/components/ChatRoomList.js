@@ -3,33 +3,20 @@ import { View, Text, SafeAreaView, TextInput, Button, FlatList, TouchableOpacity
 
 import { creatChatRoom, getChatRoomList } from '../apis/firebaseChat';
 
-function ChatRoomList({ navigation, setRoomTitle, roomTitle, chatRoomList, setChatRoomList, setSelectRoomId }){
-  const createRoom = () => {
-    if(roomTitle.trim() !== ''){
-      creatChatRoom(roomTitle.trim());
-      getChatRoomList()
-      .then(r => setChatRoomList(r))
-    }
-  }
-
+function ChatRoomList({ navigation, chatRoomList, setSelectRoomId }){
   const enterRoom = (roomId) => {
     console.log('enter room id : ',roomId);
     setSelectRoomId(roomId);
     navigation.navigate('ChatRoom');
   }
   
-  // 채팅방 id 조회
-  // console.log('rooms : ',chatRoomList[0]?._ref._documentPath._parts[1]); 
+  // 채팅방 조회
+  // console.log('rooms : ',chatRoomList); 
+
   return(
     <SafeAreaView>
-      <TextInput 
-        onChangeText={setRoomTitle}
-        style={{ backgroundColor : '#ffb'}}
-        placeholder='임시 방 이름을 입력하세요!'
-      />
-      <Button onPress={createRoom} title='만들기'></Button>
       <View style={styles.chatRoomListHeader}>
-        <Text style={styles.chatRoomListHeaderText}>채팅방 목록</Text>
+        <Text style={styles.chatRoomListHeaderText}>캘린더 톡</Text>
       </View>
       <FlatList 
         data={chatRoomList}
@@ -52,10 +39,11 @@ const styles = StyleSheet.create({
     width : '100%',
     height : 40,
     marginBottom : 10,
-    backgroundColor : '#AAA',
+    borderBottomWidth : 1,
+    borderBottomColor : '#333'
   },
   chatRoomListHeaderText : {
-    color : '#fff',
+    color : '#333',
     paddingLeft : 20,
     fontSize : 25,
     lineHeight : 40,

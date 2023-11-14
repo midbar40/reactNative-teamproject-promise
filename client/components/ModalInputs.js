@@ -1,8 +1,6 @@
 import React,{ useState } from 'react'
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native'
 
-import DateTimePicker from 'react-native-modal-datetime-picker'
-
 import DropdownList from './DropdownList'
 
 
@@ -50,15 +48,39 @@ function ModalInputs({selectedDate, modalTitle, startDate, setStartDate, endDate
 
   return(
     <View style={styles.block}>
-      <View style={styles.horizontalAlign}>
+      <View style={styles.horizontalView}>
         <View style={[styles.dropDowns]}>
           <Text style={styles.titleText}>{modalTitle}</Text>
-          <View style={[styles.dropDownlists]}>
-            <DropdownList title='년' categories={yearsRange} dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
-            <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
-            <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
-          </View>
+            <View style={[styles.dropDownlists]}>
+              <DropdownList 
+                title='년'
+                categories={yearsRange}
+                dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} 
+                startDate={startDate} setStartDate={setStartDate} 
+                endDate={endDate} setEndDate={setEndDate} 
+                selectedDate={selectedDate} 
+                modalTitle={modalTitle} 
+                itemKey={itemKey}/>
+              <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+              <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+            </View>
         </View>
+        {/* <View style={[styles.dropDowns]}>
+          <Text style={styles.titleText}>종료 :</Text>
+            <View style={[styles.dropDownlists]}>
+              <DropdownList 
+                title='년'
+                yearsRange={yearsRange} monthRange={monthRange} dateRange={dateRange}
+                dropYearOpen={dropYearOpen} setDropYearOpen={setDropYearOpen} 
+                startDate={startDate} setStartDate={setStartDate} 
+                endDate={endDate} setEndDate={setEndDate} 
+                selectedDate={selectedDate} 
+                modalTitle={modalTitle} 
+                itemKey={itemKey}/>
+              <DropdownList title='월' categories={monthRange} dropMonthOpen={dropMonthOpen} setDropMonthOpen={setDropMonthOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+              <DropdownList title='일' categories={dateRange} dropDateOpen={dropDateOpen} setDropDateOpen={setDropDateOpen} selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} modalTitle={modalTitle} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
+            </View>
+        </View> */}
       </View>
     </View>
   )
@@ -82,6 +104,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+  },
+  horizontalView: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 

@@ -1,10 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import { Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {HomeScreen, CalendarScreen, AlarmScreen, TodoScreen, ChatScreen} from './screens';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import Icon2 from 'react-native-vector-icons/FontAwesome6'
+
+import messaging from '@react-native-firebase/messaging';
+import { getToken, notificationListener, requestUserPermission} from './apis/firebaseMessage';
 
 const Tab = createBottomTabNavigator();
 
@@ -13,6 +17,20 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
 
   const [isLogin, setIsLogin] = useState(false);
   const [selectRoomId, setSelectRoomId] = useState('');
+
+  useEffect(() => {
+    requestUserPermission();
+    notificationListener();
+    getToken();
+  },[])
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     

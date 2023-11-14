@@ -9,7 +9,9 @@ const caretdownComponent = (props) => <AntIcon name='caretdown' {...props} size=
 const caretupComponent = (props) => <AntIcon name='caretup' {...props} size={15}/>
 
 
-function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpen, setDropYearOpen, dropMonthOpen, setDropMonthOpen, dropDateOpen, setDropDateOpen, startDate, setStartDate, endDate, setEndDate, itemKey}){
+function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpen, setDropYearOpen, dropMonthOpen, setDropMonthOpen, dropDateOpen, setDropDateOpen, startDate, setStartDate, endDate, setEndDate, itemKey}
+  // {yearsRange, monthRange, dateRange, dropYearOpen, setDropYearOpen, selectedDate, startDate }
+  ){
 
   //드롭다운 닫기
   const closeDropdown = () => {
@@ -19,9 +21,9 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
     dropDateOpen && setDropDateOpen(false)
   }
   
-  //드롭다운 클릭
+  // //드롭다운 클릭
   const onPress = () => {
-    // console.log(title)
+    console.log('클릭')
     if(title === '년'){
       setDropYearOpen(!dropYearOpen)
     }else if(title === '월'){
@@ -30,6 +32,69 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
       setDropDateOpen(!dropDateOpen)
     }
   }
+
+  // return(
+  //   <>
+  //     <TouchableOpacity style={[styles.horizontalAlign, dropYearOpen && styles.drops ]} onPress={onPress}>
+  //       {dropYearOpen ? caretupComponent() : caretdownComponent()}
+  //       {dropYearOpen ? 
+  //       <View style={{height:200}}>
+  //         <FlatList
+  //           data={yearsRange}
+  //           keyExtractor={item => item}
+  //           renderItem={({item}) => (
+  //             <View onStartShouldSetResponder={() => true}>
+  //               <DropdownItem
+  //                 category={item}
+  //                 closeDropdown={closeDropdown}
+  //               />
+  //             </View>
+  //           )}
+  //         style={[styles.list, dropYearOpen && styles.yearOpen]}
+  //         />
+  //       </View>
+  //        :
+  //       <View style={styles.nodrops}>
+  //         <Text>{startDate.year ? startDate.year : `${selectedDate.slice(0,4)}년`}</Text>
+  //       </View>
+  //        }
+  //     </TouchableOpacity>
+  //     <TouchableOpacity style={[styles.horizontalAlign, dropYearOpen && styles.drops ]} onPress={onPress}>
+  //        {dropYearOpen ? caretupComponent() : caretdownComponent()}
+  //        <View style={{height:200}}>
+  //          <FlatList
+  //           data={monthRange}
+  //           keyExtractor={item => item}
+  //           renderItem={({item}) => (
+  //             <View onStartShouldSetResponder={() => true}>
+  //               <DropdownItem
+  //                 category={item}
+  //                 closeDropdown={closeDropdown}
+  //               />
+  //             </View>
+  //           )}
+  //           style={[styles.list]}
+  //           />
+  //        </View>
+  //     </TouchableOpacity>
+  //     <TouchableOpacity style={[styles.horizontalAlign, dropYearOpen && styles.drops ]} onPress={onPress}>
+  //        {dropYearOpen ? caretupComponent() : caretdownComponent()}
+  //        <View style={{height:200}}>
+  //        <FlatList
+  //           data={dateRange}
+  //           keyExtractor={item => item}
+  //           renderItem={({item}) => (
+  //               <DropdownItem
+  //                 category={item}
+  //                 closeDropdown={closeDropdown}
+  //               />
+  //           )}
+  //           style={[styles.list]}
+  //           />
+  //        </View>
+  //     </TouchableOpacity>
+  //   </>
+  // )
 
   // console.log(categories)
   return(
@@ -106,6 +171,7 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
            data={categories}
            keyExtractor={item => item}
            renderItem={({item}) => (
+            <View onStartShouldSetResponder={() => true}>
                <DropdownItem
                  category={item}
                  closeDropdown={closeDropdown}
@@ -114,6 +180,7 @@ function DropdownList({title, modalTitle, categories, selectedDate,  dropYearOpe
                  endDate={endDate} setEndDate={setEndDate}
                  title={title} modalTitle={modalTitle}
                />
+            </View>
            )}
            style={[styles.list, dropDateOpen && styles.dateOpen]}
          />
@@ -151,16 +218,19 @@ const styles = StyleSheet.create({
   list: {
     marginLeft: 10,
     flex: 1,
+    width: 200,
     height: 200,
+    elevation: 2,
+    zIndex:2,
   },
   drops: {
-    // height:200, 
+    height:200, 
     justifyContent:'flex-start', 
     alignItems: 'center',
     top:0,
     zIndex:2,
     elevation: 2,
-    height: 20,
+    // height: 20,
   },
   yearOpen: {
     position:'absolute', 

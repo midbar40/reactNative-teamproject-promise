@@ -30,8 +30,8 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const [markedDate, setMarkDate] = useState(null) //마크할 날짜 담기
   const [showSchedule, setShowSchedule] = useState([]) //선택한 날짜 스케쥴 담기
   const [itemKey, setItemKey] = useState('') //삭제할 스케쥴 key 저장
-  const [pickColor, setPcikColor] = useState('pink') //스케쥴 적용할 색상 default: pink
-  const [pickFriends, setPickFriends] = useState('') //내가 고른 친구목록 저장
+  const [pickColor, setPickColor] = useState('pink') //스케쥴 적용할 색상 default: pink
+  const [pickFriends, setPickFriends] = useState() //내가 고른 친구목록 저장
   
   const today = new Date()
   const pickDay = new Date(selectedDate)
@@ -95,7 +95,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const closeModal = () => {
     setItemKey('')
     setPickFriends('')
-    setPcikColor('pink')
+    setPickColor('pink')
     setOpenModal(false)
   }
 
@@ -127,20 +127,33 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         startDay : sliceDate(startDate),
         endDay :  sliceDate(endDate),
         betweenDay: betweenDate,
-        members: pickFriends, //추후 유저조회하여 배열에 추가해줄것 pickFriends
+        members: pickFriends ? pickFriends : null,
         title: scheduleTitle,
         content: scheduleContent,
         pickColor: pickColor,
         createdAt: getCurrentTime(),
+        lastModifiedAt : null,
         createdUser: user
       }
+      const updateSchedule = {
+        startDay : sliceDate(startDate),
+        endDay :  sliceDate(endDate),
+        betweenDay: betweenDate,
+        members: pickFriends ? pickFriends : null,
+        title: scheduleTitle,
+        content: scheduleContent,
+        pickColor: pickColor,
+        lastModifiedAt : getCurrentTime(),
+        createdUser: user
+      }
+
       try{
         //스케쥴 새로 등록
         if(itemKey === ''){
           await addSchedule('CalendarSchedule', newSchedule)
         }else{
           //스케쥴 수정
-          await updateOneSchedule('CalendarSchedule', itemKey, newSchedule)
+          await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
         }
       }catch(err){
         console.log('스케줄등록/수정 에러',err)
@@ -154,7 +167,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       setScheduleContent('')
       setItemKey('')
       setPickFriends('')
-      setPcikColor('pink')
+      setPickColor('pink')
       setOpenModal(false)
     }else{
       console.log('제목&내용이 빈칸입니다.')
@@ -332,19 +345,23 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
             date:`${selectedDate.slice(8,10)}일`
           })
 
-          itemKey !== '' && getOneSchedule('CalendarSchedule', itemKey, 
-          function onResult(querySnapshot){
-            const list = []
-            list.push(querySnapshot.data())
-            // console.log(list[0].title, list[0].content, list[0].startDay.slice(0,4), list[0].startDay.slice(5,7), list[0].startDay.slice(8,10), list[0].endDay)
-            setScheduleTitle(list[0].title)
-            setScheduleContent(list[0].content)
-            setStartDate({year: `${list[0].startDay.slice(0,4)}년`, month: `${list[0].startDay.slice(5,7)}월`, date: `${list[0].startDay.slice(8,10)}일`})
-            setEndDate({year: `${list[0].endDay.slice(0,4)}년`, month: `${list[0].endDay.slice(5,7)}월`, date: `${list[0].endDay.slice(8,10)}일`})
-          },
-          function onError(err){
-            console.log('err', err)
-          })
+          if(itemKey !== ''){
+            getOneSchedule('CalendarSchedule', itemKey, 
+            function onResult(querySnapshot){
+              const list = []
+  
+              list.push(querySnapshot.data())
+              // console.log(list[0].title, list[0].content, list[0].startDay.slice(0,4), list[0].startDay.slice(5,7), list[0].startDay.slice(8,10), list[0].endDay)
+              console.log('버그버그버그',list)
+                setScheduleTitle(list[0].title)
+                setScheduleContent(list[0].content)
+                setStartDate({year: `${list[0].startDay.slice(0,4)}년`, month: `${list[0].startDay.slice(5,7)}월`, date: `${list[0].startDay.slice(8,10)}일`})
+                setEndDate({year: `${list[0].endDay.slice(0,4)}년`, month: `${list[0].endDay.slice(5,7)}월`, date: `${list[0].endDay.slice(8,10)}일`})
+            },
+            function onError(err){
+              console.log('err', err)
+            })
+          } 
 
         }}
       >
@@ -359,19 +376,19 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
                 <ModalInputs modalTitle='종료날짜' selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} itemKey={itemKey}/>
               </View>
               <View style={styles.textInputs}>
-                <ModalTextInputs title='할일 제목' scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} itemKey={itemKey}/>
-                <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
+                <ModalTextInputs title='할일 제목' scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
+                {/* <ModalTextInputs title='할일 내용' scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/> */}
                 <AddMembers showSchedule={showSchedule} itemKey={itemKey} pickFriends={pickFriends} setPickFriends={setPickFriends}/>
               </View>
               <View>
-                <PickColor showSchedule={showSchedule} pickColor={pickColor} setPcikColor={setPcikColor}/>
+                <PickColor showSchedule={showSchedule} pickColor={pickColor} setPickColor={setPickColor}/>
               </View>
               <View style={styles.horizontalView}>
-                <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
-                  <Text style={styles.btnText}>취소</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalBtn, styles.addBtn]} onPress={addScheduleClick}>
                   <Text style={styles.btnText}>{itemKey !=='' ? '수정' : '등록'}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
+                  <Text style={styles.btnText}>취소</Text>
                 </TouchableOpacity>
               </View>
             </View>
