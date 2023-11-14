@@ -28,6 +28,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const [user, setUser] = useState('') //현재 로그인한 유저 uid저장용
   const [loadSchedule, setLoadSchedule] = useState([]) //불러온 스케쥴 담기
   const [markedDate, setMarkDate] = useState(null) //마크할 날짜 담기
+  const [markandSelected, setMarkandSelected] = useState(null) //마크+선택 날짜 담기
   const [showSchedule, setShowSchedule] = useState([]) //선택한 날짜 스케쥴 담기
   const [itemKey, setItemKey] = useState('') //삭제할 스케쥴 key 저장
   const [pickColor, setPickColor] = useState('red') //스케쥴 적용할 색상 default: red
@@ -105,11 +106,11 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       try{
         //스케쥴 새로 등록(firebase)
         if(itemKey === ''){
-          console.log(`데이터 추가 : ${newSchedule}`)
+          console.log('데이터 추가 :',newSchedule)
           await addSchedule('CalendarSchedule', newSchedule)
         }else{
           //스케쥴 수정(firebase)
-          console.log(`데이터 수정 : ${updateSchedule}`)
+          console.log('데이터 수정 :',updateSchedule)
           await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
         }
       }catch(err){
@@ -138,6 +139,22 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
     }
   },[startDate])
 
+        
+  useEffect(() => {
+    //선택한 날짜 효과 추가
+    if(markedDate !== null){
+      const markedSelected = {
+        ...markedDate,
+        [selectedDate]: {
+          selected: selectedDate ? true : false,
+          marked: markedDate[selectedDate]?.marked,
+        }
+      }
+      setMarkandSelected(markedSelected)
+    }else{
+      setMarkandSelected(markedDate)
+    }
+  },[selectedDate])
 
   //firebase에 등록된 스케쥴 불러오기
   useEffect(() => {
@@ -171,7 +188,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       
         setMarkDate(marking)   
       })
-      // console.log('리스트', markedDate)
+      console.log('리스트', markedDate)
       setLoadSchedule(list)
     }
     function onError(error){
@@ -179,22 +196,9 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
     }
     return getSchedules('CalendarSchedule', onResult, onError)
  
-  },[selectedDate])
+  },[])
   
-      
-  useEffect(() => {
-    //선택한 날짜 효과 추가
-    if(markedDate !== null){
-      const markedSelected = {
-        ...markedDate,
-        [selectedDate]: {
-          selected: selectedDate ? true : false,
-          marked: markedDate[selectedDate]?.marked,
-        }
-      }
-      setMarkDate(markedSelected)
-    }
-  },[selectedDate])
+
 
 
   return(
@@ -202,7 +206,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       <Calendar
         style={styles.calendar}
         monthFormat={'yyyy년 MM월'}
-        markedDates={markedDate}
+        markedDates={markandSelected}
         renderArrow={(direction) => direction === 'left' ? <AntIcon name='left' size={25} color='lightgreen'/> : <AntIcon name='right' size={25} color='lightgreen'/>}
         theme={{
           backgroundColor: '#eeeeee',
@@ -266,7 +270,6 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
             function onResult(querySnapshot){
               const list = []
               list.push(querySnapshot.data())
-              // console.log(list[0].title, list[0].content, list[0].startDay.slice(0,4), list[0].startDay.slice(5,7), list[0].startDay.slice(8,10), list[0].endDay)
                 setScheduleTitle(list[0].title)
                 setScheduleContent(list[0].content)
                 setStartDate(list[0].startDay)
@@ -286,10 +289,19 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
                 {selectedDate}
               </Text>
               <View style={styles.inputs}>
-                <ModalInputs selectedDate={selectedDate} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} isSameDate={isSameDate}/>
+                <ModalInputs 
+                  selectedDate={selectedDate} 
+                  startDate={startDate} setStartDate={setStartDate} 
+                  endDate={endDate} setEndDate={setEndDate} 
+                  isSameDate={isSameDate}
+                />
               </View>
               <View style={styles.textInputs}>
-                <ModalTextInputs scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} itemKey={itemKey}/>
+                <ModalTextInputs 
+                  scheduleTitle={scheduleTitle} setScheduleTitle={setScheduleTitle} 
+                  scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} 
+                  itemKey={itemKey}
+                />
                 <AddMembers showSchedule={showSchedule} itemKey={itemKey} setPickFriends={setPickFriends}/>
               </View>
               <View>
@@ -397,14 +409,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   titleText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-    // marginBottom: 20,
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center', 
-    padding :10,
+    padding :8,
   },
   message:{
     fontSize: 16,

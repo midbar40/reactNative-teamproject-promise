@@ -16,7 +16,8 @@ function ModalInputs({selectedDate, startDate, setStartDate, endDate, setEndDate
   const pickDay = new Date(selectedDate)
 
   const hideDatePicker = () => {
-    setDatePickerVisible(false)
+    setStartVisible(false)
+    setEndVisible(false)
   }
   
   const pressStart = () => {

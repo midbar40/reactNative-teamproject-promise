@@ -27,10 +27,10 @@ function PickItem({ title, content, startDay, endDay, id, members, setItemKey, s
     <Pressable onLongPress={longPress}>
       <View>
         <View style={styles.content}>
-          <Text>제목 : {title}</Text>
-          <Text>내용 : {content}</Text>
-          <Text>멤버 : {memberList ? memberList.join(', ') : '없음'}</Text>
-          <Text>{startDay}  ~  {endDay}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={[styles.item, styles.text]}>{content}</Text>
+          <Text style={styles.item}>{memberList ? memberList.join(', ') : '없음'}</Text>
+          <Text style={styles.item}>{startDay}  ~  {endDay}</Text>
         </View>
       </View>
     </Pressable>
@@ -49,6 +49,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    margin: 4,
+    marginLeft: 2,
+  },
+  text: {
+    fontSize: 15,
+    marginBottom: 2,
+  },
+  item: {
+    marginLeft: 2,
+    fontSize: 14
+  }
 })
 
 export default PickItem
