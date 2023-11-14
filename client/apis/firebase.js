@@ -69,16 +69,19 @@ export const addFriend = async (newFriend) => {
 }
 // DB에 있는 나의 친구 조회(실시간)
 export const getFriendsRealtimeChange = (onResult, onError) => {
-    const myUID = getUser().uid;
-    return firestore()
-      .collection(`user`)
-      .doc(`${myUID}`)
-      // .orderBy('date', 'asc')
-      .onSnapshot(onResult, onError);
+    if(getUser() !== null ){  // 네이버 로그인시 첫 로그인정보 입력화면에서 getUser()가 null이어서 에러처리
+        const myUID = getUser().uid;
+        return firestore()
+        .collection(`user`)
+        .doc(`${myUID}`)
+        // .orderBy('date', 'asc')
+        .onSnapshot(onResult, onError);
+    }
+
 }
 
 // DB에 있는 나의 친구 조회(1회)
-export const getFriendsOnce = async () => {
+export const getFriendsOnce = async () => { 
     const myUID = getUser().uid;
     const myDBData = await firestore()
     .collection(`user`)

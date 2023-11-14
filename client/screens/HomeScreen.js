@@ -4,7 +4,7 @@ import Logout from '../components/Logout';
 
 import { searchUserByEmail, addFriend, getFriendsRealtimeChange } from '../apis/firebase';
 
-function HomeScreen({props, navigation, loginInfo}) {
+function HomeScreen({props, navigation, loginInfo,}) {
   const [friendList, setFriendList] = useState([]);
   const [searchUserText, setSearchUserText] = useState('');
   const [searchUser, setSearchUser] = useState({
@@ -61,7 +61,7 @@ function HomeScreen({props, navigation, loginInfo}) {
     return getFriendsRealtimeChange(onResult, onError)
   },[])
 
-  // console.log(friendList)
+  console.log(friendList)
 
   return (
     <SafeAreaView style={styles.container}>

@@ -32,8 +32,11 @@ export const creatChatRoom = async (title, calendarUID, friends) => { // 현재�
 
 export const sendMessageToFirebase = async (selectRoomId, message, uploadFilePath = '') => {
   try {
+    const myUID = getUser().uid;
     const getChatRoom = await firestore().collection(`chat`).doc(`${selectRoomId}`).get();
-    console.log(getChatRoom.exists)
+    const getMyData = await firestore().collection('user').doc(myUID).get();
+    const myName = getMyData.data().name;
+    // console.log(myName)
     if(getChatRoom.exists){
       // console.log(getChatRoom);
       // console.log(getChatRoom.data());
@@ -44,9 +47,10 @@ export const sendMessageToFirebase = async (selectRoomId, message, uploadFilePat
         userUID : getUser().uid,
         userEmail : getUser().email,
         uploadFilePath : uploadFilePath,
+        name : myName
       }
       await firestore().collection(`chat`).doc(`${selectRoomId}`).update({
-        messages : [...messages, newMessage]
+        messages : [newMessage, ...messages]
       })
     } else {
       // await firestore().collection(`chat`).doc(`${roomName}`).set({
@@ -72,7 +76,7 @@ export const sendMessageToFirebase = async (selectRoomId, message, uploadFilePat
     //   userEmail : getUser().email,
     // })
   } catch (error) {
-    console.log(error)
+    console.log('sendMessageToFirebase error : ',error)
   }
   
 }
@@ -81,7 +85,6 @@ export const getMessage = (roomid, onResult, onError) => {
   return firestore()
     .collection(`chat`)
     .doc(`${roomid}`)
-    // .orderBy('date', 'asc')
     .onSnapshot(onResult, onError);
 }
 
@@ -135,7 +138,11 @@ export const getChatRoomUIDByCalendarUID = async (calendarUID) => {
 }
 
 export const sendNotification = async (message, roomUID) => {
-  const FCMTokens = await getMemberFCMTokens(roomUID)
+  const FCMTokens = await getMemberFCMTokens(roomUID);
+  const myUID = getUser().uid;
+  const myData = await firestore().collection('user').doc(myUID).get();
+  const myName = myData.data().name;
+  console.log(myName)
   FCMTokens.forEach(t => {
     try {
       fetch('https://fcm.googleapis.com/fcm/send', {
@@ -147,7 +154,7 @@ export const sendNotification = async (message, roomUID) => {
       body : JSON.stringify({
         "to": `${t}`,
         "notification": {
-          "title": "Check this Mobile (title)",
+          "title": `${myName}`,
           "body": `${message.trim() !== ''? message : '사진'}`,
           "mutable_content": true,
           "sound": "Tri-tone"
@@ -164,9 +171,10 @@ export const sendNotification = async (message, roomUID) => {
 
 // 채팅방에 있는 유저들의 FCM토큰 반환
 export const getMemberFCMTokens = async (roomUID) => {
+  const myUID = getUser().uid;
   try {
     const getChatRoomData = await firestore().collection('chat').doc(roomUID).get();
-    const joinUsers = await getChatRoomData.data().joinUser;
+    const joinUsers = getChatRoomData.data().joinUser.filter(u => u !== myUID );
     // console.log(joinUsers)
 
     const FCMTokens = await Promise.all(joinUsers.map(async uid => {

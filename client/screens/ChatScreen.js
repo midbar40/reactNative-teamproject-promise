@@ -15,6 +15,7 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
   const [roomTitle, setRoomTitle] = useState('');
   const [chatRoomList, setChatRoomList] = useState([]);
   
+  // 로그인 한 유저가 참가되있는 캘린더톡 리스트
   useEffect(() => {
     const onResult = (querySnapshot) => {
       const list = querySnapshot.docs.map(d => {
