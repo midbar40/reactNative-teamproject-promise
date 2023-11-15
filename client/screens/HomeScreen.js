@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import Logout from '../components/Logout';
 
+import { getUser } from '../apis/auth';
+import { searchUserByEmail, addFriend, getFriendsRealtimeChange } from '../apis/firebase';
 import {
   searchUserByEmail,
   addFriend,
@@ -43,6 +45,7 @@ function HomeScreen({
       setSearchUserText('');
       return ;
     }
+
     const user = await searchUserByEmail(searchUserText);
     if (!user) {
       Alert.alert('유저가 없습니다.');
@@ -108,6 +111,36 @@ function HomeScreen({
       <View>
         <Text style={styles.appName}>Take me home</Text>
       </View>
+      <View>
+        <TextInput
+          style={{ backgroundColor : '#fff'}}
+          onChangeText={setSearchUserText}
+        />
+        <TouchableOpacity onPress={searchUserToFirebaseDB}>
+          <Text>검색</Text>
+        </TouchableOpacity>
+      </View>
+      {searchUser.UID &&
+        <>
+          <View>
+            <Text>이름 : {searchUser.name}</Text>
+            <Text>이메일 : {searchUser.email}</Text>
+            <Text>UID : {searchUser.UID}</Text>
+          </View>
+          <TouchableOpacity onPress={addFriendToFirebaseDB}>
+            <Text>친구 추가</Text>
+          </TouchableOpacity>
+        </>
+      }
+      {friendList.length !== 0 &&
+        <FlatList
+          data={friendList}
+          keyExtractor={item => item.UID}
+          renderItem={({ item }) => (
+            <View style={{ backgroundColor : 'orange', width : 300}}>
+              <Text>{item.name}</Text>
+              <Text>{item.email}</Text>
+
       <View style={styles.searchUserContainer}>
         <TextInput
           style={{backgroundColor: '#fff'}}
@@ -135,10 +168,10 @@ function HomeScreen({
           style={styles.flatListStyle}
           data={friendList}
           keyExtractor={item => item.UID}
-          renderItem={({item}) => (
-            <View style={{backgroundColor: 'orange', width: 300}}>
-              <Text>{item.name}</Text>
-              <Text>{item.email}</Text>
+          renderItem={({ item }) => (
+            <View style={ styles.friendsListContainer}>
+              <Text>이름 : {item.name}</Text>
+              <Text>이메일 : {item.email}</Text>
             </View>
           )}
         />

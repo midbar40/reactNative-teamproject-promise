@@ -1,19 +1,25 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import React from 'react'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, } from 'react-native'
+import moment from 'moment-timezone'
+import { removeData } from './apis/firebase'
+import AlarmItem from './AlarmItem'
 
-function AlarmList({ alarms }) {
+function AlarmList({ alarms, onRemoveAlarm }){
+  //알람 빠른시간순으로 정렬
+  alarms.sort((a, b) => moment(a.time).diff(b.time))
+
+  // const onRemoveAlarm = (id) => {
+  //   removeData('Alarms', id)
+  // }   
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Alarm List</Text>
       <FlatList
         data={alarms}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.alarmItem}>
-            <Text style={styles.alarmTime}>{item.time.format('HH:mm A')}</Text>
-            <Text style={styles.alarmTitle}>{item.title}</Text>
-          </View>
-        )}
+          <AlarmItem item={item} onDelete={onRemoveAlarm} />
+        )}        
       />
     </View>
   )
@@ -23,27 +29,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    margin: 10,
-  },
-  alarmItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-  },
-  alarmTime: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  alarmTitle: {
-    fontSize: 16,
+    width: '90%',
   },
 })
 
