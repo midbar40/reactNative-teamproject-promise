@@ -28,7 +28,7 @@ async function call(method, uri, param, header){
         rtn = await axios({
             method: method,
             url: uri,
-            param: param ,
+            data: param ,
             headers: header
         })
     } catch (err) {
@@ -51,9 +51,11 @@ router.get('/redirect', async function (req, res) {
         "redirect_uri": redirect_uri,
         "code": req.query.code
     });
+    
     const header = { 'content-type': 'application/x-www-form-urlencoded' };
     var rtn = await call('POST', token_uri, param, header);
     req.session.key = rtn?.access_token;
+    
     console.log('토큰값 (서버56번줄): ', rtn)
     // res.status(302).res.json(rtn?.access_token)
     // res.status(302).redirect('/profile');
