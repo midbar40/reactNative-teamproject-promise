@@ -8,16 +8,15 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Icon2 from 'react-native-vector-icons/FontAwesome6'
 
 import messaging from '@react-native-firebase/messaging';
-import { getToken, notificationListener, requestUserPermission } from './apis/firebaseMessage';
 import PushNotification from 'react-native-push-notification';
 import { configurePushNotifications } from './components/Alarm/apis/Push';
-import { getToken, notificationListener, requestUserPermission} from './apis/firebaseMessage';
+import { getToken, notificationListener, requestUserPermission } from './apis/firebaseMessage';
 
 
 const Tab = createBottomTabNavigator();
 configurePushNotifications()
 
-function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsKakaoLogin, isNaverLogin, setIsNaverLogin, userInfo, setUserInfo}) {
+function App({ navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsKakaoLogin, isNaverLogin, setIsNaverLogin, userInfo, setUserInfo }) {
   // console.log(route.params.email)
 
   const [selectRoomId, setSelectRoomId] = useState('');
@@ -33,7 +32,7 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
         console.error('푸시알림 등록중 오류: ', error)
       }
     }
-    registerForPushNotifications() 
+    registerForPushNotifications()
   }, [])
 
   useEffect(() => {
@@ -51,7 +50,7 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
 
   useEffect(() => {
     const handleTokenRefresh = async (newToken) => {
-      console.log('Token refreshed:', newToken);      
+      console.log('Token refreshed:', newToken);
     };
 
     const unsubscribeRefresh = messaging().onTokenRefresh(handleTokenRefresh);
@@ -68,12 +67,28 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
     });
   }
 
+
+  useEffect(() => {
+    requestUserPermission();
+    notificationListener();
+    getToken();
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'skyblue',
       }}
     >
+
       <Tab.Screen
         name="Home"
         // component={HomeScreen} 
@@ -87,9 +102,16 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
           navigation={navigation}
           isSnsLogin={isSnsLogin}
           setIsSnsLogin={setIsSnsLogin}
+          isKakaoLogin={isKakaoLogin}
+          setIsKakaoLogin={setIsKakaoLogin}
+          isNaverLogin={isNaverLogin}
+          setIsNaverLogin={setIsNaverLogin}
+          userInfo={userInfo}
+          setUserInfo={setUserInfo}
         />
       )}
       </Tab.Screen>
+
       <Tab.Screen
         name="Calendar"
         children={(props) => (
@@ -101,63 +123,6 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
         options={{
           title: 'Calendar',
           tabBarIcon: ({ color, size }) => <Icon name='calendar-number' color={color} size={size} />
-
-  useEffect(() => {
-    requestUserPermission();
-    notificationListener();
-    getToken();
-  },[])
-
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
-  }, []);
-
-  return (
-    
-      <Tab.Navigator
-        screenOptions={{
-          tabBarActiveTintColor : 'skyblue',
-        }}
-      >
-        
-        <Tab.Screen 
-          name="Home" 
-          // component={HomeScreen} 
-          options={{
-            title:'Home',
-            tabBarIcon:({color, size}) => <Icon name='home' color={color} size={size}/>
-        }}
-        >{props => (
-          <HomeScreen
-            {...props}
-            navigation={navigation}
-            isSnsLogin={isSnsLogin}
-            setIsSnsLogin={setIsSnsLogin}
-            isKakaoLogin={isKakaoLogin}
-            setIsKakaoLogin={setIsKakaoLogin}
-            isNaverLogin={isNaverLogin}
-            setIsNaverLogin={setIsNaverLogin}
-            userInfo={userInfo}
-            setUserInfo={setUserInfo}
-          />
-        )}
-        </Tab.Screen>
-        
-        <Tab.Screen 
-          name="Calendar" 
-          children={(props) => (
-            <CalendarScreen
-              navigation={navigation}
-              setSelectRoomId={setSelectRoomId}
-            />
-          )}
-          options={{
-            title:'Calendar',
-            tabBarIcon:({color, size}) => <Icon name='calendar-number' color={color} size={size}/>
 
         }}
       />
@@ -176,20 +141,20 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
           title: 'Todo',
           tabBarIcon: ({ color, size }) => <Icon2 name='clipboard-list' color={color} size={size} />
         }}
-       />      
-        <Tab.Screen 
-          name="Chat" 
-          children={(props) => (
-            <ChatScreen 
-             {...props}
-             selectRoomId={selectRoomId}
-             setSelectRoomId={setSelectRoomId}
-            />
-          )}
-          options={{
-            title:'Chat',
-            headerShown:false,
-            tabBarIcon:({color, size}) => <Icon name='chatbubbles-sharp' color={color} size={size}/>
+      />
+      <Tab.Screen
+        name="Chat"
+        children={(props) => (
+          <ChatScreen
+            {...props}
+            selectRoomId={selectRoomId}
+            setSelectRoomId={setSelectRoomId}
+          />
+        )}
+        options={{
+          title: 'Chat',
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => <Icon name='chatbubbles-sharp' color={color} size={size} />
         }}
       />
     </Tab.Navigator>

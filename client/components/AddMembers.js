@@ -5,11 +5,7 @@ import { getFriendsRealtimeChange } from '../apis/firebase'
 
 import AddMembersItem from './AddMembersItem'
 
-<<<<<<< HEAD
-function AddMembers({setPickFriends, itemKey, showSchedule}){
-=======
 function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}){
->>>>>>> develop
 
   const [open, setOpen] = useState(false) //모달 open
   const [friendLists, setFriendLists] = useState() //친구목록 전체 저장
@@ -29,20 +25,13 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
 
   const addMember = () => {
     const list = []
-<<<<<<< HEAD
-=======
     list.push(myInfo)
->>>>>>> develop
     friendLists.map(fList => {
       if(selectedId && selectedId.indexOf(fList.name) !== -1 ){
         list.push(fList)
       }
     })
-<<<<<<< HEAD
-    // console.log('친구목록',list)
-=======
     console.log('친구목록',list)
->>>>>>> develop
     setPickFriends(list)
     setOpen(false)
   }
@@ -75,11 +64,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
 
   return(
     <View style={styles.horizontalView}>
-<<<<<<< HEAD
-      <Text style={styles.memberContainer}>함께하는 멤버 : {selectedId ? selectedId.join(', ') : '없음'} </Text>
-=======
       <Text style={styles.memberContainer}>함께하는 멤버 : {selectedId ? selectedId.join(', ') : ''} </Text>
->>>>>>> develop
       <TouchableOpacity style={styles.modalBtn} onPress={openModal}>
         <Text style={styles.btnText}>추가</Text>
       </TouchableOpacity>
