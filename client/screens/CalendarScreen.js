@@ -38,15 +38,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const today = new Date()
   const pickDay = new Date(selectedDate)
 
-  //현재 로그인한 유저 uid 불러오기
-  onAuthStateChanged(auth, (user) => {
-    if(user){
-        const uid = user.uid
-        setUser(uid)
-    }else{
-        console.log(`${user}유저정보가 이상합니다`)
-    }
-  })
+
   //같은 날짜 구분
   const isSameDate = (date1, date2) => {
     return date1.getFullYear() === date2.getFullYear()
@@ -134,16 +126,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   }
 
   //user collection의 나의 정보 가져오기
-  useEffect(() => {
-    getOneSchedule('user', user, 
-            function onResult(querySnapshot){
-              console.log('myinfo',querySnapshot.data())
-              setMyInfo(querySnapshot.data())
-            },
-            function onError(err){
-              console.log('err', err)
-            })
-  },[])
+
   
   //시작날짜가 종료날짜보다 느릴시 종료날짜가 시작날짜로 자동 셋팅
   useEffect(() => {
@@ -151,6 +134,28 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       setEndDate((prev) => [...prev, startDate])
     }
   },[startDate])
+
+  useEffect(() => {
+    //현재 로그인한 유저 uid 불러오기
+   onAuthStateChanged(auth, (user) => {
+    //  console.log(user)
+     if(user){
+       const uid = user.uid
+       setUser(uid)
+     }else{
+       console.log(`${user}유저정보가 이상합니다`)
+     }
+   })
+   //로그인한 user정보 담기
+   getOneSchedule('user', user, 
+     function onResult(querySnapshot){
+       console.log('myinfo',querySnapshot.data())
+       setMyInfo(querySnapshot.data())
+     },
+     function onError(err){
+       console.log('err', err)
+     })
+ },[])
 
         
   useEffect(() => {
@@ -173,8 +178,15 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       const list = []
       querySnapshot.forEach(doc => {
         // console.log(doc.data())
-        list.push({...doc.data(), id: doc.id})
-        
+
+        //member에 내가 있는 스케쥴만 추리기
+        doc.data().members && doc.data().members.map(member => {
+          if(member.UID === user){
+            // console.log('걸러진데이터',doc.data(), doc.id)
+            list.push({...doc.data(), id: doc.id})
+          } 
+        })
+
         //데이터 불러와서 캘린더에 마킹
         let marking = list.reduce((acc, leave) => {
           let { startDay, pickColor } = leave
@@ -198,20 +210,18 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           }, {})
       
         setMarkDate(marking)   
+        setLoadSchedule(list)
       })
-      console.log('리스트', markedDate)
-      setLoadSchedule(list)
     }
     function onError(error){
-        console.error(`불러오다가 에러났음 - ${error}`)
+      console.error(`불러오다가 에러났음 - ${error}`)
     }
     return getSchedules('CalendarSchedule', onResult, onError)
- 
-  },[])
+    
+  },[user])
   
-
-
-
+  
+  // console.log('리스트', markedDate)
   return(
     <SafeAreaView style={styles.block}>
       <Calendar
@@ -278,6 +288,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           const list = []
           list.push(myInfo)
           setPickFriends(list)
+          console.log('내정보담기',list)
           if(itemKey !== ''){
             getOneSchedule('CalendarSchedule', itemKey, 
             function onResult(querySnapshot){
