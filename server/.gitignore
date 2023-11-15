@@ -2,5 +2,9 @@ serviceAccountKey
 node_modules
 package-lock.json
 .env
+<<<<<<< HEAD
 ```
 FirebaseAdminSDKserviceKey
+=======
+```
+>>>>>>> develop
