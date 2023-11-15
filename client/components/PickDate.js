@@ -6,35 +6,12 @@ import PickItem from './PickItem'
 import ChatCreateBtn from './ChatCreateBtn'
 import { removeSchedule, getThisSchedulesChatRoom, deleteThisSchedulesChatRoom } from '../apis/firebaseCalendar'
 
-<<<<<<< HEAD
-function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, }){
-=======
 function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, myInfo, }){
->>>>>>> develop
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
   const [chatRoomId, setChatRoomId] = useState('')
 
-<<<<<<< HEAD
-  const clickDelete = () => {
-    console.log('삭제', itemKey)
-    Alert.alert('삭제',
-      '할일을 삭제하시겠습니까?', 
-      [
-        {text: '취소', style: 'cancel'},
-        {text: '삭제', onPress: () => {
-          try{
-            removeSchedule('CalendarSchedule', itemKey)
-            //화면에서도 삭제
-            const newSchedule = showSchedule.filter(show => itemKey !== show.id)
-            setShowSchedule(newSchedule)
-            setItemKey('')
-          }catch(err){console.log('err:', err)}
-        }}
-      ]
-    )
-=======
   //삭제버튼 클릭
   const clickDelete = () => {
     console.log('삭제', itemKey)
@@ -74,7 +51,6 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
         }
       }
     })
->>>>>>> develop
   }
 
   // console.log('show', showSchedule)

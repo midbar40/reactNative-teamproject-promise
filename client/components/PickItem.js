@@ -4,12 +4,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { updateData } from '../apis/firebaseCalendar'
 
 
-
-<<<<<<< HEAD
-function PickItem({ title, content, startDay, endDay, id, members, setItemKey, setOpenModal}){
-=======
 function PickItem({ title, content, startDay, endDay, id, members, lastModifedUser, setItemKey, setOpenModal}){
->>>>>>> develop
 
   const [memberList, setmemberList] = useState('')
 
@@ -33,13 +28,8 @@ function PickItem({ title, content, startDay, endDay, id, members, lastModifedUs
         <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
           <Text style={[styles.item, styles.text]}>{content}</Text>
-<<<<<<< HEAD
-          <Text style={styles.item}>{memberList ? memberList.join(', ') : '없음'}</Text>
-          <Text style={styles.item}>{startDay}  ~  {endDay}</Text>
-=======
           <Text style={styles.item}>{memberList ? memberList.join(', ') : ''}</Text>
           <Text style={styles.item}>{startDay}  ~  {endDay}  (수정 : {lastModifedUser})</Text>
->>>>>>> develop
         </View>
       </View>
     </Pressable>
