@@ -81,8 +81,9 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         content: scheduleContent,
         pickColor: pickColor,
         createdAt: getCurrentTime(),
-        lastModifiedAt : null,
-        createdUser: user
+        lastModifiedAt: null,
+        createdUser: user,
+        lastModifedUser: myInfo.name
       }
       //수정 
       const updateSchedule = {
@@ -92,8 +93,8 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         title: scheduleTitle,
         content: scheduleContent,
         pickColor: pickColor,
-        lastModifiedAt : getCurrentTime(),
-
+        lastModifiedAt: getCurrentTime(),
+        lastModifedUser: myInfo.name
       }
 
       try{
@@ -283,11 +284,14 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         onShow={() => {
           setStartDate(selectedDate)
           setEndDate(selectedDate)
-          const list = []
-          list.push(myInfo)
-          setPickFriends(list)
-          console.log('내정보담기',list)
-          if(itemKey !== ''){
+          console.log('key',itemKey)
+          if(itemKey === ''){
+            const list = []
+            list.push(myInfo)
+            setPickFriends(list)
+            console.log('내정보담기',list)
+          }
+          if(itemKey !== '' || itemKey){
             getOneSchedule('CalendarSchedule', itemKey, 
             function onResult(querySnapshot){
               const list = []

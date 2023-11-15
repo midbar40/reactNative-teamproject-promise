@@ -16,6 +16,7 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
     console.log('삭제', itemKey)
     showSchedule.map(schedule => {
       if(itemKey === schedule.id){
+        //해당 스케쥴을 만든사람만 삭제 가능
         if(schedule.createdUser === myInfo.UID){
           Alert.alert('삭제',
           '할일을 삭제하시겠습니까?',
