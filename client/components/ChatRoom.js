@@ -9,14 +9,14 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { uploadFileToFirebaseStorage, getChatFile, sendNotification } from '../apis/firebaseChat';
 
 function ChatRoom({ navigation, selectRoomId }){
-  const [message, setMessage] = useState('');
-  const [messageList , setMessageList] = useState([]);
-  const [uploadFile, setUploadFile] = useState({});
-  const [toggleImgModal, setToggleImgModal] = useState('');
-  const [showingChatList, setShowingChatList] = useState([]);
-  const [page, setPage] = useState(1);
-  const numOfNewMessages = useRef(-1);
-  const [isMessageListEnd, setIsMessageListEnd] = useState(false);
+  const [message, setMessage] = useState(''); // 인풋에 적은 메세지
+  const [messageList , setMessageList] = useState([]); // DB로 부터 실시간으로 받은 메세지 리스트
+  const [uploadFile, setUploadFile] = useState({}); // 갤러리에서 선택한 (이미지) 파일
+  const [toggleImgModal, setToggleImgModal] = useState(''); // 이미지를 확대해서 보여주는 모달 토글
+  const [showingChatList, setShowingChatList] = useState([]); // 실제로 보여질 메세지 리스트
+  const [page, setPage] = useState(1); // 보여지는 채팅 페이지 넘버링을 위한 스테이트
+  const numOfNewMessages = useRef(-1); // 채팅창을 연 이후 새로 DB에 등록 된 메세지 수
+  const [isMessageListEnd, setIsMessageListEnd] = useState(false); // 보여진 메세지가 끝인지 판별
 
   // const flatList = useRef();
 
@@ -24,14 +24,14 @@ function ChatRoom({ navigation, selectRoomId }){
     if(message.trim() !== ''){
       try {
         await sendMessageToFirebase(selectRoomId, message);
-        // sendNotification(message ,selectRoomId)
+        sendNotification(message ,selectRoomId)
         setMessage('');
       } catch (error) {
         console.log(error)
       }
     } else {
       uploadFileToFirebaseStorage(uploadFile.fileData, selectRoomId);
-      // sendNotification(message ,selectRoomId)
+      sendNotification(message ,selectRoomId)
       setUploadFile({});
     }
     
@@ -74,11 +74,11 @@ function ChatRoom({ navigation, selectRoomId }){
 
   // 보여질 메세지 가공
   const showingChatListHandler = (messageList ,page, numOfNewMessages) => {
-    console.log('page : ' ,page)
-    console.log('munofmsg : ', numOfNewMessages)
+    // console.log('page : ' ,page)
+    // console.log('munofmsg : ', numOfNewMessages)
     const modifyChatList = messageList?.messages.filter((m,index) => {
       if(!isMessageListEnd && (page * 25) + numOfNewMessages > messageList?.messages.length - 1){
-        console.log('msg end',(page * 25) + numOfNewMessages,messageList?.messages.length - 1)
+        // console.log('msg end',(page * 25) + numOfNewMessages,messageList?.messages.length - 1)
         setIsMessageListEnd(true);
       }
       if(index < (page * 25) + numOfNewMessages){
@@ -87,7 +87,7 @@ function ChatRoom({ navigation, selectRoomId }){
         return false;
       }
     })
-    console.log('modi : ',modifyChatList)
+    // console.log('modi : ',modifyChatList)
     setShowingChatList(modifyChatList)
   }
 
