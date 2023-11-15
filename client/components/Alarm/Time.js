@@ -11,9 +11,7 @@ function Time({isFocused, fcmToken}){
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
   const [alarmTimes, setAlarmTimes] = useState([])
   const [addAlarmModal, setAddAlarmModal] = useState(false)
-  const [openSwipeableItem, setOpenSwipeableItem] = useState(null)
-
-  
+  const [openSwipeableItem, setOpenSwipeableItem] = useState(null)  
 
   // 시간을 AM/PM으로 나누어 보여주기 
   const getFormattedTime = (time) => {
