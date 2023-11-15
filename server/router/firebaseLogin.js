@@ -20,6 +20,7 @@ const registerFirebaseDB = async (uid, email, displayName) => {
       UID: uid,
       email: email,
       name: displayName,
+      friends: [],
     }, { merge: true })
   
       console.log('유저등록(DB)에 성공했습니다(firebaselogin.js):');
@@ -32,6 +33,7 @@ const signUpUserwithNaver = async (email, password, displayName) => {
     email: email,
     password: password,
     displayName: displayName,
+    friends:  [],
   });
   console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
   registerFirebaseDB(userRecord.uid, email, displayName); // 유저정보 Firestore database에 등록

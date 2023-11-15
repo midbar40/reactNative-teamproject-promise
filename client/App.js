@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
-=======
-import React, {useEffect, useState} from 'react';
->>>>>>> develop
 import { Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,28 +8,20 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Icon2 from 'react-native-vector-icons/FontAwesome6'
 
 import messaging from '@react-native-firebase/messaging';
-<<<<<<< HEAD
 import { getToken, notificationListener, requestUserPermission } from './apis/firebaseMessage';
 import PushNotification from 'react-native-push-notification';
 import { configurePushNotifications } from './components/Alarm/apis/Push';
-=======
 import { getToken, notificationListener, requestUserPermission} from './apis/firebaseMessage';
 
->>>>>>> develop
+
 const Tab = createBottomTabNavigator();
 configurePushNotifications()
 
-<<<<<<< HEAD
-function App({ navigation, route, isSnsLogin, setIsSnsLogin, }) {
-=======
-function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
->>>>>>> develop
+function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsKakaoLogin, isNaverLogin, setIsNaverLogin, userInfo, setUserInfo}) {
   // console.log(route.params.email)
 
-  const [isLogin, setIsLogin] = useState(false);
   const [selectRoomId, setSelectRoomId] = useState('');
 
-<<<<<<< HEAD
   /////////////////////////////////////////////////////////////
   useEffect(() => {
     const registerForPushNotifications = async () => {
@@ -113,7 +101,7 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
         options={{
           title: 'Calendar',
           tabBarIcon: ({ color, size }) => <Icon name='calendar-number' color={color} size={size} />
-=======
+
   useEffect(() => {
     requestUserPermission();
     notificationListener();
@@ -149,6 +137,12 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
             navigation={navigation}
             isSnsLogin={isSnsLogin}
             setIsSnsLogin={setIsSnsLogin}
+            isKakaoLogin={isKakaoLogin}
+            setIsKakaoLogin={setIsKakaoLogin}
+            isNaverLogin={isNaverLogin}
+            setIsNaverLogin={setIsNaverLogin}
+            userInfo={userInfo}
+            setUserInfo={setUserInfo}
           />
         )}
         </Tab.Screen>
@@ -164,7 +158,7 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
           options={{
             title:'Calendar',
             tabBarIcon:({color, size}) => <Icon name='calendar-number' color={color} size={size}/>
->>>>>>> develop
+
         }}
       />
       <Tab.Screen
@@ -182,23 +176,7 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
           title: 'Todo',
           tabBarIcon: ({ color, size }) => <Icon2 name='clipboard-list' color={color} size={size} />
         }}
-<<<<<<< HEAD
-      />
-      <Tab.Screen
-        name="Chat"
-        children={(props) => (
-          <ChatScreen
-            {...props}
-            selectRoomId={selectRoomId}
-            setSelectRoomId={setSelectRoomId}
-          />
-        )}
-        options={{
-          title: 'Chat',
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => <Icon name='chatbubbles-sharp' color={color} size={size} />
-=======
-        />      
+       />      
         <Tab.Screen 
           name="Chat" 
           children={(props) => (
@@ -212,7 +190,6 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
             title:'Chat',
             headerShown:false,
             tabBarIcon:({color, size}) => <Icon name='chatbubbles-sharp' color={color} size={size}/>
->>>>>>> develop
         }}
       />
     </Tab.Navigator>
