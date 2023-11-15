@@ -65,7 +65,6 @@ function RegisterUser({
           setIsFindPassword(false);
           setIsRegister(false);
           setLoginInfo({email: '', password: ''});
-        
         }catch(e){
           switch (e.code) {
             case 'auth/email-already-in-use':

@@ -14,6 +14,7 @@ function LandingScreen({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
+  setUserInfo
 }) {
   const [loginInfo, setLoginInfo] = useState({
     email: '',
@@ -77,6 +78,7 @@ function LandingScreen({
           setIsKakaoLogin={setIsKakaoLogin}
           isNaverLogin={isNaverLogin}
           setIsNaverLogin={setIsNaverLogin}
+          setUserInfo={setUserInfo}
         />
       )}
     </SafeAreaView>

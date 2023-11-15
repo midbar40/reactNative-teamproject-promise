@@ -30,6 +30,7 @@ function Login({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
+  setUserInfo
 }) {
 
     
@@ -43,6 +44,7 @@ function Login({
     } else {
       try {
         await signIn(email.trim(), password.trim());
+        setUserInfo({email: email.trim(), password: password.trim(), token: 'firebaseLogin'})
         navigation.navigate('App');
         setLoginInfo({email: '', password: ''});
       } catch (e) {

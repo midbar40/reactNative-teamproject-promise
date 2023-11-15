@@ -44,6 +44,7 @@ function stackRouter() {
                   setIsKakaoLogin={setIsKakaoLogin}
                   isNaverLogin={isNaverLogin}
                   setIsNaverLogin={setIsNaverLogin}
+                  setUserInfo={setUserInfo}
                 />
               )}
             </Stack.Screen>
