@@ -50,7 +50,6 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
       const memberLists = []
       if(schedule.id === rowKey){
         setTitle(schedule.title) 
-        memberLists.push(schedule.createdUser)
         schedule.members && schedule.members.map(member => {
           memberLists.push(member.UID)
         })
