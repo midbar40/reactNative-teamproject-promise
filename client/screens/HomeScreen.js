@@ -90,7 +90,7 @@ function HomeScreen({props, navigation, loginInfo}) {
           </TouchableOpacity>
         </>
       }
-      {friendList.length !== 0 &&
+      {friendList && friendList.length !== 0 &&
         <FlatList
           data={friendList}
           keyExtractor={item => item.UID}
