@@ -60,15 +60,20 @@ function RegisterUser({
               displayName: nickname.trim(),
             }),
           })
-        
+          .catch(err => {
+            console.log(err);
+          })
           Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
           setIsFindPassword(false);
           setIsRegister(false);
           setLoginInfo({email: '', password: ''});
         }catch(e){
+          console.log('등록오류코드 :', e)
           switch (e.code) {
             case 'auth/email-already-in-use':
               return Alert.alert('이미 가입된 이메일입니다');
+              case 'auth/email-already-exists':
+                return Alert.alert('이미 가입된 이메일입니다');
             case 'auth/invalid-email':
               return Alert.alert('이메일 형식이 올바르지 않습니다');
             case 'auth/weak-password':
