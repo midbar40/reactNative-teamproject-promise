@@ -13,23 +13,25 @@ function ChatRoom({ navigation, selectRoomId }){
   const [messageList , setMessageList] = useState([]);
   const [uploadFile, setUploadFile] = useState({});
   const [toggleImgModal, setToggleImgModal] = useState('');
-  const [showingChatList, setShowingChatList] = useState('');
-  const [chatIndex, setChatIndex] = useState(1);
+  const [showingChatList, setShowingChatList] = useState([]);
+  const [page, setPage] = useState(1);
+  const numOfNewMessages = useRef(-1);
+  const [isMessageListEnd, setIsMessageListEnd] = useState(false);
 
-  const flatList = useRef();
+  // const flatList = useRef();
 
   const sendMessage = async () => {
     if(message.trim() !== ''){
       try {
         await sendMessageToFirebase(selectRoomId, message);
-        sendNotification(message ,selectRoomId)
+        // sendNotification(message ,selectRoomId)
         setMessage('');
       } catch (error) {
         console.log(error)
       }
     } else {
       uploadFileToFirebaseStorage(uploadFile.fileData, selectRoomId);
-      sendNotification(message ,selectRoomId)
+      // sendNotification(message ,selectRoomId)
       setUploadFile({});
     }
     
@@ -70,6 +72,25 @@ function ChatRoom({ navigation, selectRoomId }){
 
   }
 
+  // 보여질 메세지 가공
+  const showingChatListHandler = (messageList ,page, numOfNewMessages) => {
+    console.log('page : ' ,page)
+    console.log('munofmsg : ', numOfNewMessages)
+    const modifyChatList = messageList?.messages.filter((m,index) => {
+      if(!isMessageListEnd && (page * 25) + numOfNewMessages > messageList?.messages.length - 1){
+        console.log('msg end',(page * 25) + numOfNewMessages,messageList?.messages.length - 1)
+        setIsMessageListEnd(true);
+      }
+      if(index < (page * 25) + numOfNewMessages){
+        return true;
+      } else {
+        return false;
+      }
+    })
+    console.log('modi : ',modifyChatList)
+    setShowingChatList(modifyChatList)
+  }
+
   // 채팅방 메세지 받아오기
   useEffect(() => {
     async function onResult(querySnapshot){
@@ -91,17 +112,26 @@ function ChatRoom({ navigation, selectRoomId }){
         }
       })) 
       // console.log(querySnapshot.data().messages)
-      setMessageList(querySnapshot.data())
-      
+      setMessageList(querySnapshot.data());
+      numOfNewMessages.current += 1;
+      showingChatListHandler(querySnapshot.data(), page, numOfNewMessages.current);
     }
 
     function onError(error){
       console.log(error)
     }
-
+    
     return getMessage(selectRoomId, onResult, onError)
     
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+    if(messageList?.messages?.length !== 0 && page > 1){
+      showingChatListHandler(messageList, page, numOfNewMessages.current);
+    }
+  },[page])
+
+  
 
   // console.log(uploadFile.fileUri)
 
@@ -114,7 +144,7 @@ function ChatRoom({ navigation, selectRoomId }){
         <Text style={styles.chatRoomNameText}>{messageList?.title} 채팅방</Text>
       </View>
       <FlatList
-        data={messageList.messages}
+        data={showingChatList}
         renderItem={({ item }) => (
           <ChatList 
             message={item.message} 
@@ -125,10 +155,11 @@ function ChatRoom({ navigation, selectRoomId }){
             setToggleImgModal={setToggleImgModal}
           />)}
         keyExtractor={item => item.date}
-        ref={flatList}
+        // ref={flatList}
         // onContentSizeChange={() => flatList.current.scrollToEnd()}
         // onLayout={() => flatList.current.scrollToEnd()}
         inverted
+        onEndReached={() => {!isMessageListEnd && setPage(page + 1)}}
       />
         {/* {messageList?.length !== 0 &&
           messageList?.map(chat => <ChatList key={chat.date} message={chat.message} user={chat.user}/>)
