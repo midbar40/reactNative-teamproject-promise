@@ -26,6 +26,10 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const [scheduleTitle, setScheduleTitle] = useState('') //할일 제목
   const [scheduleContent, setScheduleContent] = useState('') //할일 내용
   const [user, setUser] = useState('') //현재 로그인한 유저 uid저장용
+<<<<<<< HEAD
+=======
+  const [myInfo, setMyInfo] = useState('') //현재 로그인한 유저 uid저장용
+>>>>>>> develop
   const [loadSchedule, setLoadSchedule] = useState([]) //불러온 스케쥴 담기
   const [markedDate, setMarkDate] = useState(null) //마크할 날짜 담기
   const [markandSelected, setMarkandSelected] = useState(null) //마크+선택 날짜 담기
@@ -37,6 +41,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const today = new Date()
   const pickDay = new Date(selectedDate)
 
+<<<<<<< HEAD
   //현재 로그인한 유저 uid 불러오기
   onAuthStateChanged(auth, (user) => {
     if(user){
@@ -46,6 +51,9 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         console.log(`${user}유저정보가 이상합니다`)
     }
   })
+=======
+
+>>>>>>> develop
   //같은 날짜 구분
   const isSameDate = (date1, date2) => {
     return date1.getFullYear() === date2.getFullYear()
@@ -83,24 +91,43 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       const newSchedule = {
         startDay : startDate,
         endDay :  endDate,
+<<<<<<< HEAD
         members: pickFriends ? pickFriends : null,
+=======
+        members: pickFriends, // myInfo
+>>>>>>> develop
         title: scheduleTitle,
         content: scheduleContent,
         pickColor: pickColor,
         createdAt: getCurrentTime(),
+<<<<<<< HEAD
         lastModifiedAt : null,
         createdUser: user
+=======
+        lastModifiedAt: null,
+        createdUser: user,
+        lastModifedUser: myInfo.name
+>>>>>>> develop
       }
       //수정 
       const updateSchedule = {
         startDay : startDate,
         endDay :  endDate,
+<<<<<<< HEAD
         members: pickFriends ? pickFriends : null,
         title: scheduleTitle,
         content: scheduleContent,
         pickColor: pickColor,
         lastModifiedAt : getCurrentTime(),
         createdUser: user
+=======
+        members: pickFriends,
+        title: scheduleTitle,
+        content: scheduleContent,
+        pickColor: pickColor,
+        lastModifiedAt: getCurrentTime(),
+        lastModifedUser: myInfo.name
+>>>>>>> develop
       }
 
       try{
@@ -131,6 +158,10 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       Alert.alert('경고!', '할일 제목이나 내용을 입력해주세요.')
     }
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
   
   //시작날짜가 종료날짜보다 느릴시 종료날짜가 시작날짜로 자동 셋팅
   useEffect(() => {
@@ -139,6 +170,31 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
     }
   },[startDate])
 
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    //현재 로그인한 유저 uid 불러오기
+   onAuthStateChanged(auth, (user) => {
+    //  console.log(user)
+     if(user){
+       const uid = user.uid
+       setUser(uid)
+     }else{
+       console.log(`${user}유저정보가 이상합니다`)
+     }
+   })
+   //로그인한 user정보 담기
+   getOneSchedule('user', user, 
+     function onResult(querySnapshot){
+       console.log('myinfo',querySnapshot.data())
+       setMyInfo(querySnapshot.data())
+     },
+     function onError(err){
+       console.log('err', err)
+     })
+ },[user])
+
+>>>>>>> develop
         
   useEffect(() => {
     //선택한 날짜 효과 추가
@@ -151,8 +207,11 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         }
       }
       setMarkandSelected(markedSelected)
+<<<<<<< HEAD
     }else{
       setMarkandSelected(markedDate)
+=======
+>>>>>>> develop
     }
   },[selectedDate])
 
@@ -162,12 +221,28 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       const list = []
       querySnapshot.forEach(doc => {
         // console.log(doc.data())
+<<<<<<< HEAD
         list.push({...doc.data(), id: doc.id})
         
         //데이터 불러와서 캘린더에 마킹
         let marking = list.reduce((acc, leave) => {
           let { startDay, pickColor } = leave
             //시작날짜에 마크찍기
+=======
+
+        //member에 내가 있는 스케쥴만 추려서 담기
+        doc.data().members && doc.data().members.map(member => {
+          if(member.UID === user){
+            // console.log('걸러진데이터',doc.data(), doc.id)
+            list.push({...doc.data(), id: doc.id})
+          } 
+        })
+
+        //담은 스케쥴이 있는 날짜에 마킹
+        let marking = list.reduce((acc, leave) => {
+          let { startDay, pickColor } = leave
+            //스케쥴 시작날짜에 마크찍기
+>>>>>>> develop
             return {
               ...acc,
               [startDay]:{
@@ -187,6 +262,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           }, {})
       
         setMarkDate(marking)   
+<<<<<<< HEAD
       })
       console.log('리스트', markedDate)
       setLoadSchedule(list)
@@ -201,6 +277,20 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
 
 
 
+=======
+        setLoadSchedule(list)
+      })
+    }
+    function onError(error){
+      console.error(`불러오다가 에러났음 - ${error}`)
+    }
+    return getSchedules('CalendarSchedule', onResult, onError)
+    
+  },[user])
+  
+  
+  // console.log('리스트', markedDate)
+>>>>>>> develop
   return(
     <SafeAreaView style={styles.block}>
       <Calendar
@@ -252,7 +342,11 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       />
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}>
+<<<<<<< HEAD
         <PickDate selectedDate={selectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId}/>
+=======
+        <PickDate selectedDate={selectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId} myInfo={myInfo}/>
+>>>>>>> develop
       </View>
       <Modal
         animationType='fade'
@@ -264,8 +358,19 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         onShow={() => {
           setStartDate(selectedDate)
           setEndDate(selectedDate)
+<<<<<<< HEAD
 
           if(itemKey !== ''){
+=======
+          console.log('key',itemKey)
+          if(itemKey === ''){
+            const list = []
+            list.push(myInfo)
+            setPickFriends(list)
+            console.log('내정보담기',list)
+          }
+          if(itemKey !== '' || itemKey){
+>>>>>>> develop
             getOneSchedule('CalendarSchedule', itemKey, 
             function onResult(querySnapshot){
               const list = []
@@ -302,7 +407,11 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
                   scheduleContent={scheduleContent} setScheduleContent={setScheduleContent} 
                   itemKey={itemKey}
                 />
+<<<<<<< HEAD
                 <AddMembers showSchedule={showSchedule} itemKey={itemKey} setPickFriends={setPickFriends}/>
+=======
+                <AddMembers showSchedule={showSchedule} itemKey={itemKey} pickFriends={pickFriends} setPickFriends={setPickFriends} myInfo={myInfo}/>
+>>>>>>> develop
               </View>
               <View>
                 <PickColor showSchedule={showSchedule} pickColor={pickColor} setPickColor={setPickColor}/>

@@ -23,8 +23,17 @@ function Login({
   setNaverLoginLink,
   naverLoginLink,
   isSnsLogin,
-  setIsSnsLogin
+  setIsSnsLogin,
+  kakaoLoginLink,
+  setKakaoLoginLink,
+  isKakaoLogin,
+  setIsKakaoLogin,
+  isNaverLogin,
+  setIsNaverLogin,
+  setUserInfo
 }) {
+
+    
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
     // 로그인 정보 확인
@@ -35,6 +44,7 @@ function Login({
     } else {
       try {
         await signIn(email.trim(), password.trim());
+        setUserInfo({email: email.trim(), password: password.trim(), token: 'firebaseLogin'})
         navigation.navigate('App');
         setLoginInfo({email: '', password: ''});
       } catch (e) {
@@ -66,6 +76,12 @@ function Login({
           setNaverLoginLink={setNaverLoginLink}
           naverLoginLink={naverLoginLink}
           setIsSnsLogin={setIsSnsLogin}
+          kakaoLoginLink={kakaoLoginLink}
+          setKakaoLoginLink={setKakaoLoginLink}
+          isKakaoLogin={isKakaoLogin}
+          setIsKakaoLogin={setIsKakaoLogin}
+          isNaverLogin={isNaverLogin}
+          setIsNaverLogin={setIsNaverLogin}
         />
       ) : (
         <>

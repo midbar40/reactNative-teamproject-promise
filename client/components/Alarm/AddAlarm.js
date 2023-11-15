@@ -2,18 +2,31 @@ import React, { useState } from 'react'
 import {
   View, Modal, Text,
   StyleSheet, TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native'
 
-function AddAlarm({ visible, onClose, onAddAlarm }) {
-  const [time, setTime] = useState(5)
+function AddAlarm({ visible, onClose, onAddAlarm }){  
   const [customTime, setCustomTime] = useState('')
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState('')  
+  const [selectTime, setSelectTime] = useState(null)
 
   const handleAddAlarm = () => {
-    const alarmTime = customTime ? parseInt(customTime) : time
-    onAddAlarm(alarmTime, title)
-    onClose()
+    if ((!selectTime && !customTime) || !title){
+      Alert.alert('제목과 알람 시간을 모두 설정해야 합니다.')
+    }else{
+      const alarmTime = customTime ? parseInt(customTime) : selectTime
+      onAddAlarm(alarmTime, title)
+      setSelectTime(null)
+      setTitle('')
+      setCustomTime('')
+      onClose()
+    }
+  }
+
+  const handleSelectTime = (time) => {
+    setCustomTime('')
+    setSelectTime(time)
   }
 
   return (
@@ -21,45 +34,36 @@ function AddAlarm({ visible, onClose, onAddAlarm }) {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>알람 추가하기</Text>
-          <Text style={styles.modalLabel}>알람 Title :</Text>
+          <Text style={styles.modalLabel}>알람 Title :</Text>          
           <TextInput
             style={styles.input}
             onChangeText={text => setTitle(text)}
             placeholder="Title을 입력하세요."
+            maxLength={15}
           />
           <Text style={styles.modalLabel}>직접 설정 :</Text>
           <TextInput
             style={styles.input}
-            onChangeText={text => setCustomTime(text)}
+            onChangeText={(text) => setCustomTime(text)}
             placeholder="시간을 입력하세요. (min 단위)"
             keyboardType="numeric"
           />
-          <Text style={styles.modalLabel}>or choose from options:</Text>
+          <Text style={styles.modalLabel}>시간을 선택하세요 :</Text>
           <View style={styles.timeOptions}>
-            <TouchableOpacity
-              style={styles.timeOption}
-              onPress={() => setTime(5)}
-            >
-              <Text>5min</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.timeOption}
-              onPress={() => setTime(10)}
-            >
-              <Text>10min</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.timeOption}
-              onPress={() => setTime(30)}
-            >
-              <Text>30min</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.timeOption}
-              onPress={() => setTime(60)}
-            >
-              <Text>1hour</Text>
-            </TouchableOpacity>
+            {[5, 10, 30, 60].map((timeOption) => (
+              <TouchableOpacity
+                key={timeOption}
+                style={[
+                  styles.timeOption,
+                  selectTime === timeOption ? styles.select : null,
+                ]}
+                onPress={() => handleSelectTime(timeOption)}
+              >
+                <Text style={selectTime === timeOption ? styles.minText : null}>
+                  {timeOption === 60 ? '1hour' : `${timeOption}min`}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -92,6 +96,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    textAlign: 'center'
   },
   modalLabel: {
     fontSize: 16,
@@ -114,6 +119,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
+  },
+  select: {
+    backgroundColor: '#a8c8ffff',    
+  },
+  minText: {
+    fontWeight: 'bold',
+    color: '#fff',
   },
   buttonContainer: {
     flexDirection: 'row',
