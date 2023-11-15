@@ -64,7 +64,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
 
   return(
     <View style={styles.horizontalView}>
-      <Text style={styles.memberContainer}>함께하는 멤버 : {selectedId ? selectedId.join(', ') : '나'} </Text>
+      <Text style={styles.memberContainer}>함께하는 멤버 : {selectedId ? selectedId.join(', ') : ''} </Text>
       <TouchableOpacity style={styles.modalBtn} onPress={openModal}>
         <Text style={styles.btnText}>추가</Text>
       </TouchableOpacity>

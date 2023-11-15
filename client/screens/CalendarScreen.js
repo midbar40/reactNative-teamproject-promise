@@ -93,7 +93,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         content: scheduleContent,
         pickColor: pickColor,
         lastModifiedAt : getCurrentTime(),
-        createdUser: user
+
       }
 
       try{
@@ -125,8 +125,6 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
     }
   }
 
-  //user collection의 나의 정보 가져오기
-
   
   //시작날짜가 종료날짜보다 느릴시 종료날짜가 시작날짜로 자동 셋팅
   useEffect(() => {
@@ -155,7 +153,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
      function onError(err){
        console.log('err', err)
      })
- },[])
+ },[user])
 
         
   useEffect(() => {
@@ -179,7 +177,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       querySnapshot.forEach(doc => {
         // console.log(doc.data())
 
-        //member에 내가 있는 스케쥴만 추리기
+        //member에 내가 있는 스케쥴만 추려서 담기
         doc.data().members && doc.data().members.map(member => {
           if(member.UID === user){
             // console.log('걸러진데이터',doc.data(), doc.id)
@@ -187,10 +185,10 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           } 
         })
 
-        //데이터 불러와서 캘린더에 마킹
+        //담은 스케쥴이 있는 날짜에 마킹
         let marking = list.reduce((acc, leave) => {
           let { startDay, pickColor } = leave
-            //시작날짜에 마크찍기
+            //스케쥴 시작날짜에 마크찍기
             return {
               ...acc,
               [startDay]:{
@@ -273,7 +271,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       />
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}>
-        <PickDate selectedDate={selectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId}/>
+        <PickDate selectedDate={selectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId} myInfo={myInfo}/>
       </View>
       <Modal
         animationType='fade'

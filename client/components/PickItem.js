@@ -29,7 +29,7 @@ function PickItem({ title, content, startDay, endDay, id, members, setItemKey, s
         <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
           <Text style={[styles.item, styles.text]}>{content}</Text>
-          <Text style={styles.item}>{memberList ? memberList.join(', ') : '없음'}</Text>
+          <Text style={styles.item}>{memberList ? memberList.join(', ') : ''}</Text>
           <Text style={styles.item}>{startDay}  ~  {endDay}</Text>
         </View>
       </View>
