@@ -26,6 +26,8 @@ function HomeScreen({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
+  userInfo,
+  setUserInfo,
 }) {
   const [friendList, setFriendList] = useState([]);
   const [searchUserText, setSearchUserText] = useState('');
@@ -95,6 +97,8 @@ function HomeScreen({
         isNaverLogin={isNaverLogin}
         setIsNaverLogin={setIsNaverLogin}
         props={props}
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
       />
       <View>
         <Text style={styles.appName}>Take me home</Text>

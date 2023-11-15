@@ -49,7 +49,7 @@ function RegisterUser({
       return Alert.alert('비밀번호가 일치하지 않습니다');
     } else {
         try{
-          await fetch(`http://${homeIP}/firebaseLogin/register`, { // FIrebase 회원가입 
+          await fetch(`http://${academyIP}/firebaseLogin/register`, { // FIrebase 회원가입 
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

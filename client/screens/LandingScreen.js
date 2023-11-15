@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {FindPassword, Login, RegisterUser} from '../components';
 
@@ -82,6 +82,8 @@ function LandingScreen({
     </SafeAreaView>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

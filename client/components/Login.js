@@ -31,6 +31,8 @@ function Login({
   isNaverLogin,
   setIsNaverLogin,
 }) {
+
+    
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
     // 로그인 정보 확인

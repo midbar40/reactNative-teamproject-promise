@@ -34,12 +34,11 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
       headers: {
         'Content-Type': 'application/json',
         'cache-control':'no-cache, must-revalidate, post-check=0, pre-check=0',
-
       },
     });
     const json = await response.json();
     console.log('토큰체크 :', json);
-
+    
     const token = json.access_token;
     const header = "Bearer " + token;
     const userResponse = await fetch('https://openapi.naver.com/v1/nid/me', {
@@ -50,7 +49,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
     }
     })
     const userData = await userResponse.json() // 네이버 로그인 시 받아온 유저 정보
-    req.session.user = {email : userData.response.email, password: userData.response.id, name: userData.response.name}
+    req.session.user = {email : userData.response.email, password: userData.response.id, name: userData.response.name, token: token} 
     console.log('유저데이터(서버48줄) :', userData)
     console.log('세션테스트(서버49줄) :', req.session.user)
     
@@ -61,7 +60,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
       console.log('이미 가입된 유저입니다')
     }
     else {
-      await signUpUserwithNaver(userData.response.email, userData.response.id, userData.response.name) // firebase auth / db에 유저 정보 등록 
+      await signUpUserwithNaver(userData.response.email, userData.response.email + 'secret', userData.response.name) // firebase auth / db에 유저 정보 등록 
       console.log('회원가입 완료')
     }
   } 
@@ -69,23 +68,25 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
     console.error(error);
     res.status(500).send('오류가 발생했습니다');
   }
-  return res.json(req.session.user)
+  return res.json(req.session.userData)
 }
 ));
 
 // 유저정보
 router.get('/user', expressAsyncHandler(async (req, res) => {
-  console.log('유저정보(서버71줄) :', req.session.user)
+  console.log('유저정보(서버78줄) :', req.session.user)
   return res.json(req.session.user)
 }))
 
 
 // 로그아웃
-router.get('logout', expressAsyncHandler(async (req, res) => {
-  req.session.destroy();
+router.get('/logout', expressAsyncHandler(async (req, res) => {
+  req.session.destroy( )
   code = req.query.code;
   state = req.query.state;
   api_url = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${client_id}&client_secret=${client_secret}&code=${code}&state=${state}`  
+  console.log("로그아웃 세션삭제: ",req.session)
+  res.status(200).send('로그아웃 되었습니다') // res 구문으로 마무리하지 않으면 해당 라우터에서 빠져나가지 않게됨
 }))
 
   module.exports = router
