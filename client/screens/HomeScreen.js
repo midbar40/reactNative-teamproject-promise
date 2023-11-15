@@ -97,7 +97,7 @@ function HomeScreen({props, navigation, loginInfo}) {
           </TouchableOpacity>
         </View>
       }
-      {friendList.length !== 0 &&
+      {friendList && friendList.length !== 0 &&
         <FlatList
           style={styles.flatListStyle}
           data={friendList}

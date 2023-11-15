@@ -6,28 +6,38 @@ import PickItem from './PickItem'
 import ChatCreateBtn from './ChatCreateBtn'
 import { removeSchedule } from '../apis/firebaseCalendar'
 
-function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, }){
+function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, myInfo, }){
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
 
+  //삭제버튼 클릭
   const clickDelete = () => {
     console.log('삭제', itemKey)
-    Alert.alert('삭제',
-      '할일을 삭제하시겠습니까?', 
-      [
-        {text: '취소', style: 'cancel'},
-        {text: '삭제', onPress: () => {
-          try{
-            removeSchedule('CalendarSchedule', itemKey)
-            //화면에서도 삭제
-            const newSchedule = showSchedule.filter(show => itemKey !== show.id)
-            setShowSchedule(newSchedule)
-            setItemKey('')
-          }catch(err){console.log('err:', err)}
-        }}
-      ]
-    )
+    showSchedule.map(schedule => {
+      if(itemKey === schedule.id){
+        //해당 스케쥴을 만든사람만 삭제 가능
+        if(schedule.createdUser === myInfo.UID){
+          Alert.alert('삭제',
+          '할일을 삭제하시겠습니까?',
+          [{text: '취소', style: 'cancel'},
+           {text: '삭제', onPress: () => {
+              try{
+                //firebase 삭제
+                removeSchedule('CalendarSchedule', itemKey)
+                //화면에서도 삭제
+                const newSchedule = showSchedule.filter(show => itemKey !== show.id)
+                setShowSchedule(newSchedule)
+                setItemKey('')
+              }catch(err){console.log('err:', err)}
+           }}
+          ]
+          )
+        }else{
+          Alert.alert('오류','스케쥴을 만든 사람만 삭제 할 수 있습니다.')
+        }
+      }
+    })
   }
 
   // console.log('show', showSchedule)

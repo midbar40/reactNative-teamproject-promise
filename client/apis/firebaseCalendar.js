@@ -6,7 +6,7 @@ export const addSchedule = async ( name, data ) => {
   console.log(`${name}: ${JSON.stringify(data)} 파이어베이스 추가`)
 }
 
-//가져오기
+//전체 스케쥴 가져오기
 export const getSchedules = ( name, onResult, onError) => {
   return  firestore().collection(name).onSnapshot(onResult, onError)
 }
