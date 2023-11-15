@@ -4,7 +4,7 @@ import { SwipeListView } from 'react-native-swipe-list-view'
 
 import PickItem from './PickItem'
 import ChatCreateBtn from './ChatCreateBtn'
-import { removeSchedule } from '../apis/firebaseCalendar'
+import { removeSchedule, getThisSchedulesChatRoom, deleteThisSchedulesChatRoom } from '../apis/firebaseCalendar'
 
 <<<<<<< HEAD
 function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, }){
@@ -14,6 +14,7 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
+  const [chatRoomId, setChatRoomId] = useState('')
 
 <<<<<<< HEAD
   const clickDelete = () => {
@@ -45,14 +46,26 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
           '할일을 삭제하시겠습니까?',
           [{text: '취소', style: 'cancel'},
            {text: '삭제', onPress: () => {
-              try{
-                //firebase 삭제
-                removeSchedule('CalendarSchedule', itemKey)
-                //화면에서도 삭제
-                const newSchedule = showSchedule.filter(show => itemKey !== show.id)
-                setShowSchedule(newSchedule)
-                setItemKey('')
-              }catch(err){console.log('err:', err)}
+            //채팅방 id 조회
+            getThisSchedulesChatRoom(schedule.id, function onResult(querySnapshot){
+              querySnapshot.forEach(doc => {
+                // console.log('채팅룸', doc.id)
+                try{
+                  // firebase 삭제
+                  removeSchedule('CalendarSchedule', itemKey)
+                  // 같이 생성한 채팅방 삭제 
+                  deleteThisSchedulesChatRoom(doc.id)
+                  // 화면에서도 삭제
+                  const newSchedule = showSchedule.filter(show => itemKey !== show.id)
+                  setShowSchedule(newSchedule)
+                  setItemKey('')
+                }catch(err){console.log('err:', err)}
+              })
+            },
+            function onError(err){
+              console.log('getchatroom Error', err)
+            })
+              
            }}
           ]
           )
@@ -74,7 +87,6 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
       const memberLists = []
       if(schedule.id === rowKey){
         setTitle(schedule.title) 
-        memberLists.push(schedule.createdUser)
         schedule.members && schedule.members.map(member => {
           memberLists.push(member.UID)
         })
