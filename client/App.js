@@ -67,13 +67,11 @@ function App({ navigation, route, isSnsLogin, setIsSnsLogin, }) {
   }
 
   return (
-
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: 'skyblue',
       }}
     >
-
       <Tab.Screen
         name="Home"
         // component={HomeScreen} 
@@ -90,7 +88,6 @@ function App({ navigation, route, isSnsLogin, setIsSnsLogin, }) {
         />
       )}
       </Tab.Screen>
-
       <Tab.Screen
         name="Calendar"
         children={(props) => (
@@ -112,7 +109,6 @@ function App({ navigation, route, isSnsLogin, setIsSnsLogin, }) {
           tabBarIcon: ({ color, size }) => <Icon name='alarm' color={color} size={size} />
         }}
       />
-
       <Tab.Screen
         name="Todo"
         component={TodoScreen}
