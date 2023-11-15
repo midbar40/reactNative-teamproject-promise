@@ -3,7 +3,7 @@ const expressAsyncHandler = require('express-async-handler');
 const router = express.Router();
 const config = require('../config.js')
 
-const {signUpUser, listAllUsers, registerFirebaseDB, signUpUserwithNaver  } = require('./firebaseLogin.js')
+const {signUpUser, listAllUsers, registerFirebaseDB, signUpUserwithNaverKakao  } = require('./firebaseLogin.js')
 const client_id = config.NAVER_CLIENT_ID;
 const client_secret = config.NAVER_CLIENT_SECRET;
 let state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -60,7 +60,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
       console.log('이미 가입된 유저입니다')
     }
     else {
-      await signUpUserwithNaver(userData.response.email, userData.response.email + 'secret', userData.response.name) // firebase auth / db에 유저 정보 등록 
+      await signUpUserwithNaverKakao(userData.response.email, userData.response.email + 'secret', userData.response.name) // firebase auth / db에 유저 정보 등록 
       console.log('회원가입 완료')
     }
   } 

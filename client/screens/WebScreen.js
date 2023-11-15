@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View, Text, StyleSheet, BackHandler} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {signIn, getUser} from '../apis/auth';
+import {get} from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 function WebScreen({
   route,
@@ -25,7 +26,7 @@ function WebScreen({
   const getNaverUserInfo = async () => {
     // gpt가 짜준 코드
     try {
-      const userResponse = await fetch(`http://${academyIP}/naverlogin/user`, {
+      const userResponse = await fetch(`http://${homeIP}/naverlogin/user`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -71,40 +72,52 @@ function WebScreen({
     }
   };
 
-  // 카카오 로그인
-  const showKakaoLogin = async () => {
+  const getKakaoUserInfo = async () => {
     try {
-      // const response = await fetch(
-      //   `http://${academyIP}/kakaologin/profile`,
-      //   {
-      //     method: 'GET',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'cache-control':
-      //         'no-cache, must-revalidate, post-check=0, pre-check=0',
-      //     },
-      //     credentials: 'include',
-      //     cache: 'no-store',
-      //   },
-      // );
-      // console.log('카카오 유저데이터 :', response);
-      // const finalResponse = await fetch(response.url, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'cache-control':
-      //       'no-cache, must-revalidate, post-check=0, pre-check=0',
-      //   },
-      //   credentials: 'include',
-      //   cache: 'no-store',
-      // });
+      const response = await fetch(`http://${homeIP}/kakaologin/profile`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'cache-control':
+            'no-cache, must-revalidate, post-check=0, pre-check=0',
+        },
+        credentials: 'include',
+        cache: 'no-store',
+      });
+      const userData = await response?.json();
+
+      console.log('카카오 유저데이터 :', userData);
+
+      const updatedUserInfo = {
+        email: userData.email,
+        password: userData.email,
+        token: userData.token,
+      };
+      setUserInfo(updatedUserInfo);
+      if (updatedUserInfo?.token) {
+        console.log('로그인 시도 :', updatedUserInfo);
+        signIn(updatedUserInfo?.email, updatedUserInfo?.password);
+        console.log('로그인 성공 :', getUser());
+        navigation.navigate('App');
+      } else {
+        console.log('로그인 실패 :', getUser());
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
+  // 카카오 로그인
+  const showKakaoLogin = async () => {
+    if (getUser() == null || !userInfo?.token) {
+      await getKakaoUserInfo();
+    } else {
+      console.log('카카오 로그인 실패 :', getUser());
+    }
+  };
+
   // 카카오, 네이버 state 초기화
-  const handleNaverKakaoState = () => { 
+  const handleNaverKakaoState = () => {
     setIsKakaoLogin(false);
     setIsNaverLogin(false);
   };
