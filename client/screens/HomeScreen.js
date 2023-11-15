@@ -1,18 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import {View, StyleSheet, SafeAreaView, Text, StatusBar, TextInput, TouchableOpacity, Alert, FlatList } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  StatusBar,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  FlatList,
+} from 'react-native';
 import Logout from '../components/Logout';
 
-import { getUser } from '../apis/auth';
-import { searchUserByEmail, addFriend, getFriendsRealtimeChange } from '../apis/firebase';
+import {
+  searchUserByEmail,
+  addFriend,
+  getFriendsRealtimeChange,
+} from '../apis/firebase';
 
-function HomeScreen({props, navigation, loginInfo}) {
+function HomeScreen({
+  props,
+  navigation,
+  loginInfo,
+  isKakaoLogin,
+  setIsKakaoLogin,
+  isNaverLogin,
+  setIsNaverLogin,
+  userInfo,
+  setUserInfo,
+}) {
   const [friendList, setFriendList] = useState([]);
   const [searchUserText, setSearchUserText] = useState('');
   const [searchUser, setSearchUser] = useState({
-    email : '',
-    name : '',
-    UID : '',
-  })
+    email: '',
+    name: '',
+    UID: '',
+  });
 
   const searchUserToFirebaseDB = async () => {
     if(searchUserText.trim() === getUser().email){
@@ -21,12 +44,12 @@ function HomeScreen({props, navigation, loginInfo}) {
       return ;
     }
     const user = await searchUserByEmail(searchUserText);
-    if(!user){
+    if (!user) {
       Alert.alert('유저가 없습니다.');
       setSearchUser({
-        email : '',
-        name : '',
-        UID : '',
+        email: '',
+        name: '',
+        UID: '',
       });
     } else {
       const userEmail = user.data().email;
@@ -35,49 +58,59 @@ function HomeScreen({props, navigation, loginInfo}) {
       // console.log('user : ',user);
       // console.log('user uid : ', user.ref._documentPath._parts[1]);
       setSearchUser({
-        email : userEmail,
-        name : userName,
-        UID : userUID,
-      })
+        email: userEmail,
+        name: userName,
+        UID: userUID,
+      });
     }
-  }
+  };
 
   const addFriendToFirebaseDB = async () => {
     const result = await addFriend(searchUser);
-    if(!result){
-      Alert.alert('이미 등록된 친구입니다.')
+    if (!result) {
+      Alert.alert('이미 등록된 친구입니다.');
     }
     setSearchUser({
-      email : '',
-      name : '',
-      UID : '',
+      email: '',
+      name: '',
+      UID: '',
     });
-  }
+  };
 
   useEffect(() => {
-    function onResult(querySnapshot){
-      // console.log(querySnapshot.data()?.friends)
-      setFriendList(querySnapshot.data().friends)
+    function onResult(querySnapshot) {
+      console.log(querySnapshot.data()?.friends);
+      // setFriendList(querySnapshot.data().friends)
     }
 
-    function onError(error){
-      console.log(error)
+    function onError(error) {
+      console.log(error);
     }
 
-    return getFriendsRealtimeChange(onResult, onError)
-  },[])
+    return getFriendsRealtimeChange(onResult, onError);
+  }, []);
 
-  // console.log(friendList)
+  console.log(friendList);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Logout navigation={navigation} loginInfo={loginInfo} props={props} />
+      <Logout
+        navigation={navigation}
+        loginInfo={loginInfo}
+        isKakaoLogin={isKakaoLogin}
+        setIsKakaoLogin={setIsKakaoLogin}
+        isNaverLogin={isNaverLogin}
+        setIsNaverLogin={setIsNaverLogin}
+        props={props}
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
+      />
       <View>
         <Text style={styles.appName}>Take me home</Text>
       </View>
       <View style={styles.searchUserContainer}>
         <TextInput
-          style={styles.searchUserInput}
+          style={{backgroundColor: '#fff'}}
           onChangeText={setSearchUserText}
           placeholder="찾고 싶은 친구의 이메일을 입력하세요!"
           value={searchUserText}
@@ -86,8 +119,8 @@ function HomeScreen({props, navigation, loginInfo}) {
           <Text style={styles.searchUserBtnText}>검색</Text>
         </TouchableOpacity>
       </View>
-      {searchUser.UID &&
-        <View style={styles.searchUserListContainer}>
+      {searchUser.UID && (
+        <>
           <View>
             <Text>이름 : {searchUser.name}</Text>
             <Text>이메일 : {searchUser.email}</Text>
@@ -95,22 +128,21 @@ function HomeScreen({props, navigation, loginInfo}) {
           <TouchableOpacity style={styles.addFriendBtnContainer} onPress={addFriendToFirebaseDB}>
             <Text style={styles.addFriendBtnText}>친구 추가</Text>
           </TouchableOpacity>
-        </View>
-      }
-      {friendList && friendList.length !== 0 &&
+        </>
+      )}
+      {friendList.length !== 0 && (
         <FlatList
           style={styles.flatListStyle}
           data={friendList}
           keyExtractor={item => item.UID}
-          renderItem={({ item }) => (
-            <View style={ styles.friendsListContainer}>
-              <Text>이름 : {item.name}</Text>
-              <Text>이메일 : {item.email}</Text>
+          renderItem={({item}) => (
+            <View style={{backgroundColor: 'orange', width: 300}}>
+              <Text>{item.name}</Text>
+              <Text>{item.email}</Text>
             </View>
           )}
         />
-      }
-      
+      )}
     </SafeAreaView>
   );
 }

@@ -23,8 +23,16 @@ function Login({
   setNaverLoginLink,
   naverLoginLink,
   isSnsLogin,
-  setIsSnsLogin
+  setIsSnsLogin,
+  kakaoLoginLink,
+  setKakaoLoginLink,
+  isKakaoLogin,
+  setIsKakaoLogin,
+  isNaverLogin,
+  setIsNaverLogin,
 }) {
+
+    
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
     // 로그인 정보 확인
@@ -66,6 +74,12 @@ function Login({
           setNaverLoginLink={setNaverLoginLink}
           naverLoginLink={naverLoginLink}
           setIsSnsLogin={setIsSnsLogin}
+          kakaoLoginLink={kakaoLoginLink}
+          setKakaoLoginLink={setKakaoLoginLink}
+          isKakaoLogin={isKakaoLogin}
+          setIsKakaoLogin={setIsKakaoLogin}
+          isNaverLogin={isNaverLogin}
+          setIsNaverLogin={setIsNaverLogin}
         />
       ) : (
         <>

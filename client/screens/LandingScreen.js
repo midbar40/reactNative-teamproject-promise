@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import { FindPassword, Login, RegisterUser } from '../components';
+import React, { useState} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {FindPassword, Login, RegisterUser} from '../components';
 
-function LandingScreen({ navigation, setNaverLoginLink, naverLoginLink, isSnsLogin, setIsSnsLogin  }) {
+function LandingScreen({
+  navigation,
+  setNaverLoginLink,
+  naverLoginLink,
+  isSnsLogin,
+  setIsSnsLogin,
+  kakaoLoginLink,
+  setKakaoLoginLink,
+  isKakaoLogin,
+  setIsKakaoLogin,
+  isNaverLogin,
+  setIsNaverLogin,
+}) {
   const [loginInfo, setLoginInfo] = useState({
     email: '',
     password: '',
   });
   const [isFindPassword, setIsFindPassword] = useState(false);
   const [isRegister, setIsRegister] = useState(false);
-  const { email, password } = loginInfo;
+  const {email, password} = loginInfo;
 
   const handleUserInfoChange = (name, value) => {
     setLoginInfo(prev => ({
@@ -20,7 +32,7 @@ function LandingScreen({ navigation, setNaverLoginLink, naverLoginLink, isSnsLog
 
   const findEmail = async () => {
     setIsFindPassword(!isFindPassword);
-    setLoginInfo({ email: '', password: '' })
+    setLoginInfo({email: '', password: ''});
   };
 
   return (
@@ -57,13 +69,21 @@ function LandingScreen({ navigation, setNaverLoginLink, naverLoginLink, isSnsLog
           setIsRegister={setIsRegister}
           setNaverLoginLink={setNaverLoginLink}
           naverLoginLink={naverLoginLink}
+          kakaoLoginLink={kakaoLoginLink}
+          setKakaoLoginLink={setKakaoLoginLink}
           isSnsLogin={isSnsLogin}
           setIsSnsLogin={setIsSnsLogin}
+          isKakaoLogin={isKakaoLogin}
+          setIsKakaoLogin={setIsKakaoLogin}
+          isNaverLogin={isNaverLogin}
+          setIsNaverLogin={setIsNaverLogin}
         />
       )}
     </SafeAreaView>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {

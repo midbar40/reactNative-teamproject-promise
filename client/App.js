@@ -12,10 +12,9 @@ import { getToken, notificationListener, requestUserPermission} from './apis/fir
 
 const Tab = createBottomTabNavigator();
 
-function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
+function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsKakaoLogin, isNaverLogin, setIsNaverLogin, userInfo, setUserInfo}) {
   // console.log(route.params.email)
 
-  const [isLogin, setIsLogin] = useState(false);
   const [selectRoomId, setSelectRoomId] = useState('');
 
   useEffect(() => {
@@ -53,6 +52,12 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin}) {
             navigation={navigation}
             isSnsLogin={isSnsLogin}
             setIsSnsLogin={setIsSnsLogin}
+            isKakaoLogin={isKakaoLogin}
+            setIsKakaoLogin={setIsKakaoLogin}
+            isNaverLogin={isNaverLogin}
+            setIsNaverLogin={setIsNaverLogin}
+            userInfo={userInfo}
+            setUserInfo={setUserInfo}
           />
         )}
         </Tab.Screen>
