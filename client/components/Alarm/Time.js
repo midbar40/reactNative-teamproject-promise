@@ -7,11 +7,13 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { addData, getCollection, getCurrentTime, removeData } from './apis/firebase'
 import messaging from '@react-native-firebase/messaging'
 
-function Time({isFocused}){
+function Time({isFocused, fcmToken}){
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
   const [alarmTimes, setAlarmTimes] = useState([])
   const [addAlarmModal, setAddAlarmModal] = useState(false)
   const [openSwipeableItem, setOpenSwipeableItem] = useState(null)
+
+  
 
   // 시간을 AM/PM으로 나누어 보여주기 
   const getFormattedTime = (time) => {
@@ -20,21 +22,23 @@ function Time({isFocused}){
   }
 
   // 알람 추가
-  const addAlarm = (time, title) => {
-    const alarmTime = moment(currentTime).add(time, 'minutes')
+  const addAlarm = async(time, title) => {
+    const currentTimeInKorea = moment().tz('Asia/Seoul')
+    const timeDifference = moment.duration(time, 'minutes')
+    const alarmTime = currentTimeInKorea.clone().add(timeDifference)
     const alarmId = Math.random().toString(36).substring(7)
+    const deviceToken = fcmToken || (await messaging().getToken())
     const alarm = {
       id: alarmId,
-      time: alarmTime.toISOString(),
+      time: alarmTime.format(),
       title,
-      createdAt: getCurrentTime(),
-    }      
-
+      createdAt: getCurrentTime(),  
+      deviceToken,       
+    }
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
-    addData('Alarms', alarm)    
-  }  
-
+    addData('Alarms', alarm)
+  }
   //알람 삭제
   const removeAlarm = (id) => {
     const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id)
@@ -68,9 +72,9 @@ function Time({isFocused}){
       (error) => {
         console.error('알람 조회중 오류: ', error)
       }
-    )   
+    )
     return () => {
-      fetchAlarms()      
+      fetchAlarms()
     }
   }, [])
 
@@ -80,29 +84,25 @@ function Time({isFocused}){
       openSwipeableItem.close()
       setOpenSwipeableItem(null)
     }
-  }  
+  }
 
-  useEffect(() => {
-    // Request FCM permission
-    const requestPermission = async () => {
-      try {
-        await messaging().registerDeviceForRemoteMessages();
-        await messaging().requestPermission();
-      } catch (error) {
-        console.error('FCM permission request error:', error);
-      }
-    };
-
-    requestPermission()
-
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('Message received in the foreground:', remoteMessage);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [])
+  // useEffect(() => {
+  //   const checkAlarms = async () => {
+  //     try {
+  //       const response = await fetch('https://reactnative-teamproject-default-rtdb.firebaseio.com/check-alarms');
+  //       const result = await response.json();
+  //       console.log(result);
+  //     } catch (error) {
+  //       console.error('Error checking alarms:', error);
+  //     }
+  //   };
+  
+  //   // Schedule the checkAlarms function to run periodically
+  //   const intervalId = setInterval(checkAlarms, 60000); // Check every minute
+  
+  //   // Cleanup the interval on component unmount
+  //   return () => clearInterval(intervalId);
+  // }, []); 
 
   return (
     <View style={styles.container}>

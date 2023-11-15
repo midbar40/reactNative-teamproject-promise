@@ -6,19 +6,18 @@ const configurePushNotifications = () => {
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
   });
-
-  // Handle foreground messages
+  
   messaging().onMessage(async remoteMessage => {
     console.log('Foreground Message:', remoteMessage);
     showNotification(remoteMessage.notification);
   });
-};
-
-const showNotification = notification => {
-  PushNotification.localNotification({
-    title: notification.title,
-    message: notification.body,
-  });
+  
+  const showNotification = notification => {
+    PushNotification.localNotification({
+      title: notification.data.title,
+      message: notification.data.body,
+    });
+  };
 };
 
 export { configurePushNotifications };

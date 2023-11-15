@@ -5,7 +5,7 @@ import { updateData } from '../apis/firebaseCalendar'
 
 
 
-function PickItem({ title, content, startDay, endDay, id, members, itemKey, setItemKey, setOpenModal}){
+function PickItem({ title, content, startDay, endDay, id, members, setItemKey, setOpenModal}){
 
   const [memberList, setmemberList] = useState('')
 
@@ -13,7 +13,6 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
     console.log('길게누르기', id)
     setItemKey(id)
     setOpenModal(true)
-    console.log(memberList)
   }
 
   useEffect(() => {
@@ -21,7 +20,6 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
     members && members.map(member => {
       list.push(member.name)
     })
-    console.log('뭐지', list)
     setmemberList(list)
   },[])
 
@@ -29,15 +27,11 @@ function PickItem({ title, content, startDay, endDay, id, members, itemKey, setI
     <Pressable onLongPress={longPress}>
       <View>
         <View style={styles.content}>
-          <Text>제목 : {title}</Text>
-          {/* <Text>제목 : {id}</Text> */}
-          <Text>내용 : {content}</Text>
-          <Text>멤버 : {memberList ? memberList.join(', ') : '없음'}</Text>
-          <Text>{startDay}  ~  {endDay}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={[styles.item, styles.text]}>{content}</Text>
+          <Text style={styles.item}>{memberList ? memberList.join(', ') : '없음'}</Text>
+          <Text style={styles.item}>{startDay}  ~  {endDay}</Text>
         </View>
-        {/* <View>
-          <ChatCreateBtn title={title} calendarUID={itemKey} friends={members} />
-        </View> */}
       </View>
     </Pressable>
   )
@@ -55,6 +49,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    margin: 4,
+    marginLeft: 2,
+  },
+  text: {
+    fontSize: 15,
+    marginBottom: 2,
+  },
+  item: {
+    marginLeft: 2,
+    fontSize: 14
+  }
 })
 
 export default PickItem

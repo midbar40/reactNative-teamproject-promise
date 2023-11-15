@@ -9,14 +9,16 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { uploadFileToFirebaseStorage, getChatFile, sendNotification } from '../apis/firebaseChat';
 
 function ChatRoom({ navigation, selectRoomId }){
-  const [message, setMessage] = useState('');
-  const [messageList , setMessageList] = useState([]);
-  const [uploadFile, setUploadFile] = useState({});
-  const [toggleImgModal, setToggleImgModal] = useState('');
-  const [showingChatList, setShowingChatList] = useState('');
-  const [chatIndex, setChatIndex] = useState(1);
+  const [message, setMessage] = useState(''); // 인풋에 적은 메세지
+  const [messageList , setMessageList] = useState([]); // DB로 부터 실시간으로 받은 메세지 리스트
+  const [uploadFile, setUploadFile] = useState({}); // 갤러리에서 선택한 (이미지) 파일
+  const [toggleImgModal, setToggleImgModal] = useState(''); // 이미지를 확대해서 보여주는 모달 토글
+  const [showingChatList, setShowingChatList] = useState([]); // 실제로 보여질 메세지 리스트
+  const [page, setPage] = useState(1); // 보여지는 채팅 페이지 넘버링을 위한 스테이트
+  const numOfNewMessages = useRef(-1); // 채팅창을 연 이후 새로 DB에 등록 된 메세지 수
+  const [isMessageListEnd, setIsMessageListEnd] = useState(false); // 보여진 메세지가 끝인지 판별
 
-  const flatList = useRef();
+  // const flatList = useRef();
 
   const sendMessage = async () => {
     if(message.trim() !== ''){
@@ -70,6 +72,25 @@ function ChatRoom({ navigation, selectRoomId }){
 
   }
 
+  // 보여질 메세지 가공
+  const showingChatListHandler = (messageList ,page, numOfNewMessages) => {
+    // console.log('page : ' ,page)
+    // console.log('munofmsg : ', numOfNewMessages)
+    const modifyChatList = messageList?.messages.filter((m,index) => {
+      if(!isMessageListEnd && (page * 25) + numOfNewMessages > messageList?.messages.length - 1){
+        // console.log('msg end',(page * 25) + numOfNewMessages,messageList?.messages.length - 1)
+        setIsMessageListEnd(true);
+      }
+      if(index < (page * 25) + numOfNewMessages){
+        return true;
+      } else {
+        return false;
+      }
+    })
+    // console.log('modi : ',modifyChatList)
+    setShowingChatList(modifyChatList)
+  }
+
   // 채팅방 메세지 받아오기
   useEffect(() => {
     async function onResult(querySnapshot){
@@ -91,17 +112,26 @@ function ChatRoom({ navigation, selectRoomId }){
         }
       })) 
       // console.log(querySnapshot.data().messages)
-      setMessageList(querySnapshot.data())
-      
+      setMessageList(querySnapshot.data());
+      numOfNewMessages.current += 1;
+      showingChatListHandler(querySnapshot.data(), page, numOfNewMessages.current);
     }
 
     function onError(error){
       console.log(error)
     }
-
+    
     return getMessage(selectRoomId, onResult, onError)
     
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+    if(messageList?.messages?.length !== 0 && page > 1){
+      showingChatListHandler(messageList, page, numOfNewMessages.current);
+    }
+  },[page])
+
+  
 
   // console.log(uploadFile.fileUri)
 
@@ -114,21 +144,22 @@ function ChatRoom({ navigation, selectRoomId }){
         <Text style={styles.chatRoomNameText}>{messageList?.title} 채팅방</Text>
       </View>
       <FlatList
-        data={messageList.messages}
+        data={showingChatList}
         renderItem={({ item }) => (
           <ChatList 
             message={item.message} 
             userUID={item.userUID} 
-            useName={item.name} 
+            userName={item.name} 
             date={item.date} 
             uploadFilePath={item.uploadFilePath} 
             setToggleImgModal={setToggleImgModal}
           />)}
         keyExtractor={item => item.date}
-        ref={flatList}
+        // ref={flatList}
         // onContentSizeChange={() => flatList.current.scrollToEnd()}
         // onLayout={() => flatList.current.scrollToEnd()}
         inverted
+        onEndReached={() => {!isMessageListEnd && setPage(page + 1)}}
       />
         {/* {messageList?.length !== 0 &&
           messageList?.map(chat => <ChatList key={chat.date} message={chat.message} user={chat.user}/>)

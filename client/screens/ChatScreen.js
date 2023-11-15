@@ -21,7 +21,8 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
       const list = querySnapshot.docs.map(d => {
         return {
           chatRoomUID : d._ref._documentPath._parts[1],
-          title : d._data.title
+          title : d._data.title,
+          joinUser : d._data.joinUser
         }
       })
       // console.log('data : ',chatRoomList)
