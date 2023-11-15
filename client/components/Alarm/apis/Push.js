@@ -1,8 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 
-const configurePushNotifications = () => {
-  // Initialize Firebase Cloud Messaging
+const configurePushNotifications = () => {  
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
   });

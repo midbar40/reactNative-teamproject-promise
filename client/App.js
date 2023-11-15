@@ -49,8 +49,7 @@ function App({ navigation, route, isSnsLogin, setIsSnsLogin, }) {
 
   useEffect(() => {
     const handleTokenRefresh = async (newToken) => {
-      console.log('Token refreshed:', newToken);
-      // Save the new token to your server or use it as needed
+      console.log('Token refreshed:', newToken);      
     };
 
     const unsubscribeRefresh = messaging().onTokenRefresh(handleTokenRefresh);

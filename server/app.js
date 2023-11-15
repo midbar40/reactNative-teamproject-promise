@@ -84,11 +84,9 @@ const checkAlarms = async () => {
       const alarmTime = moment(alarm.time);
       const currentTime = moment().tz('Asia/Seoul');
 
-      if (alarmTime.isSame(currentTime, 'minute')) {
-        // Trigger push notification
+      if (alarmTime.isSame(currentTime, 'minute')) {        
         sendPushNotification(alarm.deviceToken, 'Alarm', alarm.title);
-
-        // Update the alarm in Firestore to mark it as sent
+        
         admin.firestore().collection('Alarms').doc(doc.id).update({ sent: true });
       }
     });
