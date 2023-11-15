@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { updateData } from '../apis/firebaseCalendar'
 
 
-
 function PickItem({ title, content, startDay, endDay, id, members, lastModifedUser, setItemKey, setOpenModal}){
 
   const [memberList, setmemberList] = useState('')

@@ -26,11 +26,11 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
             //채팅방 id 조회
             getThisSchedulesChatRoom(schedule.id, function onResult(querySnapshot){
               querySnapshot.forEach(doc => {
-                console.log('채팅룸', doc.id)
+                // console.log('채팅룸', doc.id)
                 try{
                   // firebase 삭제
                   removeSchedule('CalendarSchedule', itemKey)
-                  // 같이 생성한 채팅방 삭제 firebsa
+                  // 같이 생성한 채팅방 삭제 
                   deleteThisSchedulesChatRoom(doc.id)
                   // 화면에서도 삭제
                   const newSchedule = showSchedule.filter(show => itemKey !== show.id)
