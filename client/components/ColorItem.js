@@ -11,7 +11,7 @@ function ColorItem({title, pickColor, setPickColor, showSchedule}){
       setPickColor(schedule.pickColor)
     })
     :
-    setPickColor('pink')
+    setPickColor('red')
   },[])
 
   const setColor = () => {
