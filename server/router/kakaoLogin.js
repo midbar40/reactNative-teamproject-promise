@@ -39,7 +39,7 @@ async function call(method, uri, param, header){
 }
 
 router.get('/', function (req, res) {
-    res.status(302).redirect(`https://kauth.kakao.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code`)
+    res.status(302).redirect(`https://kauth.kakao.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`)
 })
 
 
@@ -67,12 +67,16 @@ router.get('/profile', async function (req, res) {
         'Authorization': 'Bearer ' + req.session.key
     }
     var rtn = await call('POST', uri, param, header);
-    req.session.kakaoUser = { email: rtn.id + '@kakao.com', password: rtn.id + 'secret', name: rtn.properties.nickname, token: req.session.key }
-    console.log(' 유저정보(서버71번줄) : ',rtn)
+    
+    // console.log(' 유저정보(서버71번줄) : ',rtn)
+    if(rtn.id && rtn.code !== -401){
+    req.session.kakaoUser = { email: rtn?.id + '@kakao.com', password: rtn?.id + 'secret', name: rtn?.properties.nickname, token: req.session.key }
 
     const userInfo = await listAllUsers() // Firebase에 등록된 유저 정보
     const userEmail = userInfo.map((user) => { return user.email }) // Firebase에 등록된 유저 이메일만 추출
-    
+    // console.log('유저 이메일 : ', userEmail)
+    // console.log('카카오 유저 이메일 : ', req.session.kakaoUser.email)
+    // console.log(' 가입여부 테스트 :', console.log(userEmail.includes(req.session.kakaoUser.email)))
     if(userEmail.includes(req.session.kakaoUser.email)){ // firebase에 이미 등록된 유저인지 확인
       console.log('이미 가입된 유저입니다')
     }
@@ -80,22 +84,21 @@ router.get('/profile', async function (req, res) {
       await signUpUserwithNaverKakao(req.session.kakaoUser.email, req.session.kakaoUser.password, req.session.kakaoUser.name) // firebase auth / db에 유저 정보 등록 
       console.log('회원가입 완료')
     }
-  
-
     return res.json(req.session.kakaoUser);
+    }else {
+        res.status(302).redirect('/')
+    }  
+
 })
 
 router.get('/logout', function (req, res) {
-    req.session.destroy();
-    axios({
-        method: 'POST',
-        url: "https://kapi.kakao.com/v1/user/logout",
-        headers: { 'Authorization': 'Bearer ' + req.session.key }
-    }).then(function (response) {
-        console.log(response);
-    }).catch(function (error) {
-        console.log(error);
+   const login_uri = `https://kauth.kakao.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`
+    axios.get(`https://kauth.kakao.com/oauth/logout?client_id=${client_id}&logout_redirect_uri=${login_uri}`)
+    .catch(function (error) {
+        console.log('카카오 로그아웃 에러 :', error);
     })
+    req.session.destroy();
     res.status(302).send('로그아웃 되었습니다');
+    // res.status(302).redirect('/')
 })
   module.exports = router

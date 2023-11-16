@@ -9,6 +9,7 @@ import Icon2 from 'react-native-vector-icons/FontAwesome6'
 
 import messaging from '@react-native-firebase/messaging';
 import { getToken, notificationListener, requestUserPermission} from './apis/firebaseMessage';
+import { getUser } from './apis/auth';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +21,7 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
   useEffect(() => {
     requestUserPermission();
     notificationListener();
-    getToken();
+    if(getUser() !==null) getToken();
   },[])
 
   useEffect(() => {

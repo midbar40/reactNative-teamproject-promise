@@ -15,7 +15,7 @@ import Logout from '../components/Logout';
 import {
   searchUserByEmail,
   addFriend,
-  getFriendsRealtimeChange,
+  // getFriendsRealtimeChange,
 } from '../apis/firebase';
 
 import {getUser} from '../apis/auth';
@@ -88,8 +88,9 @@ function HomeScreen({
     function onError(error) {
       console.log(error);
     }
-
-    return getFriendsRealtimeChange(onResult, onError);
+    console.log('홈화면 userinfo인식시점 :', userInfo)
+    //  if(userInfo.token !=='' || userInfo.token !== null || getUser() !== null ) return getFriendsRealtimeChange(onResult, onError);
+    
   }, []);
 
   console.log(friendList);
