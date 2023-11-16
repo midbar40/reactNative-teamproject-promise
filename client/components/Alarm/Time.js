@@ -6,6 +6,7 @@ import AlarmList from './AlarmList'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { addData, getCollection, getCurrentTime, removeData } from './apis/firebase'
 import messaging from '@react-native-firebase/messaging'
+import auth from '@react-native-firebase/auth'
 
 function Time({isFocused, fcmToken}){
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
@@ -19,6 +20,16 @@ function Time({isFocused, fcmToken}){
     return formattedTime
   }
 
+  const signIn = async () => {
+    try {      
+      const userCredential = await auth().signInWithEmailAndPassword(email, password)
+      const user = userCredential.user
+      console.log('사용자 로그인:', user.uid)
+    } catch (error) {
+      console.error('인증오류:', error)
+    }
+  }
+
   // 알람 추가
   const addAlarm = async(time, title) => {
     const currentTimeInKorea = moment().tz('Asia/Seoul')
@@ -26,12 +37,14 @@ function Time({isFocused, fcmToken}){
     const alarmTime = currentTimeInKorea.clone().add(timeDifference)
     const alarmId = Math.random().toString(36).substring(7)
     const deviceToken = fcmToken || (await messaging().getToken())
+    const userUid = auth().currentUser.uid
     const alarm = {
       id: alarmId,
       time: alarmTime.format(),
       title,
       createdAt: getCurrentTime(),  
-      deviceToken,       
+      deviceToken,      
+      userUid,
     }
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
@@ -39,7 +52,8 @@ function Time({isFocused, fcmToken}){
   }
   //알람 삭제
   const removeAlarm = (id) => {
-    const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id)
+    const currentUserUid = auth().currentUser.uid
+    const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id && alarm.userUid === currentUserUid)
     setAlarmTimes(updatedAlarms)
     removeData('Alarms', id)
   }
@@ -61,9 +75,12 @@ function Time({isFocused, fcmToken}){
       'Alarms',
       (querySnapshot) => {
         const alarms = []
+        const currentUserUid = auth().currentUser.uid
         querySnapshot.forEach((doc) => {
           const alarmData = doc.data()
-          alarms.push(alarmData)
+          if(alarmData.userUid === currentUserUid){
+            alarms.push(alarmData)
+          }          
         })
         setAlarmTimes(alarms)
       },

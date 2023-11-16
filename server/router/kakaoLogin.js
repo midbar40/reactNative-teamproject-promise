@@ -28,7 +28,7 @@ async function call(method, uri, param, header){
         rtn = await axios({
             method: method,
             url: uri,
-            param: param ,
+            data: param ,
             headers: header
         })
     } catch (err) {
