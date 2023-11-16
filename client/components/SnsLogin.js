@@ -25,7 +25,7 @@ function SnsLogin({
     setIsKakaoLogin(true);
     setIsNaverLogin(false);
     try {
-      const response = await fetch(`http://${academyIP}/kakaologin`, {
+      const response = await fetch(`http://${homeIP}/kakaologin`, {
         cache: 'no-store',
       })
       setKakaoLoginLink(response.url);
@@ -39,7 +39,7 @@ function SnsLogin({
     setIsKakaoLogin(false);
     const getNaverLoginLink = async () => {
       try {
-        const response = await fetch(`http://${academyIP}/naverlogin`, {
+        const response = await fetch(`http://${homeIP}/naverlogin`, {
           cache: 'no-store',
         });
         const data = await response.json();

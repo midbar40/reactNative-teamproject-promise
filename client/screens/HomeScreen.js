@@ -15,10 +15,10 @@ function HomeScreen({props, navigation, loginInfo}) {
   })
 
   const searchUserToFirebaseDB = async () => {
-    if(searchUserText.trim() === getUser().email){
+    if (searchUserText.trim() === getUser().email) {
       Alert.alert('자신의 이메일은 검색 할 수 없습니다.');
       setSearchUserText('');
-      return ;
+      return;
     }
     const user = await searchUserByEmail(searchUserText);
     if(!user){
@@ -57,7 +57,8 @@ function HomeScreen({props, navigation, loginInfo}) {
   useEffect(() => {
     function onResult(querySnapshot){
       // console.log(querySnapshot.data()?.friends)
-      setFriendList(querySnapshot.data().friends)
+
+      setFriendList(querySnapshot.data()?.friends)
     }
 
     function onError(error){
@@ -82,7 +83,9 @@ function HomeScreen({props, navigation, loginInfo}) {
           placeholder="찾고 싶은 친구의 이메일을 입력하세요!"
           value={searchUserText}
         />
-        <TouchableOpacity style={styles.searchUserBtnContainer} onPress={searchUserToFirebaseDB}>
+        <TouchableOpacity
+          style={styles.searchUserBtnContainer}
+          onPress={searchUserToFirebaseDB}>
           <Text style={styles.searchUserBtnText}>검색</Text>
         </TouchableOpacity>
       </View>
@@ -92,12 +95,15 @@ function HomeScreen({props, navigation, loginInfo}) {
             <Text>이름 : {searchUser.name}</Text>
             <Text>이메일 : {searchUser.email}</Text>
           </View>
-          <TouchableOpacity style={styles.addFriendBtnContainer} onPress={addFriendToFirebaseDB}>
+          <TouchableOpacity
+            style={styles.addFriendBtnContainer}
+            onPress={addFriendToFirebaseDB}>
             <Text style={styles.addFriendBtnText}>친구 추가</Text>
           </TouchableOpacity>
         </View>
       }
-      {friendList.length !== 0 &&
+
+      {friendList && friendList.length !== 0 && 
         <FlatList
           style={styles.flatListStyle}
           data={friendList}
@@ -123,59 +129,59 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 30,
   },
-  searchUserContainer : {
-    marginTop : 30,
-    flexDirection : 'row',
+  searchUserContainer: {
+    marginTop: 30,
+    flexDirection: 'row',
   },
-  searchUserInput : {
-    backgroundColor : '#fff',
-    flex : 1,
-    paddingLeft : 10,
-    marginLeft : 20,
-    height : 40,
-    fontSize : 15,
-    paddingVertical : 0,
+  searchUserInput: {
+    backgroundColor: '#fff',
+    flex: 1,
+    paddingLeft: 10,
+    marginLeft: 20,
+    height: 40,
+    fontSize: 15,
+    paddingVertical: 0,
   },
-  searchUserBtnContainer : {
-    width : 50,
-    height : 40,
-    marginRight : 20,
+  searchUserBtnContainer: {
+    width: 50,
+    height: 40,
+    marginRight: 20,
   },
-  addFriendBtnContainer : {
-    width : 80,
-    alignContent : 'center',
+  addFriendBtnContainer: {
+    width: 80,
+    alignContent: 'center',
   },
-  addFriendBtnText : {
-    fontSize : 15,
-    lineHeight : 35,
-    fontWeight : 'bold'
+  addFriendBtnText: {
+    fontSize: 15,
+    lineHeight: 35,
+    fontWeight: 'bold',
   },
-  searchUserBtnText : {
-    lineHeight : 40,
-    textAlign : 'center',
-    fontSize : 18,
+  searchUserBtnText: {
+    lineHeight: 40,
+    textAlign: 'center',
+    fontSize: 18,
   },
-  searchUserListContainer : {
-    flexDirection : 'row',
-    width : '100%',
-    paddingHorizontal : 30,
-    justifyContent : 'space-between',
-    backgroundColor : '#E1E8E2',
-    paddingVertical : 5
+  searchUserListContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    paddingHorizontal: 30,
+    justifyContent: 'space-between',
+    backgroundColor: '#E1E8E2',
+    paddingVertical: 5,
   },
-  flatListStyle : {
-    width : '100%',
-    marginTop : 30,
-    backgroundColor : '#E8E0DA',
+  flatListStyle: {
+    width: '100%',
+    marginTop: 30,
+    backgroundColor: '#E8E0DA',
   },
-  friendsListContainer : {
-    paddingVertical : 5,
-    paddingLeft : 30,
-    width : '100%',
-    paddingBottom : 5,
-    backgroundColor : '#EBD5CA',
-    borderBottomWidth : 2,
-    borderBottomColor : '#EBCBB9',
+  friendsListContainer: {
+    paddingVertical: 5,
+    paddingLeft: 30,
+    width: '100%',
+    paddingBottom: 5,
+    backgroundColor: '#EBD5CA',
+    borderBottomWidth: 2,
+    borderBottomColor: '#EBCBB9',
   },
 });
 
