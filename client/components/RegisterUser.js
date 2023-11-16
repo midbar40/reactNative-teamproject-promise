@@ -47,7 +47,7 @@ function RegisterUser({
       return Alert.alert('비밀번호가 일치하지 않습니다');
     } else {
       try {
-        await fetch(`http://${homeIP}/firebaseLogin/register`, {
+        const reponse = await fetch(`http://${academyIP}/firebaseLogin/register`, {
           // FIrebase 회원가입
             method: 'POST',
             headers: {
@@ -57,27 +57,18 @@ function RegisterUser({
               email: email.trim(),
               password: password.trim(),
               displayName: nickname.trim(),
-            }),
-        }).catch(err => {
-          console.log(err);
-        });
+            })
+        })
+        const errorMessage = await reponse.json();
+        Alert.alert(errorMessage) // 에러메세지 띄우기
+       if(!errorMessage){
           Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
           setIsFindPassword(false);
           setIsRegister(false);
           setLoginInfo({email: '', password: ''});
+        }
       } catch (e) {
         console.log('등록오류코드 :', e);
-          switch (e.code) {
-            case 'auth/email-already-in-use':
-              case 'auth/email-already-exists':
-                return Alert.alert('이미 가입된 이메일입니다');
-            case 'auth/invalid-email':
-              return Alert.alert('이메일 형식이 올바르지 않습니다');
-            case 'auth/weak-password':
-              return Alert.alert('비밀번호는 6자리 이상이어야 합니다');
-            default:
-              return '회원가입이 처리되지 않았습니다';
-          }
         }
     }
   };
