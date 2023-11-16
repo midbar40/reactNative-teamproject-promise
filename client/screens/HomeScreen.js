@@ -5,17 +5,7 @@ import Logout from '../components/Logout';
 import { getUser } from '../apis/auth';
 import { searchUserByEmail, addFriend, getFriendsRealtimeChange } from '../apis/firebase';
 
-function HomeScreen({
-  props,
-  navigation,
-  loginInfo,
-  isKakaoLogin,
-  setIsKakaoLogin,
-  isNaverLogin,
-  setIsNaverLogin,
-  userInfo,
-  setUserInfo,
-}) {
+function HomeScreen({props, navigation, loginInfo}) {
   const [friendList, setFriendList] = useState([]);
   const [searchUserText, setSearchUserText] = useState('');
   const [searchUser, setSearchUser] = useState({
@@ -67,6 +57,7 @@ function HomeScreen({
   useEffect(() => {
     function onResult(querySnapshot){
       // console.log(querySnapshot.data()?.friends)
+
       setFriendList(querySnapshot.data()?.friends)
     }
 
@@ -111,6 +102,7 @@ function HomeScreen({
           </TouchableOpacity>
         </View>
       }
+
       {friendList && friendList.length !== 0 && 
         <FlatList
           style={styles.flatListStyle}
