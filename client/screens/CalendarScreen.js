@@ -1,9 +1,8 @@
 import React,{ useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Text, FlatList, Pressable, Modal, TouchableOpacity, Keyboard, Alert } from 'react-native';
-import { Calendar,  CalendarList, Agenda, LocaleConfig } from 'react-native-calendars'
+import { View, StyleSheet, SafeAreaView, Text, Pressable, Modal, TouchableOpacity, Keyboard, Alert } from 'react-native';
+import { Calendar, LocaleConfig } from 'react-native-calendars'
 import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth'
 import AntIcon from 'react-native-vector-icons/AntDesign'
-import { PushNotification } from 'react-native-push-notification';
 
 import PickDate from '../components/PickDate';
 import ModalInputs from '../components/ModalInputs';
@@ -13,27 +12,10 @@ import AddMembers from '../components/AddMembers'
 
 import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule } from '../apis/firebaseCalendar'
 import { getCurrentTime } from '../apis/firebase';
+import { buildAndroidNotification } from '../src/LocalNotification';
 
 
 const auth = getAuth()
-
-// PushNotification.configure({
-//   onRegister: function (token){
-//     console.log('token', token)
-//   },
-//   onNotification: function(notification){
-//     console.log('notification', notification)
-//   },
-//   onAction: function(notification){
-//     console.log('action', notification.action)
-//     console.log('actionNotification', notification)
-//   },
-//   onRegistrationError: function(err){
-//     console.error('notiError', err)
-//   },
-//   popInitialNotification: true,
-//   requestPermissions: true
-// })
 
 function CalendarScreen({ navigation, setSelectRoomId }) {
 
@@ -119,12 +101,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         if(itemKey === ''){
           console.log('데이터 추가 :',newSchedule)
           await addSchedule('CalendarSchedule', newSchedule)
-          PushNotification({
-            channelId: 'calendar',
-            channelTitle: 'calendar',
-            title: scheduleTitle,
-            body: `members : ${pickFriends}`,
-          })
+          buildAndroidNotification('calendar', scheduleTitle, `members : ${pickFriends}`, 'data')
         }else{
           //스케쥴 수정(firebase)
           console.log('데이터 수정 :',updateSchedule)
@@ -491,3 +468,4 @@ const styles = StyleSheet.create({
 })
 
 export default CalendarScreen;
+
