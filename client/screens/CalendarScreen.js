@@ -2,8 +2,8 @@ import React,{ useState, useEffect } from 'react';
 import { View, StyleSheet, SafeAreaView, Text, FlatList, Pressable, Modal, TouchableOpacity, Keyboard, Alert } from 'react-native';
 import { Calendar,  CalendarList, Agenda, LocaleConfig } from 'react-native-calendars'
 import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth'
-
 import AntIcon from 'react-native-vector-icons/AntDesign'
+import { PushNotification } from 'react-native-push-notification';
 
 import PickDate from '../components/PickDate';
 import ModalInputs from '../components/ModalInputs';
@@ -16,6 +16,24 @@ import { getCurrentTime } from '../apis/firebase';
 
 
 const auth = getAuth()
+
+// PushNotification.configure({
+//   onRegister: function (token){
+//     console.log('token', token)
+//   },
+//   onNotification: function(notification){
+//     console.log('notification', notification)
+//   },
+//   onAction: function(notification){
+//     console.log('action', notification.action)
+//     console.log('actionNotification', notification)
+//   },
+//   onRegistrationError: function(err){
+//     console.error('notiError', err)
+//   },
+//   popInitialNotification: true,
+//   requestPermissions: true
+// })
 
 function CalendarScreen({ navigation, setSelectRoomId }) {
 
@@ -101,6 +119,12 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         if(itemKey === ''){
           console.log('데이터 추가 :',newSchedule)
           await addSchedule('CalendarSchedule', newSchedule)
+          PushNotification({
+            channelId: 'calendar',
+            channelTitle: 'calendar',
+            title: scheduleTitle,
+            body: `members : ${pickFriends}`,
+          })
         }else{
           //스케쥴 수정(firebase)
           console.log('데이터 수정 :',updateSchedule)
@@ -283,12 +307,14 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           setStartDate(selectedDate)
           setEndDate(selectedDate)
           console.log('key',itemKey)
+          //새로운 스케쥴 만들때 members에 내 정보 담기
           if(itemKey === ''){
             const list = []
             list.push(myInfo)
             setPickFriends(list)
             console.log('내정보담기',list)
           }
+          //스케쥴을 수정하려고 모달창 열때 정보 자동으로 담아 보여주기
           if(itemKey !== '' || itemKey){
             getOneSchedule('CalendarSchedule', itemKey, 
             function onResult(querySnapshot){
@@ -309,9 +335,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         <View style={styles.centerView}>
           {today < pickDay || isSameDate(today, pickDay) ?
             <View style={styles.modal}>
-              <Text style={styles.titleText}>
-                {selectedDate}
-              </Text>
+              <Text style={styles.titleText}>{selectedDate}</Text>
               <View style={styles.inputs}>
                 <ModalInputs 
                   selectedDate={selectedDate} 

@@ -10,7 +10,6 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
-  const [chatRoomId, setChatRoomId] = useState('')
 
   //삭제버튼 클릭
   const clickDelete = () => {
@@ -20,31 +19,33 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
         //해당 스케쥴을 만든사람만 삭제 가능
         if(schedule.createdUser === myInfo.UID){
           Alert.alert('삭제',
-          '할일을 삭제하시겠습니까?',
-          [{text: '취소', style: 'cancel'},
-           {text: '삭제', onPress: () => {
-            //채팅방 id 조회
-            getThisSchedulesChatRoom(schedule.id, function onResult(querySnapshot){
-              querySnapshot.forEach(doc => {
-                // console.log('채팅룸', doc.id)
-                try{
-                  // firebase 삭제
-                  removeSchedule('CalendarSchedule', itemKey)
-                  // 같이 생성한 채팅방 삭제 
-                  deleteThisSchedulesChatRoom(doc.id)
-                  // 화면에서도 삭제
-                  const newSchedule = showSchedule.filter(show => itemKey !== show.id)
-                  setShowSchedule(newSchedule)
-                  setItemKey('')
-                }catch(err){console.log('err:', err)}
-              })
-            },
-            function onError(err){
-              console.log('getchatroom Error', err)
-            })
+            '할일을 삭제하시겠습니까?',
+            [{text: '취소', style: 'cancel'},
+             {text: '삭제', onPress: () => {
+              try{
+                // firebase 삭제
+                removeSchedule('CalendarSchedule', itemKey)
+                //채팅방 id 조회
+                getThisSchedulesChatRoom(schedule.id, 
+                  function onResult(querySnapshot){
+                    console.log(querySnapshot.docs)
+                    querySnapshot.forEach(doc => {
+                      console.log('채팅룸', doc.id)
+                      // 같이 생성한 채팅방 삭제 
+                      deleteThisSchedulesChatRoom(doc.id)
+                    })
+                  },
+                  function onError(err){
+                    console.log('getchatroom Error', err)
+                  }
+                )            
+                // 화면에서도 삭제
+                const newSchedule = showSchedule.filter(show => itemKey !== show.id)
+                setShowSchedule(newSchedule)
+                setItemKey('')
+              }catch(err){console.log('err:', err)}
               
-           }}
-          ]
+            }}]
           )
         }else{
           Alert.alert('오류','스케쥴을 만든 사람만 삭제 할 수 있습니다.')
