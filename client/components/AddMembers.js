@@ -5,6 +5,7 @@ import { getFriendsRealtimeChange } from '../apis/firebase'
 
 import AddMembersItem from './AddMembersItem'
 
+
 function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}){
 
   const [open, setOpen] = useState(false) //모달 open

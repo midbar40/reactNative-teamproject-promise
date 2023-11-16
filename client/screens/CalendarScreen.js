@@ -38,7 +38,6 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const today = new Date()
   const pickDay = new Date(selectedDate)
 
-
   //같은 날짜 구분
   const isSameDate = (date1, date2) => {
     return date1.getFullYear() === date2.getFullYear()
@@ -126,13 +125,13 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
     }
   }
 
-  
   //시작날짜가 종료날짜보다 느릴시 종료날짜가 시작날짜로 자동 셋팅
   useEffect(() => {
     if(startDate > endDate){
       setEndDate((prev) => [...prev, startDate])
     }
   },[startDate])
+
 
   useEffect(() => {
     //현재 로그인한 유저 uid 불러오기
@@ -177,7 +176,6 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       const list = []
       querySnapshot.forEach(doc => {
         // console.log(doc.data())
-
         //member에 내가 있는 스케쥴만 추려서 담기
         doc.data().members && doc.data().members.map(member => {
           if(member.UID === user){

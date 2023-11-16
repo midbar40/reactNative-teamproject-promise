@@ -12,13 +12,12 @@ import {
 } from 'react-native';
 import Logout from '../components/Logout';
 
+import {getUser} from '../apis/auth';
 import {
   searchUserByEmail,
   addFriend,
-  // getFriendsRealtimeChange,
+  getFriendsRealtimeChange,
 } from '../apis/firebase';
-
-import {getUser} from '../apis/auth';
 
 function HomeScreen({
   props,
@@ -81,39 +80,38 @@ function HomeScreen({
 
   useEffect(() => {
     function onResult(querySnapshot) {
-      console.log(querySnapshot.data()?.friends);
-      // setFriendList(querySnapshot.data().friends)
+      // console.log(querySnapshot.data()?.friends)
+
+      setFriendList(querySnapshot.data()?.friends);
     }
 
     function onError(error) {
       console.log(error);
     }
-    console.log('홈화면 userinfo인식시점 :', userInfo)
-    //  if(userInfo.token !=='' || userInfo.token !== null || getUser() !== null ) return getFriendsRealtimeChange(onResult, onError);
-    
+    if (getUser() !== null) return getFriendsRealtimeChange(onResult, onError);
   }, []);
 
-  console.log(friendList);
+  // console.log(friendList)
 
   return (
     <SafeAreaView style={styles.container}>
-      <Logout
-        navigation={navigation}
-        loginInfo={loginInfo}
-        isKakaoLogin={isKakaoLogin}
-        setIsKakaoLogin={setIsKakaoLogin}
-        isNaverLogin={isNaverLogin}
-        setIsNaverLogin={setIsNaverLogin}
-        props={props}
-        userInfo={userInfo}
-        setUserInfo={setUserInfo}
+      <Logout 
+       navigation={navigation}
+       loginInfo={loginInfo}
+       isKakaoLogin={isKakaoLogin}
+       setIsKakaoLogin={setIsKakaoLogin}
+       isNaverLogin={isNaverLogin}
+       setIsNaverLogin={setIsNaverLogin}
+       props={props}
+       userInfo={userInfo}
+       setUserInfo={setUserInfo}
       />
       <View>
         <Text style={styles.appName}>Take me home</Text>
       </View>
       <View style={styles.searchUserContainer}>
         <TextInput
-          style={{backgroundColor: '#fff'}}
+          style={styles.searchUserInput}
           onChangeText={setSearchUserText}
           placeholder="찾고 싶은 친구의 이메일을 입력하세요!"
           value={searchUserText}
@@ -125,7 +123,7 @@ function HomeScreen({
         </TouchableOpacity>
       </View>
       {searchUser.UID && (
-        <>
+        <View style={styles.searchUserListContainer}>
           <View>
             <Text>이름 : {searchUser.name}</Text>
             <Text>이메일 : {searchUser.email}</Text>
@@ -135,17 +133,18 @@ function HomeScreen({
             onPress={addFriendToFirebaseDB}>
             <Text style={styles.addFriendBtnText}>친구 추가</Text>
           </TouchableOpacity>
-        </>
+        </View>
       )}
-      {friendList.length !== 0 && (
+
+      {friendList && friendList.length !== 0 && (
         <FlatList
           style={styles.flatListStyle}
           data={friendList}
           keyExtractor={item => item.UID}
           renderItem={({item}) => (
-            <View style={{backgroundColor: 'orange', width: 300}}>
-              <Text>{item.name}</Text>
-              <Text>{item.email}</Text>
+            <View style={styles.friendsListContainer}>
+              <Text>이름 : {item.name}</Text>
+              <Text>이메일 : {item.email}</Text>
             </View>
           )}
         />
