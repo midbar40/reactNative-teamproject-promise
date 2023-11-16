@@ -26,9 +26,10 @@ const registerFirebaseDB = async (uid, email, displayName) => {
       console.log('유저등록(DB)에 성공했습니다(firebaselogin.js):');
 }
 
-// 유저정보 Authentication에 등록 (네이버 로그인)
-const signUpUserwithNaver = async (email, password, displayName) => {
-  const auth = admin.auth(); // auth 객체를 가져옵니다.
+// 유저정보 Authentication에 등록 (네이버 / 카카오 로그인)
+const signUpUserwithNaverKakao = async (email, password, displayName) => {
+  try{
+    const auth = admin.auth(); // auth 객체를 가져옵니다.
   const userRecord = await auth.createUser({
     email: email,
     password: password,
@@ -38,6 +39,9 @@ const signUpUserwithNaver = async (email, password, displayName) => {
   console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
   registerFirebaseDB(userRecord.uid, email, displayName); // 유저정보 Firestore database에 등록
   return userRecord;
+  } catch(error){
+    console.log('유저등록 에러(firebaseLogin 43) :',error);
+    }
 };
 
 
@@ -111,7 +115,7 @@ router.get('/logout', expressAsyncHandler (async(req, res) => {
 
 module.exports = router
 // 아래를 객체로 묶으면 오류가 난다, 이유는 모르겠음.
-module.exports.signUpUserwithNaver = signUpUserwithNaver;
+module.exports.signUpUserwithNaverKakao = signUpUserwithNaverKakao;
 module.exports.signUpUser = signUpUser;
 module.exports.listAllUsers = listAllUsers;
 module.exports.registerFirebaseDB = registerFirebaseDB;

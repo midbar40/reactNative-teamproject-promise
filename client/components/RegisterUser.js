@@ -18,8 +18,8 @@ function RegisterUser({
   isRegister,
   setLoginInfo,
 }) {
-  const homeIP = '192.168.0.172:5300'
-  const academyIP = '192.168.200.17:5300'
+  const homeIP = '192.168.0.172:5300';
+  const academyIP = '192.168.200.17:5300';
   const [registerInfo, setRegisterInfo] = useState({
     email: '',
     nickname: '',
@@ -35,11 +35,9 @@ function RegisterUser({
   };
 
   const registerUser = async () => {
-   
-
     if (!email.trim() || email.trim() == null) {
       return Alert.alert('이메일을 입력해주세요');
-    }  else if (!nickname.trim() || nickname.trim() == null) {
+    } else if (!nickname.trim() || nickname.trim() == null) {
       return Alert.alert('닉네임을 입력해주세요');
     } else if (!password.trim() || password.trim() == null) {
       return Alert.alert('비밀번호를 입력해주세요');
@@ -48,35 +46,39 @@ function RegisterUser({
     } else if (password.trim() !== passwordCheck.trim()) {
       return Alert.alert('비밀번호가 일치하지 않습니다');
     } else {
-        try{
-          await fetch(`http://${academyIP}/firebaseLogin/register`, { // FIrebase 회원가입 
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: email.trim(),
-              password: password.trim(),
-              displayName: nickname.trim(),
-            }),
-          })
-        
-          Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
-          setIsFindPassword(false);
-          setIsRegister(false);
-          setLoginInfo({email: '', password: ''});
-        }catch(e){
-          switch (e.code) {
-            case 'auth/email-already-in-use':
-              return Alert.alert('이미 가입된 이메일입니다');
-            case 'auth/invalid-email':
-              return Alert.alert('이메일 형식이 올바르지 않습니다');
-            case 'auth/weak-password':
-              return Alert.alert('비밀번호는 6자리 이상이어야 합니다');
-            default:
-              return '회원가입이 처리되지 않았습니다';
-          }
+      try {
+        await fetch(`http://${homeIP}/firebaseLogin/register`, {
+          // FIrebase 회원가입
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            password: password.trim(),
+            displayName: nickname.trim(),
+          }),
+        }).catch(err => {
+          console.log(err);
+        });
+        Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
+        setIsFindPassword(false);
+        setIsRegister(false);
+        setLoginInfo({email: '', password: ''});
+      } catch (e) {
+        console.log('등록오류코드 :', e);
+        switch (e.code) {
+          case 'auth/email-already-in-use':
+          case 'auth/email-already-exists':
+            return Alert.alert('이미 가입된 이메일입니다');
+          case 'auth/invalid-email':
+            return Alert.alert('이메일 형식이 올바르지 않습니다');
+          case 'auth/weak-password':
+            return Alert.alert('비밀번호는 6자리 이상이어야 합니다');
+          default:
+            return '회원가입이 처리되지 않았습니다';
         }
+      }
     }
   };
   const {email, nickname, password, passwordCheck} = registerInfo;
