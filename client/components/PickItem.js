@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { updateData } from '../apis/firebaseCalendar'
 
 
-function PickItem({ title, content, startDay, endDay, id, members, lastModifedUser, setItemKey, setOpenModal, pickSchedule }){
+function PickItem({ title, content, startDay, endDay, id, members, lastModifedUser, setItemKey, setOpenModal, showSchedule }){
 
   const [memberList, setmemberList] = useState('')
 
@@ -21,7 +21,7 @@ function PickItem({ title, content, startDay, endDay, id, members, lastModifedUs
       list.push(member.name)
     })
     setmemberList(list)
-  },[])
+  },[showSchedule])
 
   return(
     <Pressable onLongPress={longPress}>

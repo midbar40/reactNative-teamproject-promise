@@ -100,7 +100,7 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
       style={styles.block}
       keyExtractor={item => item.id}
       renderItem={({item}) => (
-        <PickItem {...item} setItemKey={setItemKey} setOpenModal={setOpenModal} pickSchedule={pickSchedule}/>
+        <PickItem {...item} setItemKey={setItemKey} setOpenModal={setOpenModal} showSchedule={showSchedule}/>
       )}
       renderHiddenItem={hiddenItem}
       rightOpenValue={-70}

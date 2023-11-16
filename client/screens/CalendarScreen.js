@@ -105,62 +105,30 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           // buildAndroidNotification('calendar', scheduleTitle, `members : ${pickFriends}`, 'data')
 
           //새로 등록한 스케쥴 바로 보여주기
-          getSchedules('CalendarSchedule', 
-          function onResult(querySnapshot){
-            const list = []
-            querySnapshot.forEach(doc => {
-              //member에 내가 있는 스케쥴만 추려서 담기
-              doc.data().members && doc.data().members.map(member => {
-                if(member.UID === user){
-                  // console.log('걸러진데이터',doc.data(), doc.id)
-                  list.push({...doc.data(), id: doc.id})
-                } 
-              })
-            })
-            let arr = []
-            list.forEach(date => {
-              //클릭한 날짜가 스케쥴 기간안에 포함될때
-              if(date.startDay === selectedDate || date.endDay === selectedDate|| selectedDate > date.startDay && selectedDate < date.endDay){
-                console.log('showSchedule바뀌지않니? 115', date)
-                arr.push(date)
-                setShowSchedule(arr)
-              }
-          })
-          }, function onError(err){
-            console.log(err)
-          }
-          )
+          console.log(showSchedule)
         }else{
           //스케쥴 수정(firebase)
           console.log('데이터 수정 :',updateSchedule)
           await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
-
+          
           //수정된 스케쥴 다시 불러오기
-          getSchedules('CalendarSchedule', 
-          function onResult(querySnapshot){
+          showSchedule.map((show, id) => {
             const list = []
-            querySnapshot.forEach(doc => {
-              //member에 내가 있는 스케쥴만 추려서 담기
-              doc.data().members && doc.data().members.map(member => {
-                if(member.UID === user){
-                  // console.log('걸러진데이터',doc.data(), doc.id)
-                  list.push({...doc.data(), id: doc.id})
-                } 
+            const list2 = []
+            console.log('하나씩,', show.id)
+            if(show.id === itemKey){
+              getOneSchedule('CalendarSchedule', itemKey, function onResult(querySnapshot){
+                console.log('파이어베이스에서 불러온것',querySnapshot.data())
+                console.log('원래 담겨있던것', show)
+                return list.push(querySnapshot.data())
               })
-            })
-            let arr = []
-            list.forEach(date => {
-              //클릭한 날짜가 스케쥴 기간안에 포함될때
-              if(date.startDay === selectedDate || date.endDay === selectedDate|| selectedDate > date.startDay && selectedDate < date.endDay){
-                console.log('showSchedule바뀌지않니? 115', date)
-                arr.push(date)
-                setShowSchedule(arr)
-              }
+            }else{
+              return list2.push(show)
+            }
+            const newList = [...list, ...list2]
+            return console.log('수정된리스트', newList)
           })
-          }, function onError(err){
-            console.log(err)
-          }
-          )
+          
         }
       }catch(err){
         console.log('스케줄등록/수정 에러',err)
