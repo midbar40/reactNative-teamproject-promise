@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-// import { View, StyleSheet, SafeAreaView, Text } from 'react-native';
-
 import LandingScreen from './screens/LandingScreen';
 import WebScreen from './screens/WebScreen';
 import App from './App';
+import { getUser } from './apis/auth';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +19,14 @@ function stackRouter() {
     password: '',
     token: '',
   });
+
+  
   console.log('스택라우터 :', userInfo);
+  console.log('스택라우터겟유저 :', getUser() );
+//  useEffect(() => {
+//   console.log('최초로딩시',getUser())
+//   getUser()
+//  },[])
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -28,7 +34,7 @@ function stackRouter() {
         screenOptions={{
           headerShown: false,
         }}>
-        {userInfo == null || userInfo.token == '' ? (
+        {userInfo == null || userInfo.token == ''? (
           <>
             <Stack.Screen name="Landing">
               {props => (

@@ -44,14 +44,14 @@ function WebScreen({
         password: userData.email + 'secret',
         token: userData.token,
       };
-      setUserInfo(updatedUserInfo); // userInfo를 상위 스코프에서 접근 가능한 변수에 할당
       // console.log('유저인포(프론트35줄) :', updatedUserInfo);
-
+      
       if (updatedUserInfo?.token) {
+        setUserInfo(updatedUserInfo); // userInfo를 상위 스코프에서 접근 가능한 변수에 할당
         // console.log('로그인 시도 :', updatedUserInfo.token);
         await signIn(updatedUserInfo?.email, updatedUserInfo?.password);
         console.log('로그인 성공 54번째 겟유저 :', getUser());
-        navigation.navigate('App');
+        if(getUser() !== null) return navigation.navigate('App');
       } else {
         console.log('로그인 실패 :', updatedUserInfo);
       }
@@ -66,9 +66,7 @@ function WebScreen({
     // console.log('token정보 :', userInfo?.token);
     if (getUser() == null || !userInfo?.token) {
       await getNaverUserInfo();
-    } else {
-      console.log('네이버 로그인 실패 :', getUser());
-    }
+    } 
   };
 
   const getKakaoUserInfo = async () => {
@@ -98,7 +96,8 @@ function WebScreen({
         console.log('로그인 시도 :', updatedUserInfo);
         signIn(updatedUserInfo?.email, updatedUserInfo?.password);
         console.log('로그인 성공 (101번째 겟유저):', getUser());
-        navigation.navigate('App');
+        if(getUser() !== null) return navigation.navigate('App');
+
       } else {
         console.log('로그인 실패 :', getUser());
       }
@@ -121,6 +120,7 @@ function WebScreen({
     setIsKakaoLogin(false);
     setIsNaverLogin(false);
   };
+
 
   // 카카오/네이버로그인 화면에서 뒤로가기 버튼 눌렀을 때
   useEffect(() => {

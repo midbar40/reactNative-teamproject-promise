@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -28,8 +28,9 @@ function Logout({navigation, userInfo, setUserInfo, setIsKakaoLogin, setIsNaverL
     setUserInfo(null) // 유저정보 삭제
     console.log('로그아웃 되었습니다 :', getUser());
   
-    // navigation.navigate('Landing'); // 이거 주석했는데도 왜 자동으로 landing으로 가는거지..
   };
+
+
   return (
     <View style={styles.logoutBtn}>
       <TouchableOpacity onPress={handleLogout}>

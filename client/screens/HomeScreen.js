@@ -80,16 +80,17 @@ function HomeScreen({
 
   useEffect(() => {
     function onResult(querySnapshot) {
+      console.log('홈화면 겟유저 테스트', getUser());
       // console.log(querySnapshot.data()?.friends)
-
       setFriendList(querySnapshot.data()?.friends);
     }
 
     function onError(error) {
       console.log(error);
     }
-    if (getUser() !== null) return getFriendsRealtimeChange(onResult, onError);
-  }, []);
+ 
+      return getFriendsRealtimeChange(onResult, onError);
+  }, [getUser()]);
 
   // console.log(friendList)
 

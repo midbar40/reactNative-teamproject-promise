@@ -149,7 +149,7 @@ export const sendNotification = async (message, roomUID) => {
       method : 'POST',
       headers : {
         'Content-Type' : 'application/json',
-        'Authorization' : `Bearer ${MESSAGE_SERVICE_KEY}`
+        'Authorization' : `Bearer ${process.env.MESSAGE_SERVICE_KEY}`
       },
       body : JSON.stringify({
         "to": `${t}`,
