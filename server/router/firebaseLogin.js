@@ -36,8 +36,8 @@ const signUpUserwithNaverKakao = async (email, password, displayName) => {
     displayName: displayName,
     friends:  [],
   });
-  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
-  registerFirebaseDB(userRecord.uid, email, displayName); // 유저정보 Firestore database에 등록
+  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord?.uid);
+  registerFirebaseDB(userRecord?.uid, email, displayName); // 유저정보 Firestore database에 등록
   return userRecord;
   } catch(error){
     console.log('유저등록 에러(firebaseLogin 43) :',error);

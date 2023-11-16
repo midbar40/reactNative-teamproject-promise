@@ -4,31 +4,25 @@ import moment from 'moment-timezone'
 import AddAlarm from './AddAlarm'
 import AlarmList from './AlarmList'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { addData, getCollection, getCurrentTime, removeData } from './apis/firebase'
+import { addData, getCollection, getCurrentTime, removeData, notificationListener } from './apis/firebase'
 import messaging from '@react-native-firebase/messaging'
 import auth from '@react-native-firebase/auth'
 
-function Time({isFocused, fcmToken}){
+function Time({isFocused, fcmToken, navigation}){
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
   const [alarmTimes, setAlarmTimes] = useState([])
   const [addAlarmModal, setAddAlarmModal] = useState(false)
-  const [openSwipeableItem, setOpenSwipeableItem] = useState(null)  
+  const [openSwipeableItem, setOpenSwipeableItem] = useState(null) 
+  
+  useEffect(() => {
+    notificationListener(navigation)
+  }, [navigation])
 
   // 시간을 AM/PM으로 나누어 보여주기 
   const getFormattedTime = (time) => {
     const formattedTime = time.format('hh:mm A')
     return formattedTime
-  }
-
-  const signIn = async () => {
-    try {      
-      const userCredential = await auth().signInWithEmailAndPassword(email, password)
-      const user = userCredential.user
-      console.log('사용자 로그인:', user.uid)
-    } catch (error) {
-      console.error('인증오류:', error)
-    }
-  }
+  } 
 
   // 알람 추가
   const addAlarm = async(time, title) => {
@@ -38,6 +32,7 @@ function Time({isFocused, fcmToken}){
     const alarmId = Math.random().toString(36).substring(7)
     const deviceToken = fcmToken || (await messaging().getToken())
     const userUid = auth().currentUser.uid
+    
     const alarm = {
       id: alarmId,
       time: alarmTime.format(),
@@ -45,17 +40,21 @@ function Time({isFocused, fcmToken}){
       createdAt: getCurrentTime(),  
       deviceToken,      
       userUid,
+      sent: false,
     }
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
     addData('Alarms', alarm)
+    console.log('알람 추가')
   }
+  
   //알람 삭제
   const removeAlarm = (id) => {
     const currentUserUid = auth().currentUser.uid
     const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id && alarm.userUid === currentUserUid)
     setAlarmTimes(updatedAlarms)
-    removeData('Alarms', id)
+    removeData('Alarms', id)  
+    console.log('알람 삭제')  
   }
 
   // 실시간 한국시간으로 보여주기
@@ -76,10 +75,11 @@ function Time({isFocused, fcmToken}){
       (querySnapshot) => {
         const alarms = []
         const currentUserUid = auth().currentUser.uid
+
         querySnapshot.forEach((doc) => {
           const alarmData = doc.data()
           if(alarmData.userUid === currentUserUid){
-            alarms.push(alarmData)
+            alarms.push(alarmData)           
           }          
         })
         setAlarmTimes(alarms)
@@ -91,7 +91,7 @@ function Time({isFocused, fcmToken}){
     return () => {
       fetchAlarms()
     }
-  }, [])
+  }, [])  
 
   // 다시 터치했을때 스와이프 닫기
   const closeSwipeableItem = () => {
@@ -100,24 +100,6 @@ function Time({isFocused, fcmToken}){
       setOpenSwipeableItem(null)
     }
   }
-
-  // useEffect(() => {
-  //   const checkAlarms = async () => {
-  //     try {
-  //       const response = await fetch('https://reactnative-teamproject-default-rtdb.firebaseio.com/check-alarms');
-  //       const result = await response.json();
-  //       console.log(result);
-  //     } catch (error) {
-  //       console.error('Error checking alarms:', error);
-  //     }
-  //   };
-  
-  //   // Schedule the checkAlarms function to run periodically
-  //   const intervalId = setInterval(checkAlarms, 60000); // Check every minute
-  
-  //   // Cleanup the interval on component unmount
-  //   return () => clearInterval(intervalId);
-  // }, []); 
 
   return (
     <View style={styles.container}>

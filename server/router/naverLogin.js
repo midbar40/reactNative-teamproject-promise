@@ -79,13 +79,13 @@ router.get('/user', expressAsyncHandler(async (req, res) => {
 }))
 
 
-// 로그아웃
+// 네이버 로그아웃
 router.get('/logout', expressAsyncHandler(async (req, res) => {
   req.session.destroy( )
   code = req.query.code;
   state = req.query.state;
   api_url = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${client_id}&client_secret=${client_secret}&code=${code}&state=${state}`  
-  console.log("로그아웃 세션삭제: ",req.session)
+  console.log("로그아웃 세션삭제(네이버): ",req.session)
   res.status(200).send('로그아웃 되었습니다') // res 구문으로 마무리하지 않으면 해당 라우터에서 빠져나가지 않게됨
 }))
 

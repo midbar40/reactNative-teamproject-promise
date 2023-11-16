@@ -9,23 +9,26 @@ import {
 import {signOut, getUser} from '../apis/auth';
 
 
-function Logout({navigation, userInfo, setUserInfo, setIsKakaoLogin, setIsNaverLogin}) {
+function Logout({navigation, userInfo, setUserInfo, setIsKakaoLogin, setIsNaverLogin , isKakaoLogin, isNaverLogin}) {
   const homeIP = '192.168.0.172:5300'
   const academyIP = '192.168.200.17:5300'
 
   const handleLogout = async () => {
     console.log('로그인상태: ', getUser());
     await signOut(); // 파이어베이스 로그아웃
-    await fetch(`http://${homeIP}/naverlogin/logout`) // 네이버 로그인 토큰삭제
-    await fetch('http://nid.naver.com/nidlogin.logout') // 네이버 로그아웃
-    await fetch(`http://${homeIP}/kakaologin/logout`) // 카카오 로그인 토큰삭제
+    if(isKakaoLogin) {
+      await fetch(`http://${academyIP}/kakaologin/logout`)
+      setIsKakaoLogin(false) // 카카오 로그인 상태 false
+    } // 카카오 로그인 토큰삭제
+    else if(isNaverLogin){
+      await fetch(`http://${academyIP}/naverlogin/logout`) // 네이버 로그인 토큰삭제
+      await fetch('http://nid.naver.com/nidlogin.logout') // 네이버 로그아웃  
+      setIsNaverLogin(false) // 네이버 로그인 상태 false
+    }
     setUserInfo(null) // 유저정보 삭제
-    setIsKakaoLogin(false) // 카카오 로그인 상태 false
-    setIsNaverLogin(false) // 네이버 로그인 상태 false
     console.log('로그아웃 되었습니다 :', getUser());
   
-    navigation.navigate('Landing'); // landing state변경 해야함
-
+    // navigation.navigate('Landing'); // 이거 주석했는데도 왜 자동으로 landing으로 가는거지..
   };
   return (
     <View style={styles.logoutBtn}>
