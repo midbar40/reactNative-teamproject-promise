@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { updateData } from '../apis/firebaseCalendar'
 
 
-function PickItem({ title, content, startDay, endDay, id, members, lastModifedUser, setItemKey, setOpenModal}){
+function PickItem({ title, content, startDay, endDay, id, members, lastModifedUser, setItemKey, setOpenModal, pickSchedule }){
 
   const [memberList, setmemberList] = useState('')
 
@@ -16,7 +16,8 @@ function PickItem({ title, content, startDay, endDay, id, members, lastModifedUs
 
   useEffect(() => {
     const list = []
-    members && members.map(member => {
+    members && members.map((member, id) => {
+      // console.log('memberrrrr', member)
       list.push(member.name)
     })
     setmemberList(list)
