@@ -37,7 +37,7 @@ function WebScreen({
       });
 
       const userData = await userResponse?.json(); // 데이터 수신을 기다림
-      console.log('유저데이터(프론트32줄) :', userData);
+      // console.log('유저데이터(프론트32줄) :', userData);
 
       const updatedUserInfo = {
         email: userData.email,
@@ -45,12 +45,12 @@ function WebScreen({
         token: userData.token,
       };
       setUserInfo(updatedUserInfo); // userInfo를 상위 스코프에서 접근 가능한 변수에 할당
-      console.log('유저인포(프론트35줄) :', updatedUserInfo);
+      // console.log('유저인포(프론트35줄) :', updatedUserInfo);
 
       if (updatedUserInfo?.token) {
-        console.log('로그인 시도 :', updatedUserInfo.token);
-        signIn(updatedUserInfo?.email, updatedUserInfo?.password);
-        console.log('로그인 성공 :', updatedUserInfo);
+        // console.log('로그인 시도 :', updatedUserInfo.token);
+        await signIn(updatedUserInfo?.email, updatedUserInfo?.password);
+        console.log('로그인 성공 54번째 겟유저 :', getUser());
         navigation.navigate('App');
       } else {
         console.log('로그인 실패 :', updatedUserInfo);
@@ -62,8 +62,8 @@ function WebScreen({
 
   // 네이버 로그인
   const showNaverLogin = async () => {
-    console.log('유저정보 :', getUser());
-    console.log('token정보 :', userInfo?.token);
+    // console.log('유저정보 :', getUser());
+    // console.log('token정보 :', userInfo?.token);
     if (getUser() == null || !userInfo?.token) {
       await getNaverUserInfo();
     } else {
@@ -71,40 +71,53 @@ function WebScreen({
     }
   };
 
-  // 카카오 로그인
-  const showKakaoLogin = async () => {
+  const getKakaoUserInfo = async () => {
     try {
-      // const response = await fetch(
-      //   `http://${academyIP}/kakaologin/profile`,
-      //   {
-      //     method: 'GET',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'cache-control':
-      //         'no-cache, must-revalidate, post-check=0, pre-check=0',
-      //     },
-      //     credentials: 'include',
-      //     cache: 'no-store',
-      //   },
-      // );
-      // console.log('카카오 유저데이터 :', response);
-      // const finalResponse = await fetch(response.url, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'cache-control':
-      //       'no-cache, must-revalidate, post-check=0, pre-check=0',
-      //   },
-      //   credentials: 'include',
-      //   cache: 'no-store',
-      // });
+      const response = await fetch(`http://${academyIP}/kakaologin/profile`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'cache-control':
+            'no-cache, must-revalidate, post-check=0, pre-check=0',
+        },
+        credentials: 'include',
+        cache: 'no-store',
+      });
+      const userData = await response?.json();
+
+      console.log('카카오 유저데이터 :', userData);
+
+      const updatedUserInfo = {
+        email: userData.email,
+        password: userData.password,
+        token: userData.token,
+      };
+      setUserInfo(updatedUserInfo);
+
+      if (updatedUserInfo?.token) {
+        console.log('로그인 시도 :', updatedUserInfo);
+        signIn(updatedUserInfo?.email, updatedUserInfo?.password);
+        console.log('로그인 성공 (101번째 겟유저):', getUser());
+        navigation.navigate('App');
+      } else {
+        console.log('로그인 실패 :', getUser());
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
+  // 카카오 로그인
+  const showKakaoLogin = async () => {
+    if (getUser() == null || !userInfo?.token) {
+      await getKakaoUserInfo();
+    } else {
+      console.log('카카오 로그인 실패 :', getUser());
+    }
+  };
+
   // 카카오, 네이버 state 초기화
-  const handleNaverKakaoState = () => { 
+  const handleNaverKakaoState = () => {
     setIsKakaoLogin(false);
     setIsNaverLogin(false);
   };
