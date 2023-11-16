@@ -3,7 +3,7 @@ const expressAsyncHandler = require('express-async-handler');
 const router = express.Router();
 const config = require('../config.js')
 
-const {signUpUser, listAllUsers, registerFirebaseDB, signUpUserwithNaver  } = require('./firebaseLogin.js')
+const {signUpUser, listAllUsers, registerFirebaseDB, signUpUserwithNaverKakao  } = require('./firebaseLogin.js')
 const client_id = config.NAVER_CLIENT_ID;
 const client_secret = config.NAVER_CLIENT_SECRET;
 let state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -60,7 +60,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
       console.log('이미 가입된 유저입니다')
     }
     else {
-      await signUpUserwithNaver(userData.response.email, userData.response.email + 'secret', userData.response.name) // firebase auth / db에 유저 정보 등록 
+      await signUpUserwithNaverKakao(userData.response.email, userData.response.email + 'secret', userData.response.name) // firebase auth / db에 유저 정보 등록 
       console.log('회원가입 완료')
     }
   } 
@@ -79,13 +79,13 @@ router.get('/user', expressAsyncHandler(async (req, res) => {
 }))
 
 
-// 로그아웃
+// 네이버 로그아웃
 router.get('/logout', expressAsyncHandler(async (req, res) => {
   req.session.destroy( )
   code = req.query.code;
   state = req.query.state;
   api_url = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${client_id}&client_secret=${client_secret}&code=${code}&state=${state}`  
-  console.log("로그아웃 세션삭제: ",req.session)
+  console.log("로그아웃 세션삭제(네이버): ",req.session)
   res.status(200).send('로그아웃 되었습니다') // res 구문으로 마무리하지 않으면 해당 라우터에서 빠져나가지 않게됨
 }))
 

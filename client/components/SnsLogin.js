@@ -12,8 +12,6 @@ function SnsLogin({
   isNaverLogin,
   setIsNaverLogin,
 }) {
-  // const [isNaverLogin, setIsNaverLogin] = useState(false);
-  // const [isKakaoLogin, setIsKakaoLogin] = useState(false);
   const homeIP = '192.168.0.172:5300'
   const academyIP = '192.168.200.17:5300'
 

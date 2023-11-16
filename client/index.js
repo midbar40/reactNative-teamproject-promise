@@ -18,4 +18,6 @@ messaging().onMessage(async remoteMessage => {
   showNotification(remoteMessage.notification);
 })
 
+// messaging().onMessage(remoteMessage)
+
 AppRegistry.registerComponent(appName, () => stackRouter);
