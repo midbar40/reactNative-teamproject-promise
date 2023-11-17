@@ -10,7 +10,7 @@ import ModalTextInputs from '../components/ModalTextInputs'
 import PickColor from '../components/PickColor';
 import AddMembers from '../components/AddMembers'
 
-import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule } from '../apis/firebaseCalendar'
+import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule, getThisSchedulesChatRoom, updateChatRoomTitle } from '../apis/firebaseCalendar'
 import { getCurrentTime } from '../apis/firebase';
 import { buildAndroidNotification } from '../src/LocalNotification';
 
@@ -102,20 +102,26 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         if(itemKey === ''){
           console.log('데이터 추가 :',newSchedule)
           await addSchedule('CalendarSchedule', newSchedule)
-          // buildAndroidNotification('calendar', scheduleTitle, `members : ${pickFriends}`, 'data')
-
-          //새로 등록한 스케쥴 바로 보여주기
-          // console.log(showSchedule)
-          console.log(pickSchedule)
           setPickSchedule(!pickSchedule)
-          //스케쥴 다시 불러오기
+          // buildAndroidNotification('calendar', scheduleTitle, `members : ${pickFriends}`, 'data')
           
         }else{
           //스케쥴 수정(firebase)
           console.log('데이터 수정 :',updateSchedule)
           await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
-          console.log(pickSchedule)
           setPickSchedule(!pickSchedule)
+          console.log(updateSchedule.title, itemKey)
+          getThisSchedulesChatRoom(itemKey, 
+            function onResult(querySnapshot){
+              console.log(querySnapshot.docs)
+              querySnapshot.forEach(doc => {
+                updateChatRoomTitle(doc.id, {title: updateSchedule.title})
+              })
+            },
+            function onError(err){
+              console.log('getchatroom Error', err)
+            }
+          )   
           
         }
       }catch(err){
@@ -185,10 +191,8 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
 
   //firebase에 등록된 스케쥴 불러오기
   useEffect(() => {
-    console.log('왜안됨?')
     function onResult(querySnapshot){
       const list = []
-      console.log('어디가안됨?')
       querySnapshot.forEach(doc => {
         // console.log(doc.data())
         //member에 내가 있는 스케쥴만 추려서 담기
@@ -223,19 +227,16 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       
         setMarkDate(marking) 
       })
-      console.log('로드스케쥴 다시 셋팅')  
       setLoadSchedule(list)
       let arr = []
+      selectedDate && 
       list.forEach(date => {
         //클릭한 날짜가 스케쥴 기간안에 포함될때
-        console.log('??????', date)
         if(date.startDay === selectedDate || date.endDay === selectedDate || selectedDate > date.startDay && selectedDate < date.endDay){
             console.log('일정O', date)
             arr.push(date)
         }
-        console.log('?',arr)
       })
-      console.log(arr)
       setShowSchedule(arr)
       console.log('다시셋팅된 show', pickSchedule, showSchedule)    
     }

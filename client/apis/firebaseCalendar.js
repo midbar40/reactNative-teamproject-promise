@@ -35,3 +35,8 @@ export const getThisSchedulesChatRoom = async ( calendarUID, onResult, onError) 
 export const deleteThisSchedulesChatRoom = async ( id ) => {
   await firestore().collection('chat').doc(id).delete()
 }
+
+//해당 스케쥴 title 변경시 채팅방 이름 함께 변경
+export const updateChatRoomTitle = async ( id, data ) =>{
+  await firestore().collection('chat').doc(id).update(data)
+}

@@ -140,14 +140,14 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
         }}
         />
           
-        <Tab.Screen 
+        {/* <Tab.Screen 
           name="Todo" 
           component={TodoScreen}
           options={{
             title:'Todo',
             tabBarIcon:({color, size}) => <Icon2 name='clipboard-list' color={color} size={size}/>
         }}
-        />      
+        />       */}
         <Tab.Screen 
           name="Chat" 
           children={(props) => (
