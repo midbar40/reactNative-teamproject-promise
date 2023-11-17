@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {AppState} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {signOut, getUser} from './apis/auth';
@@ -25,7 +24,6 @@ import {
 } from './apis/firebaseMessage';
 
 const Tab = createBottomTabNavigator();
-
 function App({
   navigation,
   route,
@@ -37,11 +35,14 @@ function App({
   setIsNaverLogin,
   userInfo,
   setUserInfo,
+  setAppState,
+  appState
 }) {
   // console.log(route.params.email)
 
   const [isLogin, setIsLogin] = useState(false);
   const [selectRoomId, setSelectRoomId] = useState('');
+  console.log('앱화면 유저인포', userInfo)
 
   /////////////////////////////////////////////////////////////
   useEffect(() => {
@@ -75,20 +76,7 @@ function App({
     console.log('로그아웃 되었습니다 :', getUser());
   };
   
-  useEffect(() => {
-    if(getUser() !== null) {
-    const handleAppStateChange = nextAppState => {
-      if (nextAppState === 'background') {
-        console.log('App is in Background Mode.')
-        handleLogout()
-      }
-    };
-    AppState.addEventListener('change', handleAppStateChange);
-    return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
-    };}
-  }, []);
-
+ 
   useEffect(() => {
     const handleForegroundNotifications = async remoteMessage => {
       console.log('Foreground Message:', remoteMessage);
@@ -163,6 +151,8 @@ function App({
             setIsNaverLogin={setIsNaverLogin}
             userInfo={userInfo}
             setUserInfo={setUserInfo}
+            setAppState={setAppState}
+            appState={appState}
           />
         )}
       </Tab.Screen>

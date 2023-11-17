@@ -69,7 +69,7 @@ function Login({
   };
   return (
     <View style={styles.contentBox}>
-      <Text style={styles.appName}>KAIROS</Text>
+      <Text style={styles.appName}>오늘 내일 함께</Text>
       {isSnsLogin ? (
         <SnsLogin
           navigation={navigation}

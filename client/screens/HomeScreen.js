@@ -29,6 +29,9 @@ function HomeScreen({
   setIsNaverLogin,
   userInfo,
   setUserInfo,
+  setAppState,
+  appState
+
 }) {
   const [friendList, setFriendList] = useState([]);
   const [searchUserText, setSearchUserText] = useState('');
@@ -81,6 +84,7 @@ function HomeScreen({
   useEffect(() => {
     function onResult(querySnapshot) {
       console.log('홈화면 겟유저 테스트', getUser());
+      console.log('홈화면 appstate :', appState);
       // console.log(querySnapshot.data()?.friends)
       setFriendList(querySnapshot.data()?.friends);
     }
@@ -106,9 +110,10 @@ function HomeScreen({
        props={props}
        userInfo={userInfo}
        setUserInfo={setUserInfo}
+       setAppState={setAppState}
       />
       <View>
-        <Text style={styles.appName}>Take me home</Text>
+        <Text style={styles.appName}>친구찾기</Text>
       </View>
       <View style={styles.searchUserContainer}>
         <TextInput
