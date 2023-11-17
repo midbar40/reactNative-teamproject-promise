@@ -17,7 +17,6 @@ messaging().onMessage(async remoteMessage => {
   console.log('Foreground Message:', remoteMessage);
   showNotification(remoteMessage.notification);
 })
-
 // messaging().onMessage(remoteMessage)
 
 AppRegistry.registerComponent(appName, () => stackRouter);

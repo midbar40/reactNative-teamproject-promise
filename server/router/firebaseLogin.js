@@ -95,10 +95,18 @@ router.post('/register', expressAsyncHandler (async(req, res) => {
     console.log('유저레코드 :', userRecord.uid)
 
     registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
-  } catch(error) {
-    console.log(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-    throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
+  } catch(e) {
+    console.log('회원가입 오류 :', e.code)
+    switch (e.code) {
+        case 'auth/email-already-exists':
+          return res.json('이미 가입된 이메일입니다');
+      case 'auth/invalid-email':
+        return res.json('이메일 형식이 올바르지 않습니다');
+      case 'auth/invalid-password':
+        return res.json('비밀번호는 6자리 이상이어야 합니다');
+      default:
+        return res.json('회원가입이 처리되지 않았습니다');
+    }
   }
 }))
 
