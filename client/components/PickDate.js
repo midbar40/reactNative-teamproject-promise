@@ -6,7 +6,7 @@ import PickItem from './PickItem'
 import ChatCreateBtn from './ChatCreateBtn'
 import { removeSchedule, getThisSchedulesChatRoom, deleteThisSchedulesChatRoom } from '../apis/firebaseCalendar'
 
-function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, myInfo, pickSchedule }){
+function PickDate({selectedDate, loadSchedule, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, myInfo, pickSchedule }){
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
@@ -92,6 +92,7 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
       </>
     )
   }
+
  
   return(
     selectedDate &&

@@ -28,7 +28,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const [user, setUser] = useState('') //현재 로그인한 유저 uid저장용
   const [myInfo, setMyInfo] = useState('') //현재 로그인한 유저 uid저장용
   const [loadSchedule, setLoadSchedule] = useState([]) //불러온 스케쥴 담기
-  const [pickSchedule, setPickSchedule] = useState('') //수정한 하나의 스케쥴 담기
+  const [pickSchedule, setPickSchedule] = useState(false) //수정한 하나의 스케쥴 상태 담기
   const [markedDate, setMarkDate] = useState(null) //마크할 날짜 담기
   const [markandSelected, setMarkandSelected] = useState(null) //마크+선택 날짜 담기
   const [showSchedule, setShowSchedule] = useState([]) //선택한 날짜 스케쥴 담기
@@ -105,29 +105,17 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           // buildAndroidNotification('calendar', scheduleTitle, `members : ${pickFriends}`, 'data')
 
           //새로 등록한 스케쥴 바로 보여주기
-          console.log(showSchedule)
+          // console.log(showSchedule)
+          console.log(pickSchedule)
+          setPickSchedule(!pickSchedule)
+          //스케쥴 다시 불러오기
+          
         }else{
           //스케쥴 수정(firebase)
           console.log('데이터 수정 :',updateSchedule)
           await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
-          
-          //수정된 스케쥴 다시 불러오기
-          showSchedule.map((show, id) => {
-            const list = []
-            const list2 = []
-            console.log('하나씩,', show.id)
-            if(show.id === itemKey){
-              getOneSchedule('CalendarSchedule', itemKey, function onResult(querySnapshot){
-                console.log('파이어베이스에서 불러온것',querySnapshot.data())
-                console.log('원래 담겨있던것', show)
-                return list.push(querySnapshot.data())
-              })
-            }else{
-              return list2.push(show)
-            }
-            const newList = [...list, ...list2]
-            return console.log('수정된리스트', newList)
-          })
+          console.log(pickSchedule)
+          setPickSchedule(!pickSchedule)
           
         }
       }catch(err){
@@ -177,6 +165,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
      function onError(err){
        console.log('err', err)
      })
+     setPickSchedule(!pickSchedule)
  },[user])
 
         
@@ -196,8 +185,10 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
 
   //firebase에 등록된 스케쥴 불러오기
   useEffect(() => {
+    console.log('왜안됨?')
     function onResult(querySnapshot){
       const list = []
+      console.log('어디가안됨?')
       querySnapshot.forEach(doc => {
         // console.log(doc.data())
         //member에 내가 있는 스케쥴만 추려서 담기
@@ -230,16 +221,30 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
             return obj
           }, {})
       
-        setMarkDate(marking)   
-        setLoadSchedule(list)
+        setMarkDate(marking) 
       })
+      console.log('로드스케쥴 다시 셋팅')  
+      setLoadSchedule(list)
+      let arr = []
+      list.forEach(date => {
+        //클릭한 날짜가 스케쥴 기간안에 포함될때
+        console.log('??????', date)
+        if(date.startDay === selectedDate || date.endDay === selectedDate || selectedDate > date.startDay && selectedDate < date.endDay){
+            console.log('일정O', date)
+            arr.push(date)
+        }
+        console.log('?',arr)
+      })
+      console.log(arr)
+      setShowSchedule(arr)
+      console.log('다시셋팅된 show', pickSchedule, showSchedule)    
     }
     function onError(error){
       console.error(`불러오다가 에러났음 - ${error}`)
     }
     return getSchedules('CalendarSchedule', onResult, onError)
     
-  },[user])
+  },[pickSchedule])
   
   
   // console.log('리스트', markedDate)
@@ -294,7 +299,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       />
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}>
-        <PickDate selectedDate={selectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId} myInfo={myInfo} pickSchedule={pickSchedule}/>
+        <PickDate selectedDate={selectedDate} loadSchedule={loadSchedule} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId} myInfo={myInfo} pickSchedule={pickSchedule}/>
       </View>
       <Modal
         animationType='fade'
