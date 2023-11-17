@@ -1,9 +1,8 @@
 import React,{ useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Text, FlatList, Pressable, Modal, TouchableOpacity, Keyboard, Alert } from 'react-native';
-import { Calendar,  CalendarList, Agenda, LocaleConfig } from 'react-native-calendars'
+import { View, StyleSheet, SafeAreaView, Text, Pressable, Modal, TouchableOpacity, Keyboard, Alert } from 'react-native';
+import { Calendar, LocaleConfig } from 'react-native-calendars'
 import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth'
 import AntIcon from 'react-native-vector-icons/AntDesign'
-import { PushNotification } from 'react-native-push-notification';
 
 import PickDate from '../components/PickDate';
 import ModalInputs from '../components/ModalInputs';
@@ -13,27 +12,10 @@ import AddMembers from '../components/AddMembers'
 
 import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule } from '../apis/firebaseCalendar'
 import { getCurrentTime } from '../apis/firebase';
+import { buildAndroidNotification } from '../src/LocalNotification';
 
 
 const auth = getAuth()
-
-// PushNotification.configure({
-//   onRegister: function (token){
-//     console.log('token', token)
-//   },
-//   onNotification: function(notification){
-//     console.log('notification', notification)
-//   },
-//   onAction: function(notification){
-//     console.log('action', notification.action)
-//     console.log('actionNotification', notification)
-//   },
-//   onRegistrationError: function(err){
-//     console.error('notiError', err)
-//   },
-//   popInitialNotification: true,
-//   requestPermissions: true
-// })
 
 function CalendarScreen({ navigation, setSelectRoomId }) {
 
@@ -46,6 +28,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const [user, setUser] = useState('') //현재 로그인한 유저 uid저장용
   const [myInfo, setMyInfo] = useState('') //현재 로그인한 유저 uid저장용
   const [loadSchedule, setLoadSchedule] = useState([]) //불러온 스케쥴 담기
+  const [pickSchedule, setPickSchedule] = useState(false) //수정한 하나의 스케쥴 상태 담기
   const [markedDate, setMarkDate] = useState(null) //마크할 날짜 담기
   const [markandSelected, setMarkandSelected] = useState(null) //마크+선택 날짜 담기
   const [showSchedule, setShowSchedule] = useState([]) //선택한 날짜 스케쥴 담기
@@ -119,16 +102,21 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         if(itemKey === ''){
           console.log('데이터 추가 :',newSchedule)
           await addSchedule('CalendarSchedule', newSchedule)
-          PushNotification({
-            channelId: 'calendar',
-            channelTitle: 'calendar',
-            title: scheduleTitle,
-            body: `members : ${pickFriends}`,
-          })
+          // buildAndroidNotification('calendar', scheduleTitle, `members : ${pickFriends}`, 'data')
+
+          //새로 등록한 스케쥴 바로 보여주기
+          // console.log(showSchedule)
+          console.log(pickSchedule)
+          setPickSchedule(!pickSchedule)
+          //스케쥴 다시 불러오기
+          
         }else{
           //스케쥴 수정(firebase)
           console.log('데이터 수정 :',updateSchedule)
           await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
+          console.log(pickSchedule)
+          setPickSchedule(!pickSchedule)
+          
         }
       }catch(err){
         console.log('스케줄등록/수정 에러',err)
@@ -144,7 +132,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       setPickColor('red')
       setOpenModal(false)
     }else{
-      console.log('제목&내용이 빈칸입니다.')
+      // console.log('제목&내용이 빈칸입니다.')
       Alert.alert('경고!', '할일 제목이나 내용을 입력해주세요.')
     }
   }
@@ -177,6 +165,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
      function onError(err){
        console.log('err', err)
      })
+     setPickSchedule(!pickSchedule)
  },[user])
 
         
@@ -196,8 +185,10 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
 
   //firebase에 등록된 스케쥴 불러오기
   useEffect(() => {
+    console.log('왜안됨?')
     function onResult(querySnapshot){
       const list = []
+      console.log('어디가안됨?')
       querySnapshot.forEach(doc => {
         // console.log(doc.data())
         //member에 내가 있는 스케쥴만 추려서 담기
@@ -230,16 +221,30 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
             return obj
           }, {})
       
-        setMarkDate(marking)   
-        setLoadSchedule(list)
+        setMarkDate(marking) 
       })
+      console.log('로드스케쥴 다시 셋팅')  
+      setLoadSchedule(list)
+      let arr = []
+      list.forEach(date => {
+        //클릭한 날짜가 스케쥴 기간안에 포함될때
+        console.log('??????', date)
+        if(date.startDay === selectedDate || date.endDay === selectedDate || selectedDate > date.startDay && selectedDate < date.endDay){
+            console.log('일정O', date)
+            arr.push(date)
+        }
+        console.log('?',arr)
+      })
+      console.log(arr)
+      setShowSchedule(arr)
+      console.log('다시셋팅된 show', pickSchedule, showSchedule)    
     }
     function onError(error){
       console.error(`불러오다가 에러났음 - ${error}`)
     }
     return getSchedules('CalendarSchedule', onResult, onError)
     
-  },[user])
+  },[pickSchedule])
   
   
   // console.log('리스트', markedDate)
@@ -273,7 +278,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         // markingType={'period'}
         disabledDaysIndexes={[0]}
         onDayPress={day => {
-          console.log('선택한날짜', day)
+          console.log('선택한날짜', day, selectedDate)
           let arr = []
           loadSchedule.forEach(date => {
               //클릭한 날짜가 스케쥴 기간안에 포함될때
@@ -294,7 +299,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
       />
       <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}>
-        <PickDate selectedDate={selectedDate} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId} myInfo={myInfo}/>
+        <PickDate selectedDate={selectedDate} loadSchedule={loadSchedule} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId} myInfo={myInfo} pickSchedule={pickSchedule}/>
       </View>
       <Modal
         animationType='fade'
@@ -314,12 +319,14 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
             setPickFriends(list)
             console.log('내정보담기',list)
           }
-          //스케쥴을 수정하려고 모달창 열때 정보 자동으로 담아 보여주기
+          //스케쥴을 수정하려고 모달창 열때 
           if(itemKey !== '' || itemKey){
+            //정보 자동으로 담아 보여주기
             getOneSchedule('CalendarSchedule', itemKey, 
             function onResult(querySnapshot){
               const list = []
               list.push(querySnapshot.data())
+              // console.log('list',list[0])
                 setScheduleTitle(list[0].title)
                 setScheduleContent(list[0].content)
                 setStartDate(list[0].startDay)
@@ -491,3 +498,4 @@ const styles = StyleSheet.create({
 })
 
 export default CalendarScreen;
+

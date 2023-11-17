@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view'
 
@@ -6,7 +6,7 @@ import PickItem from './PickItem'
 import ChatCreateBtn from './ChatCreateBtn'
 import { removeSchedule, getThisSchedulesChatRoom, deleteThisSchedulesChatRoom } from '../apis/firebaseCalendar'
 
-function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, myInfo, }){
+function PickDate({selectedDate, loadSchedule, showSchedule, setShowSchedule, setOpenModal, itemKey, setItemKey, navigation, setSelectRoomId, myInfo, pickSchedule }){
 
   const [title, setTitle] = useState('')
   const [friends, setFriends] = useState('')
@@ -14,7 +14,7 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
   //삭제버튼 클릭
   const clickDelete = () => {
     console.log('삭제', itemKey)
-    showSchedule.map(schedule => {
+    showSchedule.map((schedule, id) => {
       if(itemKey === schedule.id){
         //해당 스케쥴을 만든사람만 삭제 가능
         if(schedule.createdUser === myInfo.UID){
@@ -60,11 +60,12 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
     setItemKey(rowKey)
 
     showSchedule.filter(schedule => {
+      console.log('스케쥴',schedule)
       //채팅방 멤버 구성
       const memberLists = []
       if(schedule.id === rowKey){
         setTitle(schedule.title) 
-        schedule.members && schedule.members.map(member => {
+        schedule.members && schedule.members.map((member, id) => {
           memberLists.push(member.UID)
         })
         console.log('member',memberLists)
@@ -91,6 +92,7 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
       </>
     )
   }
+
  
   return(
     selectedDate &&
@@ -99,7 +101,7 @@ function PickDate({selectedDate, showSchedule, setShowSchedule, setOpenModal, it
       style={styles.block}
       keyExtractor={item => item.id}
       renderItem={({item}) => (
-        <PickItem {...item} setItemKey={setItemKey} setOpenModal={setOpenModal}/>
+        <PickItem {...item} setItemKey={setItemKey} setOpenModal={setOpenModal} showSchedule={showSchedule}/>
       )}
       renderHiddenItem={hiddenItem}
       rightOpenValue={-70}
