@@ -114,8 +114,12 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           getThisSchedulesChatRoom(itemKey, 
             function onResult(querySnapshot){
               console.log(querySnapshot.docs)
+              const arr = []
+              updateSchedule.members.map(member => {
+                arr.push(member.UID)
+              })
               querySnapshot.forEach(doc => {
-                updateChatRoomTitle(doc.id, {title: updateSchedule.title})
+                updateChatRoomTitle(doc.id, {title: updateSchedule.title, joinUser: arr})
               })
             },
             function onError(err){
