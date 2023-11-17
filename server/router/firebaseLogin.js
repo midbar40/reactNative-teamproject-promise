@@ -4,7 +4,7 @@ const router = express.Router();
 const admin = require("firebase-admin");
 const serviceAccount = require("../serviceAccountKey.json");
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-
+const schedule = require('node-schedule')
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -95,10 +95,18 @@ router.post('/register', expressAsyncHandler (async(req, res) => {
     console.log('유저레코드 :', userRecord.uid)
 
     registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
-  } catch(error) {
-    console.log(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-    throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
+  } catch(e) {
+    console.log('회원가입 오류 :', e.code)
+    switch (e.code) {
+        case 'auth/email-already-exists':
+          return res.json('이미 가입된 이메일입니다');
+      case 'auth/invalid-email':
+        return res.json('이메일 형식이 올바르지 않습니다');
+      case 'auth/invalid-password':
+        return res.json('비밀번호는 6자리 이상이어야 합니다');
+      default:
+        return res.json('회원가입이 처리되지 않았습니다');
+    }
   }
 }))
 
@@ -111,6 +119,59 @@ router.get('/logout', expressAsyncHandler (async(req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
     throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
   }
+}))
+
+router.get('/msg', expressAsyncHandler (async (req, res) => {
+  const date = (new Date(`2023-11-17T18:17:00+09:00`)).getTime();
+  const newDate = new Date(date)
+  console.log('date : ', newDate)
+  const month = newDate.getMonth() + 1;
+  const day = newDate.getDate();
+  const hours = newDate.getHours();
+  const minutes = newDate.getMinutes();
+  console.log('time',month,day,hours,minutes)
+  schedule.cancelJob()
+  const msg1 = schedule.scheduleJob('test',`0 ${minutes} ${hours} ${day} ${month} *`, () => {
+    console.log('msg보냅니다!!')
+    fetch('https://fcm.googleapis.com/fcm/send', {
+      method : 'POST',
+      headers : {
+        'Content-Type' : 'application/json',
+        'Authorization' : `Bearer AAAAWP_U7E0:APA91bEdq5O0nBGVKCzygO0vLXHyxOVCCWijzckG_LV7FC278Nq9SfbJpzzukeXvB2Ekm1jssLkKvzqaAezJm0MwNDfU5IiwHzMGUvZnQK3DNGbBJhB0ujHDGsx2rkSg7ETd4pQEuPL-`
+      },
+      body : JSON.stringify({
+        "to": `fUshqgoQSE6JmLsuZ6AoCj:APA91bHUlGkVVCWAIWgPITWMXVoSsemjD30GUu2VcfLfqDOa54ZxxBMy9miIhz_lutx-QrPSLvGLCl-8ItCzw0C_nAVA3BHCQU62X6Mvg6yqHllY5Dzirs29qxgxuYYH9wDwRvu9cBAU`,
+        "notification": {
+          "title": `task1`,
+          "body": `task1 입니다!!`,
+          "mutable_content": true,
+          "sound": "Tri-tone"
+          }
+      })
+    })
+    .catch(e => console.log(e))
+    .then(r => console.log(r))
+    // let message = {
+    //   data: {
+    //     title: '테스트 데이터 발송',
+    //     body: '데이터가 잘 가나요?',
+    //     style: '굳굳',
+    //   },
+    //   token: 'cbYDBKG1TviNpyxurv-lA-:APA91bHMp8XTm4uyyapfH2kQN1XoiPEXsGq_K54ZV6ReZgfHJ1jJFXz44i3J-EH1DuY9u1wmozBira4MUlzKc55G2Z_xxokY4XEGA_Hm3l0V0ZquEhhW1z8w0w6zqg53ZazbvxLV0N9d',
+    // }
+  
+    // admin
+    //   .messaging()
+    //   .send(message)
+    //   .then(function (response) {
+    //     console.log('Successfully sent message: : ', response)
+    //   })
+    //   .catch(function (err) {
+    //     console.log('Error Sending message!!! : ', err)
+    //   })
+  
+  })
+  // msg1.cancel('testasdad');
 }))
 
 module.exports = router
