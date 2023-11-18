@@ -1,0 +1,6 @@
+serviceAccountKey
+node_modules
+
+.env
+```
+FirebaseAdminSDKserviceKey
