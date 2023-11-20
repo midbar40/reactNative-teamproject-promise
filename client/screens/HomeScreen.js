@@ -30,8 +30,9 @@ function HomeScreen({
   userInfo,
   setUserInfo,
   setAppState,
-  appState
-
+  appState,
+  isGoogleLogin,
+  setIsGoogleLogin
 }) {
   const [friendList, setFriendList] = useState([]);
   const [searchUserText, setSearchUserText] = useState('');
@@ -92,9 +93,8 @@ function HomeScreen({
     function onError(error) {
       console.log(error);
     }
- 
       return getFriendsRealtimeChange(onResult, onError);
-  }, [getUser()]);
+  }, []);
 
   // console.log(friendList)
 
@@ -111,6 +111,8 @@ function HomeScreen({
        userInfo={userInfo}
        setUserInfo={setUserInfo}
        setAppState={setAppState}
+       isGoogleLogin={isGoogleLogin}
+       setIsGoogleLogin={setIsGoogleLogin}
       />
       <View>
         <Text style={styles.appName}>친구찾기</Text>

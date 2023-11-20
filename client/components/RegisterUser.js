@@ -10,13 +10,11 @@ import {
 } from 'react-native';
 
 function RegisterUser({
-  navigation,
-  isFindPassword,
   setIsFindPassword,
   findEmail,
   setIsRegister,
-  isRegister,
   setLoginInfo,
+  setIsSnsLogin
 }) {
   const homeIP = '192.168.0.172:5300';
   const academyIP = '192.168.200.17:5300';
@@ -59,14 +57,11 @@ function RegisterUser({
               displayName: nickname.trim(),
             })
         })
-        const errorMessage = await reponse.json();
-        Alert.alert(errorMessage) // 에러메세지 띄우기
-       if(!errorMessage){
           Alert.alert('회원가입이 완료되었습니다', '로그인 화면으로 이동합니다');
           setIsFindPassword(false);
           setIsRegister(false);
+          setIsSnsLogin(false);
           setLoginInfo({email: '', password: ''});
-        }
       } catch (e) {
         console.log('등록오류코드 :', e);
         }

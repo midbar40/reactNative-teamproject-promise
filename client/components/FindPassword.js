@@ -11,14 +11,10 @@ import {finduserEmail, getUser} from '../apis/auth';
 console.log(getUser());
 
 function FindPassword({
-  navigation,
   email,
   handleUserInfoChange,
-  isFindPassword,
   setIsFindPassword,
-  isRegister,
   setIsRegister,
-  setLoginInfo,
 }) {
   const homeIP = '192.168.0.172:5300'
   const academyIP = '192.168.200.17:5300'

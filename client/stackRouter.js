@@ -24,7 +24,7 @@ function stackRouter({navigation, route}) {
       return undefined; // 에러 처리
     }
   };
-
+  const [isGoogleLogin, setIsGoogleLogin] = useState(false);
   const [isNaverLogin, setIsNaverLogin] = useState(false);
   const [isKakaoLogin, setIsKakaoLogin] = useState(false);
   const [naverLoginLink, setNaverLoginLink] = useState('');
@@ -36,6 +36,7 @@ function stackRouter({navigation, route}) {
     token: '',
   });
 
+  // AsyncStorage에 저장된 appState 값 불러오기
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,10 +57,16 @@ function stackRouter({navigation, route}) {
   }, []);
   console.log('스택라우터 appState', appState);
 
+
+  useEffect(() => {
+    const loginUserInfo = getUser()
+    if(loginUserInfo !== null) setUserInfo(loginUserInfo)
+  },[userInfo])
+
   return (
     <NavigationContainer key={appState}>
       <Stack.Navigator
-        initialRouteName={appState ? 'App' : 'Landing'}
+        initialRouteName= 'Landing'
         screenOptions={{
           headerShown: false,
         }}>
@@ -80,6 +87,10 @@ function stackRouter({navigation, route}) {
                   isNaverLogin={isNaverLogin}
                   setIsNaverLogin={setIsNaverLogin}
                   setUserInfo={setUserInfo}
+                  isGoogleLogin={isGoogleLogin}
+                  setIsGoogleLogin={setIsGoogleLogin}
+                  setAppState={setAppState}
+                  appState={appState}
                 />
               )}
             </Stack.Screen>
@@ -112,6 +123,8 @@ function stackRouter({navigation, route}) {
                 setIsKakaoLogin={setIsKakaoLogin}
                 isNaverLogin={isNaverLogin}
                 setIsNaverLogin={setIsNaverLogin}
+                isGoogleLogin={isGoogleLogin}
+                setIsGoogleLogin={setIsGoogleLogin}
                 userInfo={userInfo}
                 setUserInfo={setUserInfo}
                 setAppState={setAppState}

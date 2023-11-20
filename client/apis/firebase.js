@@ -70,8 +70,7 @@ export const addFriend = async (newFriend) => {
 }
 // DB에 있는 나의 친구 조회(실시간)
 export const getFriendsRealtimeChange = (onResult, onError) => {
-    const myUID = getUser()?.uid;
-    console.log('파이어베이스72줄 :', getUser())
+        const myUID = getUser()?.uid;
         return firestore()
         .collection(`user`)
         .doc(`${myUID}`)

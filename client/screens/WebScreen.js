@@ -53,11 +53,8 @@ function WebScreen({
       };
 
       if (updatedUserInfo?.token) {
-        setUserInfo(updatedUserInfo); // userInfo를 상위 스코프에서 접근 가능한 변수에 할당
         await signIn(updatedUserInfo?.email, updatedUserInfo?.password);
-
-
-        // if(getUser() !== null) return navigation.navigate('App');
+        setUserInfo(updatedUserInfo); // userInfo를 상위 스코프에서 접근 가능한 변수에 할당
       } else {
         console.log('로그인 실패 :', updatedUserInfo);
       }
@@ -88,19 +85,17 @@ function WebScreen({
       });
       const userData = await response?.json();
 
-      console.log('카카오 유저데이터 :', userData);
 
       const updatedUserInfo = {
         email: userData.email,
         password: userData.password,
         token: userData.token,
       };
-      setUserInfo(updatedUserInfo);
+
 
       if (updatedUserInfo?.token) {
-        console.log('로그인 시도 :', updatedUserInfo);
         await signIn(updatedUserInfo?.email, updatedUserInfo?.password);
-            // if(getUser() !== null) return navigation.navigate('App');
+        setUserInfo(updatedUserInfo);
       } else {
         console.log('로그인 실패 :', getUser());
       }
@@ -114,7 +109,7 @@ function WebScreen({
     if (getUser() == null || !userInfo?.token) {
       await getKakaoUserInfo();
       await saveStateToAsyncStorage();
-  console.log('로그인 성공 (101번째 겟유저):', getUser());
+  // console.log('로그인 성공 (101번째 겟유저):', getUser());
 
     } else {
       console.log('카카오 로그인 실패 :', getUser());

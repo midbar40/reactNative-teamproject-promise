@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { getUser } from '../apis/auth';
 
 function ChatList({ message, userUID, userName, date, uploadFilePath, setToggleImgModal }){
-  const myUserUID = getUser().uid;
+  const myUserUID = getUser()?.uid;
   const chatDate = new Date(date);
   const todayYear = new Date().getFullYear();
   const todayMonth = new Date().getMonth();
