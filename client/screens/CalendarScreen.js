@@ -111,28 +111,16 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
           setPickSchedule(!pickSchedule)
           console.log(updateSchedule.title, itemKey)
-          // getThisSchedulesChatRoom(itemKey,
-          //   function onResult(querySnapshot){
-              // console.log(querySnapshot.docs)
-              // let arr = []
-              // updateSchedule && updateSchedule.members.map(member => {
-              //   arr.push(member.UID)
-              // })
-              // console.log(arr)
-              // querySnapshot.forEach(doc => {
-              //   if(doc.data().title !== updateSchedule.title){
-              //     updateChatRoomTitle(doc.id, {title: updateSchedule.title})
-              //   }
-                // else if(doc.data().joinUser !== arr){
-                //   updateChatRoomTitle(doc.id, {joinUser: arr})
-                //   arr = ''
-                // }
-              // })
-            // },
-            // function onError(err){
-            //   console.log('getchatroom Error', err)
-            // }
-          // )   
+          await getThisSchedulesChatRoom(itemKey)
+          .then(result => {
+            console.log('채팅', result.docs[0].data())
+            let arr = []
+              updateSchedule && updateSchedule.members.map(member => {
+                arr.push(member.UID)
+              })
+              updateChatRoomTitle(result.docs[0].id, updateSchedule.title, arr)
+          })
+          .catch(err => console.log('채팅정보수정에러', err))
           
         }
       }catch(err){

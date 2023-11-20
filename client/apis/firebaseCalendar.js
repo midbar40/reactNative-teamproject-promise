@@ -27,8 +27,8 @@ export const updateOneSchedule = async (name, id, data) => {
 }
 
 //해당 스케쥴로 만들어진 chat 데이터 가져오기
-export const getThisSchedulesChatRoom = async ( calendarUID, onResult, onError) => {
-  await firestore().collection('chat').where('calendarUID','==', calendarUID).onSnapshot(onResult, onError)
+export const getThisSchedulesChatRoom = async ( calendarUID ) => {
+  return firestore().collection('chat').where('calendarUID','==', calendarUID).get()
 }
 
 //해당 스케쥴로 만들어진 chat 데이터 삭제
@@ -37,6 +37,9 @@ export const deleteThisSchedulesChatRoom = async ( id ) => {
 }
 
 //해당 스케쥴 title 변경시 채팅방 이름 함께 변경
-export const updateChatRoomTitle = async ( id, data ) =>{
-  await firestore().collection('chat').doc(id).update(data)
+export const updateChatRoomTitle = async ( id, newTitle, members ) =>{
+  await firestore().collection('chat').doc(id).update({
+    title: newTitle,
+    joinUser: members
+  })
 }
