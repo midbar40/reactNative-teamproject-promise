@@ -4,9 +4,9 @@ import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, Flat
 // 컴포넌트
 import ChatList from './ChatList';
 
-import { sendMessageToFirebase, getMessage } from '../apis/firebaseChat';
+import { sendMessageToFirebase, getMessage, uploadFileToFirebaseStorage, getChatFile } from '../apis/firebaseChat';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { uploadFileToFirebaseStorage, getChatFile, sendNotification } from '../apis/firebaseChat';
+import {  sendNotification } from '../apis/firebaseMessage';
 
 function ChatRoom({ navigation, selectRoomId }){
   const [message, setMessage] = useState(''); // 인풋에 적은 메세지

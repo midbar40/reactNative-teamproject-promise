@@ -1,7 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { getUser } from './auth';
-import { MESSAGE_SERVICE_KEY } from '@env';
 
 export const creatChatRoom = async (title, calendarUID, friends) => { // 현재는 룸 타이틀로 해서 같은 제목이 있는경우는 안만들게 했지만 추 후 캘린더 아이디값을 받을 예정
   try {
@@ -137,60 +136,3 @@ export const getChatRoomUIDByCalendarUID = async (calendarUID) => {
   }
 }
 
-export const sendNotification = async (message, roomUID) => {
-  const FCMTokens = await getMemberFCMTokens(roomUID);
-  const myUID = getUser().uid;
-  const myData = await firestore().collection('user').doc(myUID).get();
-  const myName = myData.data().name;
-  console.log(myName)
-  FCMTokens.forEach(t => {
-    try {
-      fetch('https://fcm.googleapis.com/fcm/send', {
-      method : 'POST',
-      headers : {
-        'Content-Type' : 'application/json',
-        'Authorization' : `Bearer ${MESSAGE_SERVICE_KEY}`
-      },
-      body : JSON.stringify({
-        "to": `${t}`,
-        "notification": {
-          "title": `${myName}`,
-          "body": `${message.trim() !== ''? message : '사진'}`,
-          "mutable_content": true,
-          "sound": "Tri-tone"
-          }
-      })
-    })
-    .catch(e => console.log(e))
-    .then(r => console.log(r))
-    } catch (error) {
-      console.log('noti error : ',error)
-    }
-  })
-}
-
-// 채팅방에 있는 유저들의 FCM토큰 반환
-export const getMemberFCMTokens = async (roomUID) => {
-  const myUID = getUser().uid;
-  try {
-    const getChatRoomData = await firestore().collection('chat').doc(roomUID).get();
-    const joinUsers = getChatRoomData.data().joinUser.filter(u => u !== myUID );
-    // console.log(joinUsers)
-
-    const FCMTokens = await Promise.all(joinUsers.map(async uid => {
-      try {
-        const token = await firestore().collection('user').doc(uid).get();
-        // console.log(token.data().FCMToken);
-        return token.data().FCMToken;
-      } catch (error) {
-        console.log(error)
-      }
-    }))
-    return FCMTokens;
-    
-  } catch (error) {
-    console.log('getMemberFCMTokens : ',error)
-  }
-  
-  
-}

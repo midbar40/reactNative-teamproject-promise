@@ -26,50 +26,50 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
 
 
   /////////////////////////////////////////////////////////////
-  useEffect(() => {
-    const registerForPushNotifications = async () => {
-      try {
-        await messaging().registerDeviceForRemoteMessages()
-        const fcmToken = await messaging().getToken()
-        console.log('FCM Token:', fcmToken)
-      } catch (error) {
-        console.error('푸시알림 등록중 오류: ', error)
-      }
-    }
-    registerForPushNotifications()
-  }, [])
+  // useEffect(() => {
+  //   const registerForPushNotifications = async () => {
+  //     try {
+  //       await messaging().registerDeviceForRemoteMessages()
+  //       const fcmToken = await messaging().getToken()
+  //       console.log('FCM Token:', fcmToken)
+  //     } catch (error) {
+  //       console.error('푸시알림 등록중 오류: ', error)
+  //     }
+  //   }
+  //   registerForPushNotifications()
+  // }, [])
 
-  useEffect(() => {
-    const handleForegroundNotifications = async (remoteMessage) => {
-      console.log('Foreground Message:', remoteMessage);
-      showNotification(remoteMessage.notification);
-    };
+  // useEffect(() => {
+  //   const handleForegroundNotifications = async (remoteMessage) => {
+  //     console.log('Foreground Message:', remoteMessage);
+  //     showNotification(remoteMessage.notification);
+  //   };
 
-    const unsubscribeForeground = messaging().onMessage(handleForegroundNotifications);
+  //   const unsubscribeForeground = messaging().onMessage(handleForegroundNotifications);
 
-    return () => {
-      unsubscribeForeground();
-    };
-  }, [])
+  //   return () => {
+  //     unsubscribeForeground();
+  //   };
+  // }, [])
 
-  useEffect(() => {
-    const handleTokenRefresh = async (newToken) => {
-      console.log('Token refreshed:', newToken);
-    };
+  // useEffect(() => {
+  //   const handleTokenRefresh = async (newToken) => {
+  //     console.log('Token refreshed:', newToken);
+  //   };
 
-    const unsubscribeRefresh = messaging().onTokenRefresh(handleTokenRefresh);
+  //   const unsubscribeRefresh = messaging().onTokenRefresh(handleTokenRefresh);
 
-    return () => {
-      unsubscribeRefresh();
-    };
-  }, [])
+  //   return () => {
+  //     unsubscribeRefresh();
+  //   };
+  // }, [])
 
-  const showNotification = (notification) => {
-    PushNotification.localNotification({
-      title: notification.title,
-      message: notification.body,
-    });
-  }
+  // const showNotification = (notification) => {
+  //   PushNotification.localNotification({
+  //     title: notification.title,
+  //     message: notification.body,
+  //   });
+  // }
 
 
 
@@ -80,13 +80,13 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
   },[])
 
 
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
+  // useEffect(() => {
+  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
+  //     console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+  //   });
 
-    return unsubscribe;
-  }, []);
+  //   return unsubscribe;
+  // }, []);
 
   return (    
       <Tab.Navigator
