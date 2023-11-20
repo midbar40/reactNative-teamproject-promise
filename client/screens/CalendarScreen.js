@@ -10,9 +10,8 @@ import ModalTextInputs from '../components/ModalTextInputs'
 import PickColor from '../components/PickColor';
 import AddMembers from '../components/AddMembers'
 
-import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule, getThisSchedulesChatRoom, updateChatRoomTitle } from '../apis/firebaseCalendar'
+import { addSchedule, getSchedules, getOneSchedule, updateOneSchedule, getThisSchedulesChatRoom, updateChatRoomTitle, sendNotification } from '../apis/firebaseCalendar'
 import { getCurrentTime } from '../apis/firebase';
-import { buildAndroidNotification } from '../src/LocalNotification';
 
 
 const auth = getAuth()
@@ -26,9 +25,9 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
   const [scheduleTitle, setScheduleTitle] = useState('') //할일 제목
   const [scheduleContent, setScheduleContent] = useState('') //할일 내용
   const [user, setUser] = useState('') //현재 로그인한 유저 uid저장용
-  const [myInfo, setMyInfo] = useState('') //현재 로그인한 유저 uid저장용
+  const [myInfo, setMyInfo] = useState('') //현재 로그인한 유저 정보 저장용
   const [loadSchedule, setLoadSchedule] = useState([]) //불러온 스케쥴 담기
-  const [pickSchedule, setPickSchedule] = useState(false) //수정한 하나의 스케쥴 상태 담기
+  const [pickSchedule, setPickSchedule] = useState(false) //수정한 하나의 스케쥴 상태 담기(useEffect갱신용)
   const [markedDate, setMarkDate] = useState(null) //마크할 날짜 담기
   const [markandSelected, setMarkandSelected] = useState(null) //마크+선택 날짜 담기
   const [showSchedule, setShowSchedule] = useState([]) //선택한 날짜 스케쥴 담기
@@ -103,16 +102,18 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           console.log('데이터 추가 :',newSchedule)
           await addSchedule('CalendarSchedule', newSchedule)
           setPickSchedule(!pickSchedule)
-          // buildAndroidNotification('calendar', scheduleTitle, `members : ${pickFriends}`, 'data')
-          
+          sendNotification(newSchedule.title, newSchedule.content, newSchedule.members)
         }else{
           //스케쥴 수정(firebase)
           console.log('데이터 수정 :',updateSchedule)
           await updateOneSchedule('CalendarSchedule', itemKey, updateSchedule)
           setPickSchedule(!pickSchedule)
           console.log(updateSchedule.title, itemKey)
+          //스케쥴과 연동된 채팅방 정보 수정(이름, 멤버)
           await getThisSchedulesChatRoom(itemKey)
           .then(result => {
+            console.log('채팅2', result)
+            result.docs && result.docs.length !== 0 &&
             console.log('채팅', result.docs[0].data())
             let arr = []
               updateSchedule && updateSchedule.members.map(member => {
@@ -121,7 +122,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
               updateChatRoomTitle(result.docs[0].id, updateSchedule.title, arr)
           })
           .catch(err => console.log('채팅정보수정에러', err))
-          
+          sendNotification(updateSchedule.title, updateSchedule.content, updateSchedule.members, itemKey)
         }
       }catch(err){
         console.log('스케줄등록/수정 에러',err)
@@ -318,19 +319,19 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
             list.push(myInfo)
             setPickFriends(list)
             console.log('내정보담기',list)
-          }
+          }else{
           //스케쥴을 수정하려고 모달창 열때 
-          if(itemKey !== '' || itemKey){
             //정보 자동으로 담아 보여주기
             getOneSchedule('CalendarSchedule', itemKey, 
             function onResult(querySnapshot){
               const list = []
               list.push(querySnapshot.data())
               // console.log('list',list[0])
-                setScheduleTitle(list[0].title)
-                setScheduleContent(list[0].content)
-                setStartDate(list[0].startDay)
-                setEndDate(list[0].endDay)
+
+              setScheduleTitle(list[0].title)
+              setScheduleContent(list[0].content)
+              setStartDate(list[0].startDay)
+              setEndDate(list[0].endDay)
             },
             function onError(err){
               console.log('err', err)
