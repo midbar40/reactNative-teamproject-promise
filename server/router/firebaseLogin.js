@@ -5,6 +5,7 @@ const admin = require("firebase-admin");
 const serviceAccount = require("../serviceAccountKey.json");
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const schedule = require('node-schedule')
+const fetch = require('node-fetch')
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -15,33 +16,33 @@ const db = getFirestore();
 
 // 유저정보 Firestore database에 등록
 const registerFirebaseDB = async (uid, email, displayName) => {
-    const userData = db.collection('user').doc(uid);
-    const res = userData.set({
-      UID: uid,
-      email: email,
-      name: displayName,
-      friends: [],
-    }, { merge: true })
-  
-      console.log('유저등록(DB)에 성공했습니다(firebaselogin.js):');
+  const userData = db.collection('user').doc(uid);
+  const res = userData.set({
+    UID: uid,
+    email: email,
+    name: displayName,
+    friends: [],
+  }, { merge: true })
+
+  console.log('유저등록(DB)에 성공했습니다(firebaselogin.js):');
 }
 
 // 유저정보 Authentication에 등록 (네이버 / 카카오 로그인)
 const signUpUserwithNaverKakao = async (email, password, displayName) => {
-  try{
+  try {
     const auth = admin.auth(); // auth 객체를 가져옵니다.
-  const userRecord = await auth.createUser({
-    email: email,
-    password: password,
-    displayName: displayName,
-    friends:  [],
-  });
-  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord?.uid);
-  registerFirebaseDB(userRecord?.uid, email, displayName); // 유저정보 Firestore database에 등록
-  return userRecord;
-  } catch(error){
-    console.log('유저등록 에러(firebaseLogin 43) :',error);
-    }
+    const userRecord = await auth.createUser({
+      email: email,
+      password: password,
+      displayName: displayName,
+      friends: [],
+    });
+    console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord?.uid);
+    registerFirebaseDB(userRecord?.uid, email, displayName); // 유저정보 Firestore database에 등록
+    return userRecord;
+  } catch (error) {
+    console.log('유저등록 에러(firebaseLogin 43) :', error);
+  }
 };
 
 
@@ -59,27 +60,27 @@ const signUpUser = async (email, password, displayName) => {
 
 // 등록된 모든 유저의 정보를(이메일, uid, 닉네임) 가져오는 함수
 const listAllUsers = async () => {
-  try{
-      const listUsersResult = await admin.auth().listUsers();
-      const userInfo = listUsersResult.users.map((userRecord) => {return {email: userRecord.email, password: userRecord.uid ,displayName: userRecord.displayName}});
-      return userInfo; // return Promise(emails)
+  try {
+    const listUsersResult = await admin.auth().listUsers();
+    const userInfo = listUsersResult.users.map((userRecord) => { return { email: userRecord.email, password: userRecord.uid, displayName: userRecord.displayName } });
+    return userInfo; // return Promise(emails)
   }
-  catch(error){
-        console.log(error);
-        res.status(500).json({ error: 'Internal Server Error' }); 
-        throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+    throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
   }
 };
 
 
 // 이메일 찾기 (가입한 이메일로 새로운 비밀번호 전송)
-router.get('/', expressAsyncHandler (async(req, res) => {
+router.get('/', expressAsyncHandler(async (req, res) => {
   try {
     const userInfo = await listAllUsers();
     const userEmail = userInfo.map((user) => { return user.email })
     console.log('유저이메일 :', userEmail)
     res.json(userEmail);
-  } catch(error) {
+  } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
     throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
@@ -87,19 +88,19 @@ router.get('/', expressAsyncHandler (async(req, res) => {
 }));
 
 // 유저등록
-router.post('/register', expressAsyncHandler (async(req, res) => {
+router.post('/register', expressAsyncHandler(async (req, res) => {
   try {
-    const {email, password, displayName} = req.body;
+    const { email, password, displayName } = req.body;
     const userRecord = await signUpUser(email, password, displayName);
     res.json(userRecord)
     console.log('유저레코드 :', userRecord.uid)
 
     registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
-  } catch(e) {
+  } catch (e) {
     console.log('회원가입 오류 :', e.code)
     switch (e.code) {
-        case 'auth/email-already-exists':
-          return res.json('이미 가입된 이메일입니다');
+      case 'auth/email-already-exists':
+        return res.json('이미 가입된 이메일입니다');
       case 'auth/invalid-email':
         return res.json('이메일 형식이 올바르지 않습니다');
       case 'auth/invalid-password':
@@ -111,67 +112,57 @@ router.post('/register', expressAsyncHandler (async(req, res) => {
 }))
 
 // 로그아웃
-router.get('/logout', expressAsyncHandler (async(req, res) => {
+router.get('/logout', expressAsyncHandler(async (req, res) => {
   try {
     req.session.destroy(); // 세션 삭제
-  } catch(error) {
+  } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
     throw error; // throw error를 해주지 않으면 catch로 넘어가지 않는다.
   }
 }))
 
-router.get('/msg', expressAsyncHandler (async (req, res) => {
-  const date = (new Date(`2023-11-17T18:17:00+09:00`)).getTime();
+//푸쉬 알람
+router.post('/msg', expressAsyncHandler(async (req, res) => {
+  const alarmTime = req.body.time
+  const alarmTitle = req.body.title
+  const uid = req.body.uid
+  const userDB = await db.collection('user').doc(uid).get()
+  const token = userDB._fieldsProto.FCMToken.stringValue  
+
+  const date = new Date(alarmTime).getTime();
   const newDate = new Date(date)
-  console.log('date : ', newDate)
+  console.log('date : ', alarmTime)
+
   const month = newDate.getMonth() + 1;
   const day = newDate.getDate();
   const hours = newDate.getHours();
   const minutes = newDate.getMinutes();
-  console.log('time',month,day,hours,minutes)
-  schedule.cancelJob()
-  const msg1 = schedule.scheduleJob('test',`0 ${minutes} ${hours} ${day} ${month} *`, () => {
+  console.log('time', month, day, hours, minutes)
+
+  schedule.cancelJob('push')
+  schedule.scheduleJob('push', `0 ${minutes} ${hours} ${day} ${month} *`, async () => {
     console.log('msg보냅니다!!')
+
     fetch('https://fcm.googleapis.com/fcm/send', {
-      method : 'POST',
-      headers : {
-        'Content-Type' : 'application/json',
-        'Authorization' : `Bearer AAAAWP_U7E0:APA91bEdq5O0nBGVKCzygO0vLXHyxOVCCWijzckG_LV7FC278Nq9SfbJpzzukeXvB2Ekm1jssLkKvzqaAezJm0MwNDfU5IiwHzMGUvZnQK3DNGbBJhB0ujHDGsx2rkSg7ETd4pQEuPL-`
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer AAAAWP_U7E0:APA91bEdq5O0nBGVKCzygO0vLXHyxOVCCWijzckG_LV7FC278Nq9SfbJpzzukeXvB2Ekm1jssLkKvzqaAezJm0MwNDfU5IiwHzMGUvZnQK3DNGbBJhB0ujHDGsx2rkSg7ETd4pQEuPL-`
       },
-      body : JSON.stringify({
-        "to": `fUshqgoQSE6JmLsuZ6AoCj:APA91bHUlGkVVCWAIWgPITWMXVoSsemjD30GUu2VcfLfqDOa54ZxxBMy9miIhz_lutx-QrPSLvGLCl-8ItCzw0C_nAVA3BHCQU62X6Mvg6yqHllY5Dzirs29qxgxuYYH9wDwRvu9cBAU`,
-        "notification": {
-          "title": `task1`,
-          "body": `task1 입니다!!`,
+      body: JSON.stringify({
+        to: token,
+        notification: {
+          title: `${hours} : ${minutes}`,
+          body: alarmTitle,
           "mutable_content": true,
           "sound": "Tri-tone"
-          }
+        },
       })
     })
-    .catch(e => console.log(e))
-    .then(r => console.log(r))
-    // let message = {
-    //   data: {
-    //     title: '테스트 데이터 발송',
-    //     body: '데이터가 잘 가나요?',
-    //     style: '굳굳',
-    //   },
-    //   token: 'cbYDBKG1TviNpyxurv-lA-:APA91bHMp8XTm4uyyapfH2kQN1XoiPEXsGq_K54ZV6ReZgfHJ1jJFXz44i3J-EH1DuY9u1wmozBira4MUlzKc55G2Z_xxokY4XEGA_Hm3l0V0ZquEhhW1z8w0w6zqg53ZazbvxLV0N9d',
-    // }
-  
-    // admin
-    //   .messaging()
-    //   .send(message)
-    //   .then(function (response) {
-    //     console.log('Successfully sent message: : ', response)
-    //   })
-    //   .catch(function (err) {
-    //     console.log('Error Sending message!!! : ', err)
-    //   })
-  
+      .catch(e => console.log(e))
+      .then(r => console.log(r))
   })
-  // msg1.cancel('testasdad');
 }))
 
 module.exports = router

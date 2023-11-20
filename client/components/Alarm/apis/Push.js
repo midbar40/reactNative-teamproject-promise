@@ -16,21 +16,7 @@ const configurePushNotifications = () => {
       title: notification.title,
       message: notification.body,
     });
-  };
-
-  messaging().onNotificationOpenedApp((remoteMessage) => {
-    console.log('백그라운드 상태 열림:', remoteMessage.notification);
-    
-  })
-
-  messaging()
-    .getInitialNotification()
-    .then((remoteMessage) => {
-      if (remoteMessage) {
-        console.log('Notification caused app to open from quit state:', remoteMessage.notification);
-        
-      }
-    })
+  };  
 };
 
 export { configurePushNotifications };
