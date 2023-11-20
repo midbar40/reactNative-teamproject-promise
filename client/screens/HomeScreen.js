@@ -226,10 +226,13 @@ const styles = StyleSheet.create({
   },
   friendList: {
     fontSize: 20,
-    marginVertical: 10,
+    paddingVertical: 10,
     textAlign: 'left',
     width: '100%',
     paddingLeft: 30,
+    // backgroundColor: '#EBD5CA',
+    // borderBottomWidth: 2,
+    // borderBottomColor: '#EBCBB9',
   }
 });
 

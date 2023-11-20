@@ -91,7 +91,9 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
   return (    
       <Tab.Navigator
         screenOptions={{
-          tabBarActiveTintColor : 'skyblue',
+          tabBarActiveTintColor : '#444',
+          tabBarInactiveTintColor: '#aaa',
+          tabBarHideOnKeyboard: true,
         }}
       >
         

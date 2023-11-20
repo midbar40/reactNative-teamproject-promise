@@ -13,7 +13,7 @@ function PickColor({pickColor, setPickColor, showSchedule }){
       <ColorItem title='#F592B5' pickColor={pickColor} setPickColor={setPickColor} showSchedule={showSchedule}/>
       <ColorItem title='#F2B81B' pickColor={pickColor} setPickColor={setPickColor} showSchedule={showSchedule}/>
       <ColorItem title='lightgreen' pickColor={pickColor} setPickColor={setPickColor} showSchedule={showSchedule}/>
-      <ColorItem title='skyblue' pickColor={pickColor} setPickColor={setPickColor} showSchedule={showSchedule}/>
+      <ColorItem title='#66D3FA' pickColor={pickColor} setPickColor={setPickColor} showSchedule={showSchedule}/>
       <ColorItem title='grey' pickColor={pickColor} setPickColor={setPickColor} showSchedule={showSchedule}/>
     </View>
   )
