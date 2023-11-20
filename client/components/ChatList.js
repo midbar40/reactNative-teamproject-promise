@@ -35,7 +35,7 @@ function ChatList({ message, userUID, userName, date, uploadFilePath, setToggleI
       :
       <View style={styles.otherMessageContainer}>
         <View style={styles.otherMessageUserName}>
-          <Text>{userName}</Text>
+          <Text style={{ fontWeight : 'bold' }}>{userName}</Text>
         </View>
         <View style={{ flexDirection : 'row'}}>
           <TouchableOpacity style={styles.otherMessageBox} onPress={clickImageHandle}>
