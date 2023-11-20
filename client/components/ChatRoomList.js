@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
   chatRoomListHeader : {
     width : '100%',
     height : 40,
-    marginVertical : 20,
+    marginTop : 20,
+    marginBottom : 50,
   },
   chatRoomListHeaderText : {
     color : '#333',
@@ -54,13 +55,14 @@ const styles = StyleSheet.create({
     fontWeight : 'bold',
   },
   chatRoomListContainer : {
-    width : '100%',
     height : 50,
     borderColor : '#fff',
     backgroundColor : '#5160F5',
     borderBottomWidth : 2,
     flexDirection : 'row',
-    justifyContent : 'space-between'
+    justifyContent : 'space-between',
+    marginHorizontal : 10,
+    borderRadius : 5,
   },
   chatRoomListText : {
     fontSize : 20,
