@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: 300,
+    top: 220
   },
   modalTitle: {
     fontSize: 20,
