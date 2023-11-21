@@ -31,18 +31,19 @@ const registerFirebaseDB = async (uid, email, displayName) => {
 const signUpUserwithNaverKakao = async (email, password, displayName) => {
   try {
     const auth = admin.auth(); // auth 객체를 가져옵니다.
-    const userRecord = await auth.createUser({
-      email: email,
-      password: password,
-      displayName: displayName,
-      friends: [],
-    });
-    console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord?.uid);
-    registerFirebaseDB(userRecord?.uid, email, displayName); // 유저정보 Firestore database에 등록
-    return userRecord;
-  } catch (error) {
-    console.log('유저등록 에러(firebaseLogin 43) :', error);
-  }
+
+  const userRecord = await auth.createUser({
+    email: email,
+    password: password,
+    displayName: displayName,
+    friends:  [],
+  });
+  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord?.uid);
+  registerFirebaseDB(userRecord?.uid, email, displayName); // 유저정보 Firestore database에 등록
+  return userRecord;
+  } catch(error){
+    console.log('유저등록 에러(firebaseLogin 43) :',error);
+    }
 };
 
 
@@ -96,11 +97,11 @@ router.post('/register', expressAsyncHandler(async (req, res) => {
     console.log('유저레코드 :', userRecord.uid)
 
     registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
-  } catch (e) {
+  } catch(e) {
     console.log('회원가입 오류 :', e.code)
     switch (e.code) {
-      case 'auth/email-already-exists':
-        return res.json('이미 가입된 이메일입니다');
+        case 'auth/email-already-exists':
+          return res.json('이미 가입된 이메일입니다');
       case 'auth/invalid-email':
         return res.json('이메일 형식이 올바르지 않습니다');
       case 'auth/invalid-password':
