@@ -165,7 +165,7 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
       .then(r => {
         console.log(r)
         res.json('알람이 등록되었습니다')
-      }
+      })
   })
 }))
 
