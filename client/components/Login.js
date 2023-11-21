@@ -73,7 +73,8 @@ function Login({
   };
   return (
     <View style={styles.contentBox}>
-      <Text style={styles.appName}>오늘 내일 함께</Text>
+      <Text style={styles.appName}>약속해줘</Text>
+      {/* 🤙 */}
       {isSnsLogin ? (
         <SnsLogin
           navigation={navigation}
@@ -159,11 +160,29 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   appName: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 60,
+    // fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 30,
+    // marginLeft: -80,
+    fontFamily: 'Ansungtangmyun-Bold',
+    color: '#3251DB',
+    padding: 5,
+    // height: 48,
+    letterSpacing: 4,
   },
+  // appName1:{
+  //   fontSize: 80,
+  //   marginLeft: 0,
+  //   color: '#3251DB',
+  //   // height: 60,
+  // },
+  // appName2: {
+  //   marginLeft: 80,
+  //   marginTop: 1,
+  //   marginBottom: 30,
+  //   color: '#5D99DB',
+  // },
   inputBox: {
     width: '100%',
     justifyContent: 'center',

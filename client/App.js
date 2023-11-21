@@ -47,53 +47,52 @@ function App({
   console.log('앱화면 유저인포', userInfo)
 
   /////////////////////////////////////////////////////////////
-  useEffect(() => {
-    const registerForPushNotifications = async () => {
-      try {
-        await messaging().registerDeviceForRemoteMessages();
-        const fcmToken = await messaging().getToken();
-        console.log('FCM Token:', fcmToken);
-      } catch (error) {
-        console.error('푸시알림 등록중 오류: ', error);
-      }
-    };
-    registerForPushNotifications();
-  }, []);
-    
- 
-  useEffect(() => {
-    const handleForegroundNotifications = async remoteMessage => {
-      console.log('Foreground Message:', remoteMessage);
-      showNotification(remoteMessage.notification);
-    };
+  // useEffect(() => {
+  //   const registerForPushNotifications = async () => {
+  //     try {
+  //       await messaging().registerDeviceForRemoteMessages()
+  //       const fcmToken = await messaging().getToken()
+  //       console.log('FCM Token:', fcmToken)
+  //     } catch (error) {
+  //       console.error('푸시알림 등록중 오류: ', error)
+  //     }
+  //   }
+  //   registerForPushNotifications()
+  // }, [])
 
-    const unsubscribeForeground = messaging().onMessage(
-      handleForegroundNotifications,
-    );
+  // useEffect(() => {
+  //   const handleForegroundNotifications = async (remoteMessage) => {
+  //     console.log('Foreground Message:', remoteMessage);
+  //     showNotification(remoteMessage.notification);
+  //   };
 
-    return () => {
-      unsubscribeForeground();
-    };
-  }, []);
+  //   const unsubscribeForeground = messaging().onMessage(handleForegroundNotifications);
 
-  useEffect(() => {
-    const handleTokenRefresh = async newToken => {
-      console.log('Token refreshed:', newToken);
-    };
+  //   return () => {
+  //     unsubscribeForeground();
+  //   };
+  // }, [])
 
-    const unsubscribeRefresh = messaging().onTokenRefresh(handleTokenRefresh);
+  // useEffect(() => {
+  //   const handleTokenRefresh = async (newToken) => {
+  //     console.log('Token refreshed:', newToken);
+  //   };
 
-    return () => {
-      unsubscribeRefresh();
-    };
-  }, []);
+  //   const unsubscribeRefresh = messaging().onTokenRefresh(handleTokenRefresh);
 
-  const showNotification = notification => {
-    PushNotification.localNotification({
-      title: notification.title,
-      message: notification.body,
-    });
-  };
+  //   return () => {
+  //     unsubscribeRefresh();
+  //   };
+  // }, [])
+
+  // const showNotification = (notification) => {
+  //   PushNotification.localNotification({
+  //     title: notification.title,
+  //     message: notification.body,
+  //   });
+  // }
+
+
 
   useEffect(() => {
     requestUserPermission();
@@ -101,29 +100,33 @@ function App({
     if (getUser() !== null) getToken();
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
+  // useEffect(() => {
+  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
+  //     console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+  //   });
 
-    return unsubscribe;
-  }, []);
+  //   return unsubscribe;
+  // }, []);
 
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarActiveTintColor: 'skyblue',
-      }}>
-      <Tab.Screen
-        name="Home"
-        // component={HomeScreen}
-        options={{
-          title: 'Home',
-          tabBarIcon: ({color, size}) => (
-            <Icon name="home" color={color} size={size} />
-          ),
-        }}>
-        {props => (
+  return (    
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor : '#444',
+          tabBarInactiveTintColor: '#aaa',
+          tabBarHideOnKeyboard: true,
+        }}
+      >
+        
+        <Tab.Screen 
+          name="Home" 
+          // component={HomeScreen} 
+          options={{
+            title:'Home',
+            headerShown:false,
+            tabBarIcon:({color, size}) => <Icon name='home' color={color} size={size}/>
+
+        }}
+        >{props => (
           <HomeScreen
             {...props}
             navigation={navigation}
@@ -167,33 +170,29 @@ function App({
             <Icon name="alarm" color={color} size={size} />
           ),
         }}
-      />
-
-      <Tab.Screen
-        name="Todo"
-        component={TodoScreen}
-        options={{
-          title: 'Todo',
-          tabBarIcon: ({color, size}) => (
-            <Icon2 name="clipboard-list" color={color} size={size} />
-          ),
+        />
+          
+        {/* <Tab.Screen 
+          name="Todo" 
+          component={TodoScreen}
+          options={{
+            title:'Todo',
+            tabBarIcon:({color, size}) => <Icon2 name='clipboard-list' color={color} size={size}/>
         }}
-      />
-      <Tab.Screen
-        name="Chat"
-        children={props => (
-          <ChatScreen
-            {...props}
-            selectRoomId={selectRoomId}
-            setSelectRoomId={setSelectRoomId}
-          />
-        )}
-        options={{
-          title: 'Chat',
-          headerShown: false,
-          tabBarIcon: ({color, size}) => (
-            <Icon name="chatbubbles-sharp" color={color} size={size} />
-          ),
+        />       */}
+        <Tab.Screen 
+          name="Chat" 
+          children={(props) => (
+            <ChatScreen 
+             {...props}
+             selectRoomId={selectRoomId}
+             setSelectRoomId={setSelectRoomId}
+            />
+          )}
+          options={{
+            title:'Chat',
+            headerShown:false,
+            tabBarIcon:({color, size}) => <Icon name='chatbubbles-sharp' color={color} size={size}/>
         }}
       />
     </Tab.Navigator>
