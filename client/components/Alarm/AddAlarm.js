@@ -24,6 +24,13 @@ function AddAlarm({ visible, onClose, onAddAlarm }){
     }
   }
 
+  const cancel = () => {
+    setSelectTime(null)
+    setTitle('')
+    setCustomTime('')
+    onClose()
+  }
+
   const handleSelectTime = (time) => {
     setCustomTime('')
     setSelectTime(time)
@@ -66,7 +73,7 @@ function AddAlarm({ visible, onClose, onAddAlarm }){
             ))}
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <TouchableOpacity style={styles.closeButton} onPress={cancel}>
               <Text style={styles.closeText}>취소</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.addButton} onPress={handleAddAlarm}>
