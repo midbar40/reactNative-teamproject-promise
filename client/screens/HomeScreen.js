@@ -137,17 +137,20 @@ function HomeScreen({
       )}
 
       {friendList && friendList.length !== 0 && (
-        <FlatList
-          style={styles.flatListStyle}
-          data={friendList}
-          keyExtractor={item => item.UID}
-          renderItem={({item}) => (
-            <View style={styles.friendsListContainer}>
-              <Text>이름 : {item.name}</Text>
-              <Text>이메일 : {item.email}</Text>
-            </View>
-          )}
-        />
+        <>
+          <Text style={styles.friendList}>나의 친구목록</Text>
+          <FlatList
+            style={styles.flatListStyle}
+            data={friendList}
+            keyExtractor={item => item.UID}
+            renderItem={({item}) => (
+              <View style={styles.friendsListContainer}>
+                <Text>이름 : {item.name}</Text>
+                <Text>이메일 : {item.email}</Text>
+              </View>
+            )}
+          />
+        </>
       )}
     </SafeAreaView>
   );
@@ -157,6 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   appName: {
     fontSize: 30,
@@ -173,6 +177,8 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 15,
     paddingVertical: 0,
+    borderColor: '#EBD5CA',
+    borderWidth: 1,
   },
   searchUserBtnContainer: {
     width: 50,
@@ -192,6 +198,9 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     textAlign: 'center',
     fontSize: 18,
+    backgroundColor: '#EBD5CA',
+    borderWidth: 1,
+    borderColor: '#EBD5CA',
   },
   searchUserListContainer: {
     flexDirection: 'row',
@@ -203,7 +212,7 @@ const styles = StyleSheet.create({
   },
   flatListStyle: {
     width: '100%',
-    marginTop: 30,
+    // marginTop: 30,
     backgroundColor: '#E8E0DA',
   },
   friendsListContainer: {
@@ -215,6 +224,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: '#EBCBB9',
   },
+  friendList: {
+    fontSize: 20,
+    paddingVertical: 10,
+    textAlign: 'left',
+    width: '100%',
+    paddingLeft: 30,
+    // backgroundColor: '#EBD5CA',
+    // borderBottomWidth: 2,
+    // borderBottomColor: '#EBCBB9',
+  }
 });
 
 export default HomeScreen;

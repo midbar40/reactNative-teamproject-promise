@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Ansungtangmyun-Bold.ttf",
+      "sha1": "d0d38d56ae266e1683dd2295fcf799041090f817"
+    },
+    {
+      "path": "assets/fonts/Ansungtangmyun-ESG.ttf",
+      "sha1": "974466a24e1dad0cb75465641ecaf9d95e283638"
+    },
+    {
+      "path": "assets/fonts/HakgyoansimGaeulsopungB.ttf",
+      "sha1": "fa415fa1ccc8557dc6caff985bc9396edca4b6c5"
+    },
+    {
+      "path": "assets/fonts/HakgyoansimGaeulsopungL.ttf",
+      "sha1": "45aa6da5905770fbca33b0e9d4c8c52072024d1d"
+    },
+    {
+      "path": "assets/fonts/heamnea.ttf",
+      "sha1": "84937cb60bbde811fe73ce382a6f015e14a8d966"
+    },
+    {
+      "path": "assets/fonts/JSArirang.ttf",
+      "sha1": "d0ef04f33134cbaec15a88b4ff2ca891307da8ca"
+    },
+    {
+      "path": "assets/fonts/JSArirangHON.ttf",
+      "sha1": "baf8bab545d0bfcf4750bc2888b122b07075db8b"
+    },
+    {
+      "path": "assets/fonts/UhBee Rice.ttf",
+      "sha1": "d2ba98c7f6cb2078a0753fd281fccefc4041932c"
+    }
+  ]
+}

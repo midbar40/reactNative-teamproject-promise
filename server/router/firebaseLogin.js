@@ -140,8 +140,8 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
   const minutes = newDate.getMinutes();
   console.log('time', month, day, hours, minutes)
 
-  schedule.cancelJob('push')
-  schedule.scheduleJob('push', `0 ${minutes} ${hours} ${day} ${month} *`, async () => {
+  // schedule.cancelJob('push')
+  schedule.scheduleJob(`0 ${minutes} ${hours} ${day} ${month} *`, async () => {
     console.log('msg보냅니다!!')
 
     fetch('https://fcm.googleapis.com/fcm/send', {

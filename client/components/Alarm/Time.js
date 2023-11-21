@@ -115,6 +115,26 @@ function Time({isFocused, fcmToken}){
     }
   } 
 
+  const checkAndTriggerAlarms = () => {
+    alarmTimes.forEach((alarm) => {
+      const alarmTime = moment(alarm.time);
+      if (currentTime.isSame(alarmTime, 'second')) {        
+        console.log('Matching alarm! Trigger notification:', alarm);        
+      }
+    });
+  };
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(moment().tz('Asia/Seoul'));
+      checkAndTriggerAlarms(); 
+    }, 1000);
+
+        return () => {
+      clearInterval(intervalId);
+    };
+  }, [currentTime, alarmTimes]);
+
   return (
     <View style={styles.container}>
       <View style={styles.dayContainer}>

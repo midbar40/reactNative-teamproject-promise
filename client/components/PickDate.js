@@ -23,9 +23,13 @@ function PickDate({selectedDate, loadSchedule, showSchedule, setShowSchedule, se
             [{text: '취소', style: 'cancel'},
              {text: '삭제', onPress: () => {
               try{
+                // 화면에서도 삭제
+                const newSchedule = showSchedule.filter(show => itemKey !== show.id)
+                setShowSchedule(newSchedule)
                 // firebase 삭제
                 removeSchedule('CalendarSchedule', itemKey)
                 //채팅방 id 조회
+                setItemKey('')
                 getThisSchedulesChatRoom(schedule.id, 
                   function onResult(querySnapshot){
                     console.log(querySnapshot.docs)
@@ -39,10 +43,6 @@ function PickDate({selectedDate, loadSchedule, showSchedule, setShowSchedule, se
                     console.log('getchatroom Error', err)
                   }
                 )            
-                // 화면에서도 삭제
-                const newSchedule = showSchedule.filter(show => itemKey !== show.id)
-                setShowSchedule(newSchedule)
-                setItemKey('')
               }catch(err){console.log('err:', err)}
               
             }}]
