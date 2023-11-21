@@ -3,7 +3,8 @@ import {
   View, Modal, Text,
   StyleSheet, TextInput,
   TouchableOpacity,
-  Alert
+  Alert,
+  StatusBar
 } from 'react-native'
 
 function AddAlarm({ visible, onClose, onAddAlarm }){  
@@ -30,7 +31,7 @@ function AddAlarm({ visible, onClose, onAddAlarm }){
   }
 
   return (
-    <Modal transparent={true} visible={visible}>
+    <Modal transparent={true} visible={visible} statusBarTranslucent={true}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={[styles.modalTitle, styles.font]}>알람 추가하기</Text>
@@ -66,11 +67,11 @@ function AddAlarm({ visible, onClose, onAddAlarm }){
             ))}
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <Text style={[styles.closeText, styles.font]}>취소</Text>
-            </TouchableOpacity>
             <TouchableOpacity style={styles.addButton} onPress={handleAddAlarm}>
               <Text style={[styles.addText, styles.font]}>추가</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Text style={[styles.closeText, styles.font]}>취소</Text>
             </TouchableOpacity>
           </View>
         </View>

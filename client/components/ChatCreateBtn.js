@@ -21,7 +21,7 @@ function ChatCreateBtn({ title, calendarUID, friends, navigation, setSelectRoomI
 
 const styles = StyleSheet.create({
   calendarTalkContainer : {
-    backgroundColor : 'lightgreen',
+    backgroundColor : '#BDEDD2',
     right: 0,
     width: 70,
     height: '100%',
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   calendarTalkText : {
-    color : '#fff',
+    color : '#666',
     // fontWeight : 'bold',
     fontSize : 15,
     textAlign : 'center',
