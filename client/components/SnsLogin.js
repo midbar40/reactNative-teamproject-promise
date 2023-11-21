@@ -67,7 +67,7 @@ function SnsLogin({
           onPress={() => {
             setIsSnsLogin(false);
           }}>
-          <Text style={styles.loginBtn}>가입된 아이디로 로그인</Text>
+          <Text style={[styles.loginBtn, styles.font]}>가입된 아이디로 로그인</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.loginBtnBox}>
@@ -75,19 +75,19 @@ function SnsLogin({
           style={styles.GoogleButton}
           activeOpacity={0.7}
           onPress={googleLogin}>
-          <Text style={styles.GoogleLoginBtn}>Google 로그인</Text>
+          <Text style={[styles.GoogleLoginBtn, styles.font]}>Google 로그인</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.KakaoButton}
           activeOpacity={0.7}
           onPress={kakaoLogin}>
-          <Text style={styles.KakaoLoginBtn}>카카오 로그인</Text>
+          <Text style={[styles.KakaoLoginBtn, styles.font]}>카카오 로그인</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.NaverButton}
           activeOpacity={0.7}
           onPress={naverLogin}>
-          <Text style={styles.NaverLoginBtn}>네이버 로그인</Text>
+          <Text style={[styles.NaverLoginBtn, styles.font]}>네이버 로그인</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   button: {
     width: '80%',
     height: 50,
-    backgroundColor: 'skyblue',
+    backgroundColor: '#F7CAC9',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   loginBtn: {
     fontSize: 18,
     color: 'white',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   GoogleButton: {
     width: '80%',
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   GoogleLoginBtn: {
     fontSize: 18,
     color: '#fff',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   KakaoButton: {
     width: '80%',
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   KakaoLoginBtn: {
     fontSize: 18,
     color: '#333',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   NaverButton: {
     width: '80%',
@@ -151,7 +151,10 @@ const styles = StyleSheet.create({
   NaverLoginBtn: {
     fontSize: 18,
     color: '#fff',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold',
+  }
 });
 export default SnsLogin;

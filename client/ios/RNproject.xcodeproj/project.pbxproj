@@ -19,9 +19,17 @@
 		2CA5A9129A6B44DDACCF8633 /* JSArirang.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CA6EB6D11BCE458E8654C50C /* JSArirang.ttf */; };
 		133D0FCFA65D4F8CB948C2E7 /* JSArirangHON.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8103B689842D44D4A41467D9 /* JSArirangHON.ttf */; };
 		867CE2C7466449A0A2D13C4F /* HakgyoansimGaeulsopungB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D2757F6C6484F828DCFA323 /* HakgyoansimGaeulsopungB.ttf */; };
-		3857B8137A6249E5A0AE65D0 /* HakgyoansimGaeulsopungL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D56FE5F219DB44629462C384 /* HakgyoansimGaeulsopungL.ttf */; };
 		52FEF981B1544F93AC96454B /* heamnea.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 361B418BC7A04A859517B4DE /* heamnea.ttf */; };
 		944CE38D92DD4B6AB5F4B73B /* UhBee Rice.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A80DAF56AAC402E85397E41 /* UhBee Rice.ttf */; };
+		973B09B43CB94B81BFD8A688 /* Cafe24OhsquareAir-v2.0.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 630D86F3FDFC46BBB3092942 /* Cafe24OhsquareAir-v2.0.ttf */; };
+		1A2D2CAB02594379B2867A16 /* Cafe24Supermagic-Bold-v1.0.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BFF1AC2A00A045AB9808E874 /* Cafe24Supermagic-Bold-v1.0.ttf */; };
+		DCEA6558FCB74A82899709D6 /* establish Retrosans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 397B9ABC328D4370BFF42A4A /* establish Retrosans.ttf */; };
+		E2F6246502184770860E220E /* KyoboHandwriting2019.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86A6C671188E461396282E0E /* KyoboHandwriting2019.ttf */; };
+		C9CCD9BEDE8C4B54B6BB8B99 /* KyoboHandwriting2020pdy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3E7AAB991F2443B3BBA8A144 /* KyoboHandwriting2020pdy.ttf */; };
+		829436C757FC4A90A903A03A /* Pak_Yong_jun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F351D1550E96457F8B3C0A45 /* Pak_Yong_jun.ttf */; };
+		678BDD0BD1874E659C1208A2 /* ulsanjunggu.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DB9C7D1947954CDFB5FB9491 /* ulsanjunggu.ttf */; };
+		411F1F2125104A33B5B46D90 /* IM_Hyemin-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32535C431C0549DB92AE45E4 /* IM_Hyemin-Bold.ttf */; };
+		D76C6B6E0C7E44ADAC61B1D6 /* IM_Hyemin-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 62758F6AB5424AD49B14D4BA /* IM_Hyemin-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,9 +65,17 @@
 		CA6EB6D11BCE458E8654C50C /* JSArirang.ttf */ = {isa = PBXFileReference; name = "JSArirang.ttf"; path = "../assets/fonts/JSArirang.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		8103B689842D44D4A41467D9 /* JSArirangHON.ttf */ = {isa = PBXFileReference; name = "JSArirangHON.ttf"; path = "../assets/fonts/JSArirangHON.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		1D2757F6C6484F828DCFA323 /* HakgyoansimGaeulsopungB.ttf */ = {isa = PBXFileReference; name = "HakgyoansimGaeulsopungB.ttf"; path = "../assets/fonts/HakgyoansimGaeulsopungB.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D56FE5F219DB44629462C384 /* HakgyoansimGaeulsopungL.ttf */ = {isa = PBXFileReference; name = "HakgyoansimGaeulsopungL.ttf"; path = "../assets/fonts/HakgyoansimGaeulsopungL.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		361B418BC7A04A859517B4DE /* heamnea.ttf */ = {isa = PBXFileReference; name = "heamnea.ttf"; path = "../assets/fonts/heamnea.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		9A80DAF56AAC402E85397E41 /* UhBee Rice.ttf */ = {isa = PBXFileReference; name = "UhBee Rice.ttf"; path = "../assets/fonts/UhBee Rice.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		630D86F3FDFC46BBB3092942 /* Cafe24OhsquareAir-v2.0.ttf */ = {isa = PBXFileReference; name = "Cafe24OhsquareAir-v2.0.ttf"; path = "../assets/fonts/Cafe24OhsquareAir-v2.0.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BFF1AC2A00A045AB9808E874 /* Cafe24Supermagic-Bold-v1.0.ttf */ = {isa = PBXFileReference; name = "Cafe24Supermagic-Bold-v1.0.ttf"; path = "../assets/fonts/Cafe24Supermagic-Bold-v1.0.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		397B9ABC328D4370BFF42A4A /* establish Retrosans.ttf */ = {isa = PBXFileReference; name = "establish Retrosans.ttf"; path = "../assets/fonts/establish Retrosans.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		86A6C671188E461396282E0E /* KyoboHandwriting2019.ttf */ = {isa = PBXFileReference; name = "KyoboHandwriting2019.ttf"; path = "../assets/fonts/KyoboHandwriting2019.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3E7AAB991F2443B3BBA8A144 /* KyoboHandwriting2020pdy.ttf */ = {isa = PBXFileReference; name = "KyoboHandwriting2020pdy.ttf"; path = "../assets/fonts/KyoboHandwriting2020pdy.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F351D1550E96457F8B3C0A45 /* Pak_Yong_jun.ttf */ = {isa = PBXFileReference; name = "Pak_Yong_jun.ttf"; path = "../assets/fonts/Pak_Yong_jun.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DB9C7D1947954CDFB5FB9491 /* ulsanjunggu.ttf */ = {isa = PBXFileReference; name = "ulsanjunggu.ttf"; path = "../assets/fonts/ulsanjunggu.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		32535C431C0549DB92AE45E4 /* IM_Hyemin-Bold.ttf */ = {isa = PBXFileReference; name = "IM_Hyemin-Bold.ttf"; path = "../assets/fonts/IM_Hyemin-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		62758F6AB5424AD49B14D4BA /* IM_Hyemin-Regular.ttf */ = {isa = PBXFileReference; name = "IM_Hyemin-Regular.ttf"; path = "../assets/fonts/IM_Hyemin-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,9 +189,17 @@
 				CA6EB6D11BCE458E8654C50C /* JSArirang.ttf */,
 				8103B689842D44D4A41467D9 /* JSArirangHON.ttf */,
 				1D2757F6C6484F828DCFA323 /* HakgyoansimGaeulsopungB.ttf */,
-				D56FE5F219DB44629462C384 /* HakgyoansimGaeulsopungL.ttf */,
 				361B418BC7A04A859517B4DE /* heamnea.ttf */,
 				9A80DAF56AAC402E85397E41 /* UhBee Rice.ttf */,
+				630D86F3FDFC46BBB3092942 /* Cafe24OhsquareAir-v2.0.ttf */,
+				BFF1AC2A00A045AB9808E874 /* Cafe24Supermagic-Bold-v1.0.ttf */,
+				397B9ABC328D4370BFF42A4A /* establish Retrosans.ttf */,
+				86A6C671188E461396282E0E /* KyoboHandwriting2019.ttf */,
+				3E7AAB991F2443B3BBA8A144 /* KyoboHandwriting2020pdy.ttf */,
+				F351D1550E96457F8B3C0A45 /* Pak_Yong_jun.ttf */,
+				DB9C7D1947954CDFB5FB9491 /* ulsanjunggu.ttf */,
+				32535C431C0549DB92AE45E4 /* IM_Hyemin-Bold.ttf */,
+				62758F6AB5424AD49B14D4BA /* IM_Hyemin-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -282,9 +306,17 @@
 				2CA5A9129A6B44DDACCF8633 /* JSArirang.ttf in Resources */,
 				133D0FCFA65D4F8CB948C2E7 /* JSArirangHON.ttf in Resources */,
 				867CE2C7466449A0A2D13C4F /* HakgyoansimGaeulsopungB.ttf in Resources */,
-				3857B8137A6249E5A0AE65D0 /* HakgyoansimGaeulsopungL.ttf in Resources */,
 				52FEF981B1544F93AC96454B /* heamnea.ttf in Resources */,
 				944CE38D92DD4B6AB5F4B73B /* UhBee Rice.ttf in Resources */,
+				973B09B43CB94B81BFD8A688 /* Cafe24OhsquareAir-v2.0.ttf in Resources */,
+				1A2D2CAB02594379B2867A16 /* Cafe24Supermagic-Bold-v1.0.ttf in Resources */,
+				DCEA6558FCB74A82899709D6 /* establish Retrosans.ttf in Resources */,
+				E2F6246502184770860E220E /* KyoboHandwriting2019.ttf in Resources */,
+				C9CCD9BEDE8C4B54B6BB8B99 /* KyoboHandwriting2020pdy.ttf in Resources */,
+				829436C757FC4A90A903A03A /* Pak_Yong_jun.ttf in Resources */,
+				678BDD0BD1874E659C1208A2 /* ulsanjunggu.ttf in Resources */,
+				411F1F2125104A33B5B46D90 /* IM_Hyemin-Bold.ttf in Resources */,
+				D76C6B6E0C7E44ADAC61B1D6 /* IM_Hyemin-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

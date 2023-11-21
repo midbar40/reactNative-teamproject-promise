@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal, StatusBar } from 'react-native';
 
 // 컴포넌트
 import ChatList from './ChatList';
@@ -137,11 +137,12 @@ function ChatRoom({ navigation, selectRoomId }){
 
   return (
     <SafeAreaView style={styles.block}>
+      <StatusBar hidden></StatusBar>
       <View style={styles.chatRoomNameContainer}>
         <TouchableOpacity style={styles.returnBtnContainer} onPress={() => navigation.navigate('ChatRoomList')}>
           <Text style={styles.returnBtnText}>◀</Text>
         </TouchableOpacity>
-        <Text style={styles.chatRoomNameText}>{messageList?.title} 채팅방</Text>
+        <Text style={[styles.chatRoomNameText, styles.font]}>{messageList?.title} 채팅방</Text>
       </View>
       <FlatList
         data={showingChatList}
@@ -188,7 +189,7 @@ function ChatRoom({ navigation, selectRoomId }){
         />
         <TouchableOpacity onPress={sendMessage} style={[styles.chatSubmitButton, !uploadFile?.fileUri && !message.trim() && {backgroundColor : 'lightgray'} ]}>
           <View>
-            <Text style={styles.chatSubmitButtonText}>보내기</Text>
+            <Text style={[styles.chatSubmitButtonText, styles.font]}>보내기</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -201,11 +202,12 @@ function ChatRoom({ navigation, selectRoomId }){
       <Modal
         visible={toggleImgModal === ''? false : true}
         transparent={false}
+        statusBarTranslucent={true}
       >
         <SafeAreaView style={{ flex : 1 }}>
-          <View style={{ paddingTop : 10}}>
+          <View style={{ paddingTop : 15}}>
             <TouchableOpacity onPress={() => {setToggleImgModal('')}} style={styles.foucusImageCancelBtnContainer}>
-              <Text style={styles.foucusImageCancelBtnText}>취소</Text>
+              <Text style={[styles.foucusImageCancelBtnText, styles.font]}>취소</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.focusImageContainer}>
@@ -220,9 +222,10 @@ function ChatRoom({ navigation, selectRoomId }){
 const styles = StyleSheet.create({
   block : {
     flex : 1,
+    backgroundColor: '#fff',
   },
   chatRoomNameContainer : {
-    backgroundColor : '#43B2DB',
+    backgroundColor : '#FAA6AA',
     height : 40,
     marginBottom : 5,
     flexDirection : 'row'
@@ -231,7 +234,7 @@ const styles = StyleSheet.create({
     width : 40,
     height : 40,
     marginRight : 10,
-    backgroundColor : '#B0CEFA',
+    backgroundColor : '#F7CAC9',
   },
   returnBtnText : {
     color : '#fff',
@@ -243,38 +246,46 @@ const styles = StyleSheet.create({
   chatRoomNameText : {
     fontSize : 20,
     lineHeight : 40,
-    fontWeight : 'bold',
+    // fontWeight : 'bold',
     color : '#fff',
   },
   chatInputContainer : {
     // position : 'absolute',
     // bottom : 0,
     // alignItems : 'flex-end',
-    flexDirection : 'row'
+    flexDirection : 'row',
+    borderTopWidth: 1,
+    borderColor: '#eee',
+    // justifyContent:'center',
+    // alignItems:'center',
+    // height: 35,
   },
   chatTextInput : {
     backgroundColor : '#fff',
     paddingVertical : 0,
     flex : 1,
+    padding: 5,
   },
   chatSubmitButton : {
     width : 70,
-    backgroundColor : "#A0DBCB"
+    backgroundColor : "#69DBB1",
   },
   chatSubmitButtonText : {
     color : '#fff',
     textAlign : 'center',
-    fontWeight : 'bold',
+    // fontWeight : 'bold',
     fontSize : 18,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   addFileButtonContainer : {
     width : 30,
-    backgroundColor :"#A0DBCB",
+    backgroundColor :"#69DBB1",
   },
   addFileButtonText : {
     fontSize : 20,
     textAlign : 'center',
-    fontWeight : 'bold',
+    // fontWeight : 'bold',
   },
   addImageViewContaier : {
     height : 200,
@@ -300,6 +311,9 @@ const styles = StyleSheet.create({
   foucusImageCancelBtnText : {
     fontSize : 18,
     paddingLeft : 10
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold',
   }
 })
 

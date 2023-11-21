@@ -29,8 +29,8 @@ function AddMembersItem({item, selectedId, setSelectedId}){
 
   return(
     <TouchableOpacity onPress={onPress} style={[styles.container, pick ? styles.pick : '']}>
-      <Text>이름: {item.name}</Text>
-      <Text>이메일: {item.email}</Text>
+      <Text style={styles.font}>이름: {item.name}</Text>
+      <Text style={styles.font}>이메일: {item.email}</Text>
     </TouchableOpacity>
   )
 }
@@ -38,15 +38,18 @@ function AddMembersItem({item, selectedId, setSelectedId}){
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: 'lightgreen',
+    borderColor: '#BDEDD2',
     borderRadius: 15,
     padding: 10,
     marginVertical: 5,
   },
   pick: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#BDEDD2',
     elevation: 2,
-  }
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
+  },
 })
 
 export default AddMembersItem
