@@ -72,14 +72,14 @@ function RegisterUser({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentBox}>
-        <Text style={styles.appName}>KAIROS</Text>
+        <Text style={styles.appName}>약속해줘</Text>
         <View style={styles.inputBox}>
           <TextInput
             placeholder="이메일을 입력해주세요"
             placeholderTextColor={'#999'}
             value={email}
             onChangeText={value => handleRegisterInfoChange('email', value)}
-            style={styles.input}
+            style={[styles.input, styles.font]}
             textContentType={'emailAddress'}
           />
         </View>
@@ -89,7 +89,7 @@ function RegisterUser({
             placeholderTextColor={'#999'}
             value={nickname}
             onChangeText={value => handleRegisterInfoChange('nickname', value)}
-            style={styles.input}
+            style={[styles.input, styles.font]}
           />
         </View>
         <View style={styles.inputBox}>
@@ -98,7 +98,7 @@ function RegisterUser({
             placeholderTextColor={'#999'}
             value={password}
             onChangeText={value => handleRegisterInfoChange('password', value)}
-            style={styles.input}
+            style={[styles.input, styles.font]}
             secureTextEntry={true}
           />
         </View>
@@ -110,7 +110,7 @@ function RegisterUser({
             onChangeText={value =>
               handleRegisterInfoChange('passwordCheck', value)
             }
-            style={styles.input}
+            style={[styles.input, styles.font]}
             secureTextEntry={true}
           />
         </View>
@@ -119,7 +119,7 @@ function RegisterUser({
             style={styles.button}
             activeOpacity={0.7}
             onPress={registerUser}>
-            <Text style={styles.registerBtn}>가입하기</Text>
+            <Text style={[styles.registerBtn, styles.font]}>가입하기</Text>
           </TouchableOpacity>
         </View>
         <View></View>
@@ -130,11 +130,11 @@ function RegisterUser({
               setIsRegister(false);
               setLoginInfo({email: '', password: ''});
             }}>
-            <Text>로그인하기</Text>
+            <Text style={styles.font}>로그인하기</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={findEmail}>
-            <Text>비밀번호찾기</Text>
+            <Text style={styles.font}>비밀번호찾기</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -156,10 +156,12 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   appName: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 55,
+    // fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 30,
+    fontFamily: 'ulsanjunggu',
+    color: '#FAA6AA',
   },
   inputBox: {
     width: '100%',
@@ -184,7 +186,7 @@ const styles = StyleSheet.create({
   button: {
     width: '80%',
     height: 50,
-    backgroundColor: 'skyblue',
+    backgroundColor: '#F7CAC9',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -198,5 +200,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold',
+  }
 });
 export default RegisterUser;

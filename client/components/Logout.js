@@ -52,7 +52,7 @@ function Logout({
   return (
     <View style={styles.logoutBtn}>
       <TouchableOpacity onPress={handleLogout}>
-        <Text>로그아웃</Text>
+        <Text style={styles.font}>로그아웃</Text>
       </TouchableOpacity>
     </View>
   );
@@ -62,8 +62,11 @@ const styles = StyleSheet.create({
   logoutBtn: {
     position: 'absolute',
     right: 20,
-    top: 20,
+    top: 30,
   },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold',
+  }
 });
 
 export default Logout;

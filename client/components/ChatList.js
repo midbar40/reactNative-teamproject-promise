@@ -18,7 +18,7 @@ function ChatList({ message, userUID, userName, date, uploadFilePath, setToggleI
     {myUserUID === userUID ?
       <View style={styles.myMessageContainer}>
         <View style={styles.myMessageTimeContainer}>
-          <Text style={{fontSize : 12}}>{(todayYear === chatDate.getFullYear() && todayMonth === chatDate.getMonth() && todayDate === chatDate.getDate()) ? 
+          <Text style={[{fontSize : 12}, styles.font]}>{(todayYear === chatDate.getFullYear() && todayMonth === chatDate.getMonth() && todayDate === chatDate.getDate()) ? 
           (chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` : 
           (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` :
           `오후 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}`)) :
@@ -27,7 +27,7 @@ function ChatList({ message, userUID, userName, date, uploadFilePath, setToggleI
         </View>
         <TouchableOpacity style={styles.myMessageBox} onPress={clickImageHandle}>
           {uploadFilePath === '' ?
-            <Text style={styles.chatText}>{message}</Text> :
+            <Text style={[styles.chatText, styles.font]}>{message}</Text> :
             <Image src={`${uploadFilePath}`} style={{width : 100, height : 100, marginVertical : 2}}/>
           }
         </TouchableOpacity>
@@ -35,17 +35,18 @@ function ChatList({ message, userUID, userName, date, uploadFilePath, setToggleI
       :
       <View style={styles.otherMessageContainer}>
         <View style={styles.otherMessageUserName}>
-          <Text style={{ fontWeight : 'bold' }}>{userName}</Text>
+          <Text style={[styles.font]}>{userName}</Text>
+          {/* { fontWeight : 'bold' }, */}
         </View>
         <View style={{ flexDirection : 'row'}}>
           <TouchableOpacity style={styles.otherMessageBox} onPress={clickImageHandle}>
             {uploadFilePath === '' ?
-              <Text style={styles.chatText}>{message}</Text> :
+              <Text style={[styles.chatText, styles.font]}>{message}</Text> :
               <Image src={`${uploadFilePath}`} style={{width : 100, height : 100, marginVertical : 2}}/>
             }
           </TouchableOpacity>
           <View style={styles.otherMessageTimeContainer}>
-            <Text style={{fontSize : 12}}>{(todayYear === chatDate.getFullYear() && todayMonth === chatDate.getMonth() && todayDate === chatDate.getDate()) ? 
+            <Text style={[{fontSize : 12}, styles.font]}>{(todayYear === chatDate.getFullYear() && todayMonth === chatDate.getMonth() && todayDate === chatDate.getDate()) ? 
           (chatDate.getHours() < 12 ? `오전 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` : 
           (chatDate.getHours() !== 12 ? `오후 ${chatDate.getHours() - 12} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}` :
           `오후 ${chatDate.getHours()} : ${chatDate.getMinutes() < 10 ? '0'+chatDate.getMinutes() : chatDate.getMinutes()}`)) :
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     paddingHorizontal : 8,
     paddingVertical : 2,
     borderRadius : 5,
-    backgroundColor : '#C7A1DB',
+    backgroundColor : '#FAA6AA',
     maxWidth : '70%',
   },
   otherMessageTimeContainer : {
@@ -101,6 +102,9 @@ const styles = StyleSheet.create({
   chatText : {
     lineHeight : 22,
   },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold',
+  }
 })
 
 export default ChatList;

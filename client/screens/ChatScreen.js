@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StatusBar } from 'react-native';
 
 import { getChatRoomList } from '../apis/firebaseChat';
 
@@ -37,7 +37,7 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
   }, [])
   
   return (
-    <Stack.Navigator screenOptions={{ headerShown : false }}>
+    <Stack.Navigator screenOptions={{ headerShown : false }} colors={{background: '#fff'}}>
       <Stack.Screen name="ChatRoomList" children={(props) => 
         <ChatRoomList
           {...props}

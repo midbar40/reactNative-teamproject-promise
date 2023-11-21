@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { addData, getCollection, getCurrentTime, removeData } from './apis/firebase'
 import messaging from '@react-native-firebase/messaging'
 import auth from '@react-native-firebase/auth'
+import { getUser } from '../../apis/auth'
 
 function Time({isFocused, fcmToken}){
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
@@ -49,6 +50,18 @@ function Time({isFocused, fcmToken}){
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
     addData('Alarms', alarm)
+    fetch('http://192.168.200.13:5300/firebaseLogin/msg',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body : JSON.stringify({
+        time :alarmTime,
+        title : title,
+        uid : getUser().uid
+      })
+    })
+    .catch(error => console.error(error))  
   }
   //알람 삭제
   const removeAlarm = (id) => {
@@ -80,6 +93,7 @@ function Time({isFocused, fcmToken}){
           const alarmData = doc.data()
           if(alarmData.userUid === currentUserUid){
             alarms.push(alarmData)
+            // alarmData.time = alarmData.time.toDate()
           }          
         })
         setAlarmTimes(alarms)
@@ -99,33 +113,35 @@ function Time({isFocused, fcmToken}){
       openSwipeableItem.close()
       setOpenSwipeableItem(null)
     }
-  }
+  } 
 
-  // useEffect(() => {
-  //   const checkAlarms = async () => {
-  //     try {
-  //       const response = await fetch('https://reactnative-teamproject-default-rtdb.firebaseio.com/check-alarms');
-  //       const result = await response.json();
-  //       console.log(result);
-  //     } catch (error) {
-  //       console.error('Error checking alarms:', error);
-  //     }
-  //   };
+  const checkAndTriggerAlarms = () => {
+    alarmTimes.forEach((alarm) => {
+      const alarmTime = moment(alarm.time);
+      if (currentTime.isSame(alarmTime, 'second')) {        
+        console.log('Matching alarm! Trigger notification:', alarm);        
+      }
+    });
+  };
   
-  //   // Schedule the checkAlarms function to run periodically
-  //   const intervalId = setInterval(checkAlarms, 60000); // Check every minute
-  
-  //   // Cleanup the interval on component unmount
-  //   return () => clearInterval(intervalId);
-  // }, []); 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(moment().tz('Asia/Seoul'));
+      checkAndTriggerAlarms(); 
+    }, 1000);
+
+        return () => {
+      clearInterval(intervalId);
+    };
+  }, [currentTime, alarmTimes]);
 
   return (
     <View style={styles.container}>
       <View style={styles.dayContainer}>
-        <Text style={styles.dayText}>
+        <Text style={[styles.dayText, styles.font]}>
           {currentTime.format('YYYY. MM. DD')}
         </Text>
-        <Text style={styles.timeText}>
+        <Text style={[styles.timeText, styles.font]}>
           {getFormattedTime(currentTime)}
         </Text>
       </View>
@@ -134,7 +150,7 @@ function Time({isFocused, fcmToken}){
         style={styles.alarmsContainer}
         onTouchStart={closeSwipeableItem}
       >
-        <Text style={styles.alarmsText}>Alarms : </Text>
+        <Text style={[styles.alarmsText, styles.font]}>Alarms : </Text>
         <AlarmList
           alarms={alarmTimes}
           onRemoveAlarm={removeAlarm}
@@ -169,22 +185,22 @@ const styles = StyleSheet.create({
   dayContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 70,
     width: '90%',
-    backgroundColor: '#98c8ffff',
+    backgroundColor: '#42D0B9',
     borderRadius: 20,
   },
   dayText: {
     fontSize: 50,
     marginTop: 10,
     marginBottom: 5,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: '#fff'
   },
   timeText: {
     fontSize: 40,
     marginBottom: 15,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: '#fff'
   },
   alarmsContainer: {
@@ -193,12 +209,12 @@ const styles = StyleSheet.create({
   },
   alarmsText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 10,
   },
   addButton: {
-    backgroundColor: '#a8c8ffff',
+    backgroundColor: '#42D0B9',
     width: 50, height: 50,
     borderRadius: 30,
     justifyContent: 'center',
@@ -210,7 +226,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center'
-  }
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
+  },
 })
 
 export default Time

@@ -51,14 +51,14 @@ function FindPassword({
 
   return (
     <View style={styles.contentBox}>
-      <Text style={styles.appName}>KAIROS</Text>
+      <Text style={styles.appName}>약속해줘</Text>
       <View style={styles.inputBox}>
         <TextInput
           placeholder="이메일을 입력해주세요"
           placeholderTextColor={'#999'}
           value={email}
           onChangeText={value => handleUserInfoChange('email', value)}
-          style={styles.input}
+          style={[styles.input, styles.font]}
           textContentType={'emailAddress'}
         />
       </View>
@@ -67,7 +67,7 @@ function FindPassword({
           style={styles.button}
           activeOpacity={0.7}
           onPress={findEmailAndSend}>
-          <Text style={styles.loginBtn}>확인</Text>
+          <Text style={[styles.loginBtn, styles.font]}>확인</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.signUpAndFindEmail}>
@@ -76,7 +76,7 @@ function FindPassword({
             setIsFindPassword(false);
             setIsRegister(true);
           }}>
-          <Text>회원가입</Text>
+          <Text style={styles.font}>회원가입</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -84,7 +84,7 @@ function FindPassword({
             setIsFindPassword(false);
             setIsRegister(false);
           }}>
-          <Text>로그인하기</Text>
+          <Text style={styles.font}>로그인하기</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -102,8 +102,10 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   appName: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 55,
+    fontFamily: 'ulsanjunggu',
+    color: '#FAA6AA',
+    // fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 30,
   },
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
   button: {
     width: '80%',
     height: 50,
-    backgroundColor: 'skyblue',
+    backgroundColor: '#F7CAC9',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -145,6 +147,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold',
+  }
 });
 
 export default FindPassword;

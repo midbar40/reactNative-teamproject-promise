@@ -65,9 +65,9 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
 
   return(
     <View style={styles.horizontalView}>
-      <Text style={styles.memberContainer}>함께하는 멤버 : {selectedId ? selectedId.join(', ') : ''} </Text>
+      <Text style={[styles.memberContainer, styles.font]}>함께하는 멤버 : {selectedId ? selectedId.join(', ') : ''} </Text>
       <TouchableOpacity style={styles.modalBtn} onPress={openModal}>
-        <Text style={styles.btnText}>추가</Text>
+        <Text style={[styles.btnText, styles.font]}>추가</Text>
       </TouchableOpacity>
       <Modal
         animationType='slide'
@@ -90,8 +90,8 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
             style={styles.lists}
           />
           <View style={styles.horizontalView}>
-            <Pressable style={styles.modalBtn} onPress={addMember}><Text>등록</Text></Pressable>
-            <Pressable style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}><Text>닫기</Text></Pressable>
+            <Pressable style={[styles.modalBtn]} onPress={addMember}><Text style={styles.font}>등록</Text></Pressable>
+            <Pressable style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}><Text style={styles.font}>닫기</Text></Pressable>
           </View>
         </View>
       </Modal>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#BDEDD2',
   },
   btnText: {
     fontSize: 12,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'lightgreen',
+    borderColor: '#BDEDD2',
     justifyContent: 'center',
     alignItems:'center',
     elevation: 2,
@@ -142,7 +142,10 @@ const styles = StyleSheet.create({
   },
   memberContainer: {
     width: 220,
-  }
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
+  },
 })
 
 export default AddMembers

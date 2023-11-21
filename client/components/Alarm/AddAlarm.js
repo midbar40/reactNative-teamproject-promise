@@ -33,22 +33,22 @@ function AddAlarm({ visible, onClose, onAddAlarm }){
     <Modal transparent={true} visible={visible}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>알람 추가하기</Text>
-          <Text style={styles.modalLabel}>알람 Title :</Text>          
+          <Text style={[styles.modalTitle, styles.font]}>알람 추가하기</Text>
+          <Text style={[styles.modalLabel, styles.font]}>알람 Title :</Text>          
           <TextInput
-            style={styles.input}
+            style={[styles.input, styles.font]}
             onChangeText={text => setTitle(text)}
             placeholder="Title을 입력하세요."
             maxLength={15}
           />
-          <Text style={styles.modalLabel}>직접 설정 :</Text>
+          <Text style={[styles.modalLabel, styles.font]}>직접 설정 :</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, styles.font]}
             onChangeText={(text) => setCustomTime(text)}
             placeholder="시간을 입력하세요. (min 단위)"
             keyboardType="numeric"
           />
-          <Text style={styles.modalLabel}>시간을 선택하세요 :</Text>
+          <Text style={[styles.modalLabel, styles.font]}>시간을 선택하세요 :</Text>
           <View style={styles.timeOptions}>
             {[5, 10, 30, 60].map((timeOption) => (
               <TouchableOpacity
@@ -59,7 +59,7 @@ function AddAlarm({ visible, onClose, onAddAlarm }){
                 ]}
                 onPress={() => handleSelectTime(timeOption)}
               >
-                <Text style={selectTime === timeOption ? styles.minText : null}>
+                <Text style={[selectTime === timeOption ? styles.minText : null, styles.font]}>
                   {timeOption === 60 ? '1hour' : `${timeOption}min`}
                 </Text>
               </TouchableOpacity>
@@ -67,10 +67,10 @@ function AddAlarm({ visible, onClose, onAddAlarm }){
           </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <Text style={styles.closeText}>취소</Text>
+              <Text style={[styles.closeText, styles.font]}>취소</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.addButton} onPress={handleAddAlarm}>
-              <Text style={styles.addText}>추가</Text>
+              <Text style={[styles.addText, styles.font]}>추가</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center'
   },
@@ -121,10 +121,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   select: {
-    backgroundColor: '#a8c8ffff',    
+    backgroundColor: '#42D0B9',    
   },
   minText: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: '#fff',
   },
   buttonContainer: {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   addButton: {
-    backgroundColor: '#a8c8ffff',
+    backgroundColor: '#42D0B9',
     borderRadius: 5,
     padding: 10,
     marginTop: 10,
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
   addText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   closeButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#bbb',
     borderRadius: 5,
     padding: 10,
     marginTop: 10,
@@ -155,7 +155,10 @@ const styles = StyleSheet.create({
   closeText: {
     fontSize: 16,
     color: '#fff',
-    fontWeight: 'bold'
+    // fontWeight: 'bold'
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
   },
 })
 

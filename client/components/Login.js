@@ -6,6 +6,7 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import {signIn} from '../apis/auth';
 // import { useNavigation } from '@react-navigation/native';
@@ -73,6 +74,7 @@ function Login({
   };
   return (
     <View style={styles.contentBox}>
+      <StatusBar backgroundColor="#F2F2F2" barStyle={'dark-content'}></StatusBar>
       <Text style={styles.appName}>약속해줘</Text>
       {/* 🤙 */}
       {isSnsLogin ? (
@@ -101,7 +103,7 @@ function Login({
               placeholderTextColor={'#999'}
               value={email}
               onChangeText={value => handleUserInfoChange('email', value)}
-              style={styles.input}
+              style={[styles.input, styles.font]}
               textContentType={'emailAddress'}
             />
           </View>
@@ -111,7 +113,7 @@ function Login({
               placeholderTextColor={'#999'}
               value={password}
               onChangeText={value => handleUserInfoChange('password', value)}
-              style={styles.input}
+              style={[styles.input, styles.font]}
               secureTextEntry={true}
             />
           </View>
@@ -120,13 +122,13 @@ function Login({
               style={styles.button}
               activeOpacity={0.7}
               onPress={loginAndMoveToApp}>
-              <Text style={styles.loginBtn}>로그인</Text>
+              <Text style={[styles.loginBtn, styles.font]}>로그인</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.snsLoginButton}
               activeOpacity={0.7}
               onPress={moveToSnsLogin}>
-              <Text style={styles.snsLoginBtn}>SNS 로그인</Text>
+              <Text style={[styles.snsLoginBtn, styles.font]}>SNS 로그인</Text>
             </TouchableOpacity>
           </View>
         </>
@@ -138,11 +140,11 @@ function Login({
             setIsRegister(true);
             setLoginInfo({email: '', password: ''});
           }}>
-          <Text>회원가입</Text>
+          <Text style={styles.font}>회원가입</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={findEmail}>
-          <Text>비밀번호찾기</Text>
+          <Text style={styles.font}>비밀번호찾기</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -158,6 +160,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
+    // backgroundColor: '#fff',
   },
   appName: {
     fontSize: 60,
@@ -165,8 +168,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30,
     // marginLeft: -80,
-    fontFamily: 'Ansungtangmyun-Bold',
-    color: '#3251DB',
+    fontFamily: 'ulsanjunggu',
+    color: '#FAA6AA',
     padding: 5,
     // height: 48,
     letterSpacing: 4,
@@ -211,7 +214,7 @@ const styles = StyleSheet.create({
   button: {
     width: '80%',
     height: 50,
-    backgroundColor: 'skyblue',
+    backgroundColor: '#F7CAC9',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -220,12 +223,12 @@ const styles = StyleSheet.create({
   loginBtn: {
     fontSize: 18,
     color: 'white',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   snsLoginButton: {
     width: '80%',
     height: 50,
-    backgroundColor: '#c7c7c7',
+    backgroundColor: '#CDDAC3',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -234,8 +237,11 @@ const styles = StyleSheet.create({
   snsLoginBtn: {
     fontSize: 18,
     color: 'white',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold',
+  }
 });
 
 export default Login;
