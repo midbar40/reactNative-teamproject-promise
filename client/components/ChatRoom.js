@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal, StatusBar } from 'react-native';
 
 // 컴포넌트
 import ChatList from './ChatList';
@@ -137,6 +137,7 @@ function ChatRoom({ navigation, selectRoomId }){
 
   return (
     <SafeAreaView style={styles.block}>
+      <StatusBar hidden></StatusBar>
       <View style={styles.chatRoomNameContainer}>
         <TouchableOpacity style={styles.returnBtnContainer} onPress={() => navigation.navigate('ChatRoomList')}>
           <Text style={styles.returnBtnText}>◀</Text>

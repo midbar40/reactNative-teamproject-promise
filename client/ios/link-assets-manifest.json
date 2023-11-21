@@ -10,6 +10,18 @@
       "sha1": "974466a24e1dad0cb75465641ecaf9d95e283638"
     },
     {
+      "path": "assets/fonts/Cafe24OhsquareAir-v2.0.ttf",
+      "sha1": "e62e403572eb3d32d68d221f0787532089217c56"
+    },
+    {
+      "path": "assets/fonts/Cafe24Supermagic-Bold-v1.0.ttf",
+      "sha1": "fc47cff042f6fa6e57f29378abb057582d57fa45"
+    },
+    {
+      "path": "assets/fonts/establish Retrosans.ttf",
+      "sha1": "cf48a67e98fd5e6f25edb2b3f04c37fc46fba44a"
+    },
+    {
       "path": "assets/fonts/HakgyoansimGaeulsopungB.ttf",
       "sha1": "fa415fa1ccc8557dc6caff985bc9396edca4b6c5"
     },
@@ -30,8 +42,24 @@
       "sha1": "baf8bab545d0bfcf4750bc2888b122b07075db8b"
     },
     {
+      "path": "assets/fonts/KyoboHandwriting2019.ttf",
+      "sha1": "63e0d02b4202cb535508319182245ace6952318e"
+    },
+    {
+      "path": "assets/fonts/KyoboHandwriting2020pdy.ttf",
+      "sha1": "6bfcace37bcdd467a9dd2f2d0fb8c2daed818099"
+    },
+    {
+      "path": "assets/fonts/Pak_Yong_jun.ttf",
+      "sha1": "d4245d647904fd59eecf81c2920d547b30149589"
+    },
+    {
       "path": "assets/fonts/UhBee Rice.ttf",
       "sha1": "d2ba98c7f6cb2078a0753fd281fccefc4041932c"
+    },
+    {
+      "path": "assets/fonts/ulsanjunggu.ttf",
+      "sha1": "ac24faf64dd13237158e805199ad223d32657c32"
     }
   ]
 }

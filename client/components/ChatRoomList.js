@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, TextInput, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 
 import { creatChatRoom, getChatRoomList } from '../apis/firebaseChat';
 
@@ -14,7 +14,7 @@ function ChatRoomList({ navigation, chatRoomList, setSelectRoomId }){
   // console.log('rooms : ',chatRoomList); 
 
   return(
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor:'#fff'}}>
       <View style={styles.chatRoomListHeader}>
         <Text style={styles.chatRoomListHeaderText}>채팅</Text>
       </View>

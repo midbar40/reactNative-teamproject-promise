@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StatusBar } from 'react-native';
 
 import { getChatRoomList } from '../apis/firebaseChat';
 

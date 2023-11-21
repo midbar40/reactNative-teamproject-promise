@@ -6,6 +6,7 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import {signIn} from '../apis/auth';
 // import { useNavigation } from '@react-navigation/native';
@@ -69,6 +70,7 @@ function Login({
   };
   return (
     <View style={styles.contentBox}>
+      <StatusBar backgroundColor="#F2F2F2"></StatusBar>
       <Text style={styles.appName}>약속해줘</Text>
       {/* 🤙 */}
       {isSnsLogin ? (
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
+    // backgroundColor: '#fff',
   },
   appName: {
     fontSize: 60,
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30,
     // marginLeft: -80,
-    fontFamily: 'Ansungtangmyun-Bold',
+    fontFamily: 'ulsanjunggu',
     color: '#3251DB',
     padding: 5,
     // height: 48,

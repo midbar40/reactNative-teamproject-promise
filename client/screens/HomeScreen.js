@@ -95,6 +95,7 @@ function HomeScreen({
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar hidden></StatusBar>
       <Logout 
        navigation={navigation}
        loginInfo={loginInfo}
