@@ -205,7 +205,7 @@ function ChatRoom({ navigation, selectRoomId }){
         statusBarTranslucent={true}
       >
         <SafeAreaView style={{ flex : 1 }}>
-          <View style={{ paddingTop : 15}}>
+          <View style={{ paddingTop : 30}}>
             <TouchableOpacity onPress={() => {setToggleImgModal('')}} style={styles.foucusImageCancelBtnContainer}>
               <Text style={[styles.foucusImageCancelBtnText, styles.font]}>취소</Text>
             </TouchableOpacity>
