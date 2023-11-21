@@ -14,7 +14,7 @@ function AlarmItem({ item, onDelete, isFocused }) {
         style={styles.deleteButton}
         onPress={handleDelete}
       >
-        <Text style={styles.deleteText}>Delete</Text>
+        <Text style={[styles.deleteText, styles.font]}>Delete</Text>
       </TouchableOpacity>
     )
   }
@@ -55,10 +55,10 @@ function AlarmItem({ item, onDelete, isFocused }) {
             { transform: [{ translateX }] } // 변환 적용
           ]}
         >
-          <Text style={styles.alarmTime}>
+          <Text style={[styles.alarmTime, styles.font]}>
             {moment(item.time).tz('Asia/Seoul').format('hh:mm A')}
           </Text>
-          <Text style={styles.alarmTitle} numberOfLines={1} ellipsizeMode='tail'>
+          <Text style={[styles.alarmTitle, styles.font]} numberOfLines={1} ellipsizeMode='tail'>
             {item.title}
           </Text>
         </Animated.View>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderWidth: 2,
-    borderColor: '#98c8ffff',
+    borderColor: '#42D0B9',
     borderRadius: 10,
     width: '90%',
     marginLeft: 'auto',
@@ -85,13 +85,13 @@ const styles = StyleSheet.create({
   },
   alarmTime: {
     fontSize: 16,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   alarmTitle: {
     fontSize: 16,
     alignItems: 'flex-start',
     width: 170,
-    fontWeight: 'bold'
+    // fontWeight: 'bold'
   },
   swipe: {
     backgroundColor: '#fff',
@@ -107,7 +107,10 @@ const styles = StyleSheet.create({
   },
   deleteText: {
     color: '#fff',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
   },
 })
 

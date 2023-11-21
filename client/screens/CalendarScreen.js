@@ -255,17 +255,17 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         style={styles.calendar}
         monthFormat={'yyyy년 MM월'}
         markedDates={markandSelected ? markandSelected : markedDate}
-        renderArrow={(direction) => direction === 'left' ? <AntIcon name='left' size={25} color='lightgreen'/> : <AntIcon name='right' size={25} color='lightgreen'/>}
+        renderArrow={(direction) => direction === 'left' ? <AntIcon name='left' size={25} color='#BDEDD2'/> : <AntIcon name='right' size={25} color='#BDEDD2'/>}
         theme={{
           backgroundColor: '#eeeeee',
           textSectionTitleColor: '#b6c1cd',
-          selectedDayBackgroundColor: '#00adf5',
+          selectedDayBackgroundColor: '#F7CAC9',
           selectedDayTextColor: '#fff',
           // dotColor: 'red',
           // selectedDotColor: 'red',
-          todayTextColor: 'orange',
+          todayTextColor: '#99BFBF',
           // indicatorColor: 'yellow',
-          arrowColor: 'lightgreen',
+          // arrowColor: '#CDDAC3',
           'stylesheet.calendar.header': {
               dayHeader:{
                   color: '#333',
@@ -298,7 +298,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           setOpenModal(true)
         }}
       />
-      <Text style={[styles.titleText, styles.pickTitle]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
+      <Text style={[styles.titleText, styles.pickTitle, styles.font]}>{selectedDate ? selectedDate : '날짜를 선택해주세요!'}</Text>
       <View style={[styles.bgWhite, {flex: 1}]}>
         <PickDate selectedDate={selectedDate} loadSchedule={loadSchedule} showSchedule={showSchedule} setShowSchedule={setShowSchedule} itemKey={itemKey} setItemKey={setItemKey} setOpenModal={setOpenModal} pickFriends={pickFriends} navigation={navigation} setSelectRoomId={setSelectRoomId} myInfo={myInfo} pickSchedule={pickSchedule}/>
       </View>
@@ -343,7 +343,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         <View style={styles.centerView}>
           {today < pickDay || isSameDate(today, pickDay) ?
             <View style={styles.modal}>
-              <Text style={styles.titleText}>{selectedDate}</Text>
+              <Text style={[styles.titleText, styles.font]}>{selectedDate}</Text>
               <View style={styles.inputs}>
                 <ModalInputs 
                   selectedDate={selectedDate} 
@@ -365,18 +365,18 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
               </View>
               <View style={styles.horizontalView}>
                 <TouchableOpacity style={[styles.modalBtn, styles.addBtn]} onPress={addScheduleClick}>
-                  <Text style={styles.btnText}>{itemKey !=='' ? '수정' : '등록'}</Text>
+                  <Text style={[styles.btnText, styles.font]}>{itemKey !=='' ? '수정' : '등록'}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
-                  <Text style={styles.btnText}>취소</Text>
+                  <Text style={[styles.btnText, styles.font]}>취소</Text>
                 </TouchableOpacity>
               </View>
             </View>
             :
             <View style={styles.modal}>
-              <Text style={styles.message}>지난 날짜에는 스케쥴을 추가 할 수 없습니다.</Text>
+              <Text style={[styles.message, styles.font]}>지난 날짜에는 스케쥴을 추가 할 수 없습니다.</Text>
               <Pressable style={[styles.modalBtn, styles.closeBtn]} onPress={closeModal}>
-                <Text style={styles.btnText}>닫기</Text>
+                <Text style={[styles.btnText, styles.font]}>닫기</Text>
               </Pressable>
             </View>
           }
@@ -390,10 +390,12 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+    backgroundColor: '#fff'
   },
   calendar: {
     borderBottomWidth: 1,
-    borderColor: 'lightgreen',
+    borderColor: '#BDEDD2',
+    marginTop: 30,
     },
   day: {
     padding:5,
@@ -407,7 +409,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   plusBtn: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#BDEDD2',
     borderRadius: 50,
     padding: 10,
     width: 40,
@@ -419,7 +421,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   icon: {
-    fontWeight: 'bold'
+    // fontWeight: 'bold'
   },
   centerView: {
     flex: 1,
@@ -432,7 +434,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'lightgreen',
+    borderColor: '#BDEDD2',
     justifyContent: 'center',
     alignItems:'center',
     elevation: 2,
@@ -456,17 +458,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ddd'
   },
   addBtn: {
-    backgroundColor: 'lightgreen'
+    backgroundColor: '#BDEDD2'
   },
   btnText: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   textInputs: {
     marginBottom: 5,
   },
   titleText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     textAlign: 'center',
     backgroundColor: '#fff',
     justifyContent: 'center',
@@ -481,8 +483,8 @@ const styles = StyleSheet.create({
   },
   pickTitle: {
     borderBottomWidth: 1,
-    borderBottomColor: 'lightgreen',
-    backgroundColor: 'lightgreen'
+    borderBottomColor: '#BDEDD2',
+    backgroundColor: '#BDEDD2'
   },
   todayBtn:{
     padding: 7,
@@ -495,6 +497,9 @@ const styles = StyleSheet.create({
   },
   bgWhite: {
     backgroundColor: '#fff'
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
   }
 })
 

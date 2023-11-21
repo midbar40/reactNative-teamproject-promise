@@ -37,7 +37,7 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
   }, [])
   
   return (
-    <Stack.Navigator screenOptions={{ headerShown : false }}>
+    <Stack.Navigator screenOptions={{ headerShown : false }} colors={{background: '#fff'}}>
       <Stack.Screen name="ChatRoomList" children={(props) => 
         <ChatRoomList
           {...props}

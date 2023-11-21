@@ -68,8 +68,8 @@ function ModalInputs({selectedDate, startDate, setStartDate, endDate, setEndDate
     <View style={styles.block}>
       <View style={styles.horizontalView}>
         <TouchableOpacity style={styles.picker} onPress={pressStart}>
-          <Text style={styles.titleText}>시작 날짜 : </Text>
-          <Text style={styles.titleText}>{startDate}</Text>
+          <Text style={[styles.titleText, styles.font]}>시작 날짜 : </Text>
+          <Text style={[styles.titleText, styles.font]}>{startDate}</Text>
           <DateTimePicker
             isVisible={startVisible}
             mode='date'
@@ -79,8 +79,8 @@ function ModalInputs({selectedDate, startDate, setStartDate, endDate, setEndDate
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.picker} onPress={pressEnd}>
-          <Text style={styles.titleText}>종료 날짜 : </Text>
-          <Text style={styles.titleText}>{endDate}</Text>
+          <Text style={[styles.titleText, styles.font]}>종료 날짜 : </Text>
+          <Text style={[styles.titleText, styles.font]}>{endDate}</Text>
           <DateTimePicker
             isVisible={endVisible}
             mode='date'
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   titleText: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     // fontStyle: 'italic',
   },
   dropDownlists: {
@@ -126,11 +126,14 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'lightgreen',
+    borderColor: '#BDEDD2',
     justifyContent: 'center', 
     alignItems: 'center',
     elevation: 2,
-  }
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
+  },
 })
 
 export default ModalInputs

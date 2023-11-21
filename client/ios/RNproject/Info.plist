@@ -58,7 +58,6 @@
 		<string>JSArirang.ttf</string>
 		<string>JSArirangHON.ttf</string>
 		<string>HakgyoansimGaeulsopungB.ttf</string>
-		<string>HakgyoansimGaeulsopungL.ttf</string>
 		<string>heamnea.ttf</string>
 		<string>UhBee Rice.ttf</string>
 		<string>Cafe24OhsquareAir-v2.0.ttf</string>
@@ -68,6 +67,8 @@
 		<string>KyoboHandwriting2020pdy.ttf</string>
 		<string>Pak_Yong_jun.ttf</string>
 		<string>ulsanjunggu.ttf</string>
+		<string>IM_Hyemin-Bold.ttf</string>
+		<string>IM_Hyemin-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

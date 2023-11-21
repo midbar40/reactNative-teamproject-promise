@@ -86,7 +86,7 @@ function PickDate({selectedDate, loadSchedule, showSchedule, setShowSchedule, se
         </View>
         <View style={styles.rowBack}>
           <TouchableOpacity style={styles.deleteBtn} onPress={clickDelete}>
-            <Text style={styles.deleteText}>Delete</Text>
+            <Text style={[styles.deleteText, styles.font]}>Delete</Text>
           </TouchableOpacity>
         </View>
       </>
@@ -141,9 +141,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   deleteText: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 15,
     color: 'white',
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
   },
 })
 

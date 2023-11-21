@@ -27,10 +27,10 @@ function PickItem({ title, content, startDay, endDay, id, members, lastModifedUs
     <Pressable onLongPress={longPress}>
       <View>
         <View style={styles.content}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={[styles.item, styles.text]}>{content}</Text>
-          <Text style={styles.item}>{memberList ? memberList.join(', ') : ''}</Text>
-          <Text style={styles.item}>{startDay}  ~  {endDay}  (수정 : {lastModifedUser})</Text>
+          <Text style={[styles.title, styles.font]}>{title}</Text>
+          <Text style={[styles.item, styles.text, styles.font]}>{content}</Text>
+          <Text style={[styles.item, styles.font]}>{memberList ? memberList.join(', ') : ''}</Text>
+          <Text style={[styles.item, styles.font]}>{startDay}  ~  {endDay}  (수정 : {lastModifedUser})</Text>
         </View>
       </View>
     </Pressable>
@@ -40,7 +40,7 @@ function PickItem({ title, content, startDay, endDay, id, members, lastModifedUs
 const styles = StyleSheet.create({
   content: {
     borderBottomWidth: 1,
-    borderBottomColor: 'lightgreen',
+    borderBottomColor: '#BDEDD2',
     padding: 10,
     backgroundColor: '#fff'
   },
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     margin: 4,
     marginLeft: 2,
   },
@@ -62,6 +62,12 @@ const styles = StyleSheet.create({
   item: {
     marginLeft: 2,
     fontSize: 14
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
+  },
+  fontL:{
+    fontFamily: 'IM_Hyemin-Regular',
   }
 })
 

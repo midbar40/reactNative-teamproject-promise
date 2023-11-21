@@ -138,10 +138,10 @@ function Time({isFocused, fcmToken}){
   return (
     <View style={styles.container}>
       <View style={styles.dayContainer}>
-        <Text style={styles.dayText}>
+        <Text style={[styles.dayText, styles.font]}>
           {currentTime.format('YYYY. MM. DD')}
         </Text>
-        <Text style={styles.timeText}>
+        <Text style={[styles.timeText, styles.font]}>
           {getFormattedTime(currentTime)}
         </Text>
       </View>
@@ -150,7 +150,7 @@ function Time({isFocused, fcmToken}){
         style={styles.alarmsContainer}
         onTouchStart={closeSwipeableItem}
       >
-        <Text style={styles.alarmsText}>Alarms : </Text>
+        <Text style={[styles.alarmsText, styles.font]}>Alarms : </Text>
         <AlarmList
           alarms={alarmTimes}
           onRemoveAlarm={removeAlarm}
@@ -185,22 +185,22 @@ const styles = StyleSheet.create({
   dayContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 70,
     width: '90%',
-    backgroundColor: '#98c8ffff',
+    backgroundColor: '#42D0B9',
     borderRadius: 20,
   },
   dayText: {
     fontSize: 50,
     marginTop: 10,
     marginBottom: 5,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: '#fff'
   },
   timeText: {
     fontSize: 40,
     marginBottom: 15,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: '#fff'
   },
   alarmsContainer: {
@@ -209,12 +209,12 @@ const styles = StyleSheet.create({
   },
   alarmsText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 10,
   },
   addButton: {
-    backgroundColor: '#a8c8ffff',
+    backgroundColor: '#42D0B9',
     width: 50, height: 50,
     borderRadius: 30,
     justifyContent: 'center',
@@ -226,7 +226,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center'
-  }
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
+  },
 })
 
 export default Time

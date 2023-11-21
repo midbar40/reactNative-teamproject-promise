@@ -22,20 +22,20 @@ function ModalTextInputs({scheduleTitle, setScheduleTitle, scheduleContent, setS
     return(
       <>
         <View style={styles.horizontalView}>
-          <Text style={styles.title}>할일 제목 : </Text>
+          <Text style={[styles.title, styles.font]}>할일 제목 : </Text>
             <TextInput
               autoCorrect={false}
-              style={styles.textInput}
+              style={[styles.textInput, styles.font]}
               selectionColor={'#E7BFFF'}
               onChangeText={titleInput}
               blurOnSubmit={false}
             />
         </View>
         <View style={styles.horizontalView}>
-          <Text style={styles.title}>할일 내용 : </Text>
+          <Text style={[styles.title, styles.font]}>할일 내용 : </Text>
             <TextInput
               autoCorrect={false}
-              style={styles.textInput}
+              style={[styles.textInput, styles.font]}
               selectionColor={'#E7BFFF'}
               onChangeText={contentInput}
               blurOnSubmit={false}
@@ -47,10 +47,10 @@ function ModalTextInputs({scheduleTitle, setScheduleTitle, scheduleContent, setS
     return(
       <>
         <View style={styles.horizontalView}>
-          <Text style={styles.title}>할일 제목 : </Text>
+          <Text style={[styles.title, styles.font]}>할일 제목 : </Text>
             <TextInput
               autoCorrect={false}
-              style={styles.textInput}
+              style={[styles.textInput, styles.font]}
               selectionColor={'#E7BFFF'}
               onChangeText={titleInput}
               blurOnSubmit={false}
@@ -58,10 +58,10 @@ function ModalTextInputs({scheduleTitle, setScheduleTitle, scheduleContent, setS
             />
         </View>
         <View style={styles.horizontalView}>
-          <Text style={styles.title}>할일 내용 : </Text>
+          <Text style={[styles.title, styles.font]}>할일 내용 : </Text>
             <TextInput
               autoCorrect={false}
-              style={styles.textInput}
+              style={[styles.textInput, styles.font]}
               selectionColor={'#E7BFFF'}
               onChangeText={contentInput}
               blurOnSubmit={false}
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderBottomWidth:1,
-    borderBottomColor: 'lightgreen',
+    borderBottomColor: '#BDEDD2',
     paddingLeft: 10,
     paddingBottom: 0,
     marginBottom: 10,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   dateInput: {
     borderBottomWidth:1,
-    borderBottomColor: 'lightgreen',
+    borderBottomColor: '#BDEDD2',
     paddingLeft: 10,
     paddingBottom: 0,
     marginBottom: 10,
@@ -104,7 +104,10 @@ const styles = StyleSheet.create({
   text: {
     marginLeft: 7,
     marginRight: 20
-  }
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
+  },
 
 })
 

@@ -26,12 +26,16 @@
       "sha1": "fa415fa1ccc8557dc6caff985bc9396edca4b6c5"
     },
     {
-      "path": "assets/fonts/HakgyoansimGaeulsopungL.ttf",
-      "sha1": "45aa6da5905770fbca33b0e9d4c8c52072024d1d"
-    },
-    {
       "path": "assets/fonts/heamnea.ttf",
       "sha1": "84937cb60bbde811fe73ce382a6f015e14a8d966"
+    },
+    {
+      "path": "assets/fonts/IM_Hyemin-Bold.ttf",
+      "sha1": "e14c3d304d182591ffd9d690db8586aa2eebc909"
+    },
+    {
+      "path": "assets/fonts/IM_Hyemin-Regular.ttf",
+      "sha1": "a5a79172142251cd2c91222c39eaecbb6191cede"
     },
     {
       "path": "assets/fonts/JSArirang.ttf",

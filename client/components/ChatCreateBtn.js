@@ -14,7 +14,7 @@ function ChatCreateBtn({ title, calendarUID, friends, navigation, setSelectRoomI
 
   return (
     <TouchableOpacity style={styles.calendarTalkContainer} onPress={moveToCalendarTalk}>
-      <Text style={styles.calendarTalkText}>캘린더톡</Text>
+      <Text style={[styles.calendarTalkText, styles.font]}>캘린더톡</Text>
     </TouchableOpacity>
   )
 }
@@ -33,10 +33,13 @@ const styles = StyleSheet.create({
   },
   calendarTalkText : {
     color : '#fff',
-    fontWeight : 'bold',
+    // fontWeight : 'bold',
     fontSize : 15,
     textAlign : 'center',
     lineHeight : 30,
+  },
+  font: {
+    fontFamily: 'IM_Hyemin-Bold'
   },
 })
 
