@@ -7,8 +7,7 @@ function ChatCreateBtn({ title, calendarUID, friends, navigation, setSelectRoomI
   // console.log(friends)
   const moveToCalendarTalk = async () => {
     const chatRoomUID = await creatChatRoom(title, calendarUID, friends);
-    setSelectRoomId(chatRoomUID);
-    // console.log('nav : ',navigation)
+    await setSelectRoomId(chatRoomUID);
     navigation.navigate('Chat');
   }
 
