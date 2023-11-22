@@ -91,6 +91,13 @@ function Time({isFocused, fcmToken}){
     const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id && alarm.userUid === currentUserUid)
     setAlarmTimes(updatedAlarms)
     removeData('Alarms', id)
+    fetch('http://192.168.200.13:5300/firebaseLogin/cancel', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },      
+    })
+    .catch(error => console.error(error)) 
   }
 
   // 실시간 한국시간으로 보여주기
