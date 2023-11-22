@@ -161,6 +161,9 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
           "mutable_content": true,
           "sound": "Tri-tone"
         },
+        data: {
+          'type': 'alarm'
+        }
       })
     })
       .catch(e => console.log(e))

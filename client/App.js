@@ -30,11 +30,14 @@ function App({ navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIs
     if (getUser() !== null) getToken();
   }, [])
 
-  messaging().onMessage(async remoteMessage => {
-    console.log('Foreground Message:', remoteMessage);
-    Alert.alert('test입니다.')
-    // showNotification(remoteMessage.notification);
-  })
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if(remoteMessage.data.type === 'alarm')
+      Alert.alert('알람 도착', `\n${remoteMessage.notification.title}\n\n${remoteMessage.notification.body}`);
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <Tab.Navigator
