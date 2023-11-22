@@ -35,6 +35,12 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
 
     return getChatRoomList(onResult, onError)
   }, [])
+
+  useEffect(() => {
+    if(selectRoomId !== ''){
+      navigation.navigate('ChatRoom');
+    }
+  },[selectRoomId])
   
   return (
     <Stack.Navigator screenOptions={{ headerShown : false }} colors={{background: '#fff'}}>
