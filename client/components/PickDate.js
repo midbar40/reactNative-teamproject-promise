@@ -30,19 +30,12 @@ function PickDate({selectedDate, loadSchedule, showSchedule, setShowSchedule, se
                 removeSchedule('CalendarSchedule', itemKey)
                 //채팅방 id 조회
                 setItemKey('')
-                getThisSchedulesChatRoom(schedule.id, 
-                  function onResult(querySnapshot){
-                    console.log(querySnapshot.docs)
-                    querySnapshot.forEach(doc => {
-                      console.log('채팅룸', doc.id)
-                      // 같이 생성한 채팅방 삭제 
-                      deleteThisSchedulesChatRoom(doc.id)
-                    })
-                  },
-                  function onError(err){
-                    console.log('getchatroom Error', err)
-                  }
-                )            
+                getThisSchedulesChatRoom(schedule.id)
+                  .then(result => {
+                    console.log(result.docs[0].id)
+                    deleteThisSchedulesChatRoom(result.docs[0].id)
+                  })
+                  .catch(err => console.log('deletechatroomErr', err))
               }catch(err){console.log('err:', err)}
               
             }}]
