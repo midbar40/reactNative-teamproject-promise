@@ -157,7 +157,7 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
           title: `${hours} : ${minutes}`,
           body: alarmTitle,
           "mutable_content": true,
-          "sound": "Tri-tone"
+          "sound": Tri-tone
         },
       })
     })
