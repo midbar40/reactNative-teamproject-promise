@@ -124,6 +124,7 @@ router.get('/logout', expressAsyncHandler(async (req, res) => {
 }))
 
 //푸쉬 알람
+const scheduledJobs = {}
 router.post('/msg', expressAsyncHandler(async (req, res) => {
   const alarmTime = req.body.time
   const alarmTitle = req.body.title
@@ -141,8 +142,9 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
   const minutes = newDate.getMinutes();
   console.log('time', month, day, hours, minutes)
 
-  // schedule.cancelJob('push')
-  schedule.scheduleJob(`0 ${minutes} ${hours} ${day} ${month} *`, async () => {
+  const jobKey = `${minutes} ${hours} ${day} ${month} *`
+
+  scheduledJobs[jobKey] = schedule.scheduleJob('push', jobKey, async () => {
     console.log('msg보냅니다!!')
 
     fetch('https://fcm.googleapis.com/fcm/send', {
@@ -159,8 +161,8 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
           "mutable_content": true,
           "sound": "Tri-tone"
         },
-        data : {
-          type : 'alarm'
+        data: {
+          'type': 'alarm'
         }
       })
     })
@@ -169,7 +171,11 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
         console.log(r)
         res.json('알람이 등록되었습니다')
       })
-  })
+  })  
+}))
+
+router.post('/cancel', expressAsyncHandler(async (req, res) => {
+  schedule.cancelJob('push')
 }))
 
 module.exports = router
