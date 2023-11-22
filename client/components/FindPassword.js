@@ -6,6 +6,7 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  StatusBar
 } from 'react-native';
 import {finduserEmail, getUser} from '../apis/auth';
 console.log(getUser());
@@ -51,6 +52,7 @@ function FindPassword({
 
   return (
     <View style={styles.contentBox}>
+      <StatusBar backgroundColor="#F2F2F2" barStyle={'dark-content'}></StatusBar>
       <Text style={styles.appName}>약속해줘</Text>
       <View style={styles.inputBox}>
         <TextInput

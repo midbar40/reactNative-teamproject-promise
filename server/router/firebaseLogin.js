@@ -160,12 +160,13 @@ router.get('/logout', expressAsyncHandler(async (req, res) => {
 }))
 
 //푸쉬 알람
+const scheduledJobs = {}
 router.post('/msg', expressAsyncHandler(async (req, res) => {
   const alarmTime = req.body.time
   const alarmTitle = req.body.title
   const uid = req.body.uid
   const userDB = await db.collection('user').doc(uid).get()
-  const token = userDB._fieldsProto.FCMToken.stringValue  
+  const token = userDB._fieldsProto.FCMToken.stringValue
 
   const date = new Date(alarmTime).getTime();
   const newDate = new Date(date)
@@ -177,8 +178,9 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
   const minutes = newDate.getMinutes();
   console.log('time', month, day, hours, minutes)
 
-  // schedule.cancelJob('push')
-  schedule.scheduleJob(`0 ${minutes} ${hours} ${day} ${month} *`, async () => {
+  const jobKey = `${minutes} ${hours} ${day} ${month} *`
+
+  scheduledJobs[jobKey] = schedule.scheduleJob('push', jobKey, async () => {
     console.log('msg보냅니다!!')
 
     fetch('https://fcm.googleapis.com/fcm/send', {
@@ -195,6 +197,9 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
           "mutable_content": true,
           "sound": "Tri-tone"
         },
+        data: {
+          'type': 'alarm'
+        }
       })
     })
       .catch(e => console.log(e))

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   Alert,
+  StatusBar
 } from 'react-native';
 
 function RegisterUser({
@@ -71,6 +72,7 @@ function RegisterUser({
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor="#F2F2F2" barStyle={'dark-content'}></StatusBar>
       <View style={styles.contentBox}>
         <Text style={styles.appName}>약속해줘</Text>
         <View style={styles.inputBox}>
@@ -156,11 +158,11 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 55,
+    fontFamily: 'ulsanjunggu',
+    color: '#FAA6AA',
     // fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 30,
-    fontFamily: 'ulsanjunggu',
-    color: '#FAA6AA',
   },
   inputBox: {
     width: '100%',

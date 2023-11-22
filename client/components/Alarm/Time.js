@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Keyboard} from 'react-native'
 import moment from 'moment-timezone'
 import AddAlarm from './AddAlarm'
 import AlarmList from './AlarmList'
@@ -14,6 +14,28 @@ function Time({isFocused, fcmToken}){
   const [alarmTimes, setAlarmTimes] = useState([])
   const [addAlarmModal, setAddAlarmModal] = useState(false)
   const [openSwipeableItem, setOpenSwipeableItem] = useState(null)  
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardOpen(true)
+      }
+    )
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardOpen(false)
+      }
+    )
+
+    return () => {
+      keyboardDidShowListener.remove()
+      keyboardDidHideListener.remove()
+    }
+  }, [])
 
   // 시간을 AM/PM으로 나누어 보여주기 
   const getFormattedTime = (time) => {
@@ -69,6 +91,13 @@ function Time({isFocused, fcmToken}){
     const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id && alarm.userUid === currentUserUid)
     setAlarmTimes(updatedAlarms)
     removeData('Alarms', id)
+    fetch('http://192.168.200.13:5300/firebaseLogin/cancel', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },      
+    })
+    .catch(error => console.error(error)) 
   }
 
   // 실시간 한국시간으로 보여주기
@@ -158,14 +187,16 @@ function Time({isFocused, fcmToken}){
           isFocused={isFocused}
         />
       </View>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => setAddAlarmModal(true)}
-      >
-        <Text style={styles.addText}>
-          <Icon name='add' size={40} />
-        </Text>
-      </TouchableOpacity>
+      {!isKeyboardOpen && (
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => setAddAlarmModal(true)}
+        >
+          <Text style={styles.addText}>
+            <Icon name='add' size={40} />
+          </Text>
+        </TouchableOpacity>
+      )}
       <AddAlarm
         visible={addAlarmModal}
         onClose={() => setAddAlarmModal(false)}

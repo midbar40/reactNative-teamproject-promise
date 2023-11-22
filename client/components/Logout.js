@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {signOut, getUser} from '../apis/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { deleteFCMTokenInFirebase } from '../apis/firebaseMessage';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -31,6 +32,7 @@ function Logout({
     const homeIP = '192.168.0.172:5300'
     const academyIP = '192.168.200.17:5300'
     console.log('로그인상태: ', getUser());
+    deleteFCMTokenInFirebase(); // 유저의 FCM토큰을 삭제합니다.
     await signOut(); // 파이어베이스 로그아웃
     if (isKakaoLogin) {
       await fetch(`http://${academyIP}/kakaologin/logout`);
