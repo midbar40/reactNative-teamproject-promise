@@ -30,6 +30,7 @@ function App({ navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIs
     if (getUser() !== null) getToken();
   }, [])
 
+
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       if(remoteMessage.data.type === 'alarm')
