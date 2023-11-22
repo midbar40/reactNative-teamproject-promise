@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
   },
   contentBox: {
     flex: 1,
-    width: 400,
     height: 400,
     borderBlockColor: '#c7c7c7',
     alignItems: 'center',

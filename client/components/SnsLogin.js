@@ -52,7 +52,6 @@ function SnsLogin({
       console.log('구글 토큰 :', idToken);
       const userInfoFromGoogle = await GoogleSignin.getCurrentUser();
       console.log('구글 유저정보 :', userInfoFromGoogle.user);
- 
 
       await fetch(`http://${academyIP}/firebaseLogin/googleSignUp`, {
         method: 'POST',

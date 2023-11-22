@@ -13,7 +13,8 @@ function Logout({
   isNaverLogin,
   setAppState,
   isGoogleLogin,
-  setIsGoogleLogin
+  setIsGoogleLogin,
+  setIsSnsLogin
 }) {
   const homeIP = '192.168.0.172:5300';
   const academyIP = '192.168.200.17:5300';
@@ -45,6 +46,7 @@ function Logout({
       setIsGoogleLogin(false);
     }
     setUserInfo(null); // 유저정보 삭제
+    setIsSnsLogin(false); // sns 로그인 상태 false
     await saveStateToAsyncStorage();
     console.log('로그아웃 되었습니다 :', getUser());
   };

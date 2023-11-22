@@ -27,13 +27,17 @@ export const getCurrentTime = () => {
     return firestore.FieldValue.serverTimestamp()
 }
 
-export const searchUserByEmail = async (email) => {
+export const searchUserByEmail = async (UID) => {
+    console.log('searchUserByEmail :',UID)
     try {
-        const searchUser = await firestore().collection('user').where('email','==',email).get();
+        // const searchUser = await firestore().collection('user').where('UID','==',UID).get();
+        const searchUser = await firestore().collection('user').get();
+        const searchUserUid = searchUser.docs.filter(doc => 
+            doc._data.UID.includes(UID))
         if(searchUser.docs.length === 0){
             return false
         } else {
-            return searchUser.docs[0];
+            return searchUserUid;
         }
     } catch (error) {
         console.log(error)

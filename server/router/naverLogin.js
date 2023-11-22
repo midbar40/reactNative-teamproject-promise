@@ -50,7 +50,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
     })
     const userData = await userResponse.json() // 네이버 로그인 시 받아온 유저 정보
     req.session.user = {email : userData.response.email, password: userData.response.id, name: userData.response.name, token: token} 
-    // console.log('유저데이터(서버48줄) :', userData)
+    console.log('유저데이터(서버48줄) :', userData)
     // console.log('세션테스트(서버49줄) :', req.session.user)
     
     const userInfo = await listAllUsers() // Firebase에 등록된 유저 정보
