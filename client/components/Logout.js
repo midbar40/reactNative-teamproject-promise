@@ -7,6 +7,7 @@ import {
 
 } from 'react-native';
 import {signOut, getUser} from '../apis/auth';
+import { deleteFCMTokenInFirebase } from '../apis/firebaseMessage';
 
 
 function Logout({navigation, userInfo, setUserInfo, setIsKakaoLogin, setIsNaverLogin , isKakaoLogin, isNaverLogin}) {
@@ -15,6 +16,7 @@ function Logout({navigation, userInfo, setUserInfo, setIsKakaoLogin, setIsNaverL
 
   const handleLogout = async () => {
     console.log('로그인상태: ', getUser());
+    deleteFCMTokenInFirebase(); // 유저의 FCM토큰을 삭제합니다.
     await signOut(); // 파이어베이스 로그아웃
     if(isKakaoLogin) {
       await fetch(`http://${academyIP}/kakaologin/logout`)

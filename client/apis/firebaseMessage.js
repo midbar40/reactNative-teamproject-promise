@@ -13,6 +13,13 @@ export const getToken = async () => {
   })
 }
 
+export const deleteFCMTokenInFirebase = () => {
+  const uid = getUser().uid;
+  firestore().collection('user').doc(uid).update({
+    FCMToken : ''
+  })
+}
+
 export const notificationListener = () => {
   messaging().onNotificationOpenedApp(remoteMessage => {
     console.log(

@@ -80,13 +80,14 @@ function App({navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsK
   },[])
 
 
-  // useEffect(() => {
-  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
-  //     console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-  //   });
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      if(remoteMessage.data.type === 'alarm')
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage.notification.title));
+    });
 
-  //   return unsubscribe;
-  // }, []);
+    return unsubscribe;
+  }, []);
 
   return (    
       <Tab.Navigator
