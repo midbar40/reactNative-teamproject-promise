@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a79c39c7-f184-4bd4-a729-15d909f387f8" name="Changes" comment="" />
+    <list default="true" id="a79c39c7-f184-4bd4-a729-15d909f387f8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/client/apis/firebaseMessage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/apis/firebaseMessage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/router/firebaseLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/router/firebaseLogin.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
