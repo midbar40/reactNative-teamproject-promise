@@ -22,22 +22,24 @@ function AddMembersItem({item, pickFriends, setPickFriends, setSelectedId, frien
   const onPress = () => {
     const names = []
     const Uids = []
-    friendInfo && friendInfo.map(friend => {
-      names.push(friend.name)
-      Uids.push(friend.UID)
-      if(Uids.indexOf(item.UID) === -1){
+    console.log(friendInfo)
+    if(Uids.indexOf(item.UID) === -1 || friendInfo === []){
+        friendInfo && friendInfo.map(friend => {
+          names.push(friend.name)
+          Uids.push(friend.UID)
+        })
         setFriendInfo([...friendInfo, {
           name: item.name,
           UID: item.UID
         }])
-      }else if(pick){
-        const filtered = friendInfo.filter(list => {
-          return list.UID !== item.UID && list.name !== item.UID
-        })
-        setFriendInfo(filtered)
+        if(pick){
+          const filtered = friendInfo.filter(list => {
+            return list.UID !== item.UID && list.name !== item.UID
+          })
+          setFriendInfo(filtered)
+        }
       }
-      setPick(!pick)
-    })
+    setPick(!pick)
   }
 
   return(

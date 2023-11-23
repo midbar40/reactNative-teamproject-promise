@@ -10,7 +10,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
 
   const [open, setOpen] = useState(false) //모달 open
   const [friendLists, setFriendLists] = useState() //친구목록 전체 저장
-  const [friendInfo, setFriendInfo] = useState() //친구목록 이름, UID 저장용
+  const [friendInfo, setFriendInfo] = useState([]) //친구목록 이름, UID 저장용
   const [selectedId, setSelectedId] = useState('') //선택 친구 이름 저장
 
   // console.log('show', showSchedule)
@@ -30,18 +30,18 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
     const notFriendsList = []
     list.push(myInfo)
 
-    const final =  friendInfo.filter(flist => {
+    const final =  friendInfo && friendInfo.filter(flist => {
       const filtered = friendLists.filter(info => {
         return info.UID !== flist.UID && info.UID !== myInfo.UID && notFriendsList.push(info)
       })
       return filtered
     })
     // console.log('final', final)
-    setPickFriends(final)
+    final ? setPickFriends(final) : setPickFriends(myInfo)
     
     //이름만 담기
     const arr =[]
-    final.map(l => {
+    final && final.map(l => {
       arr.push(l.name)
     })
     setSelectedId(arr)
