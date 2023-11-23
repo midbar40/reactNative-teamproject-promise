@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Keyboard} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
 import moment from 'moment-timezone'
 import AddAlarm from './AddAlarm'
 import AlarmList from './AlarmList'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { addData, getCollection, getCurrentTime, removeData } from './apis/firebase'
+import { addData, getCollection, getCurrentTime, removeData, updateDate } from './apis/firebase'
 import messaging from '@react-native-firebase/messaging'
 import auth from '@react-native-firebase/auth'
 import { getUser } from '../../apis/auth'
 
-function Time({isFocused, fcmToken}){
+function Time({ isFocused, fcmToken }) {
   const [currentTime, setCurrentTime] = useState(moment().tz('Asia/Seoul'))
   const [alarmTimes, setAlarmTimes] = useState([])
   const [addAlarmModal, setAddAlarmModal] = useState(false)
-  const [openSwipeableItem, setOpenSwipeableItem] = useState(null)  
+  const [openSwipeableItem, setOpenSwipeableItem] = useState(null)
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
   useEffect(() => {
@@ -44,7 +44,7 @@ function Time({isFocused, fcmToken}){
   }
 
   const signIn = async () => {
-    try {      
+    try {
       const userCredential = await auth().signInWithEmailAndPassword(email, password)
       const user = userCredential.user
       console.log('사용자 로그인:', user.uid)
@@ -54,36 +54,40 @@ function Time({isFocused, fcmToken}){
   }
 
   // 알람 추가
-  const addAlarm = async(time, title) => {
+  const addAlarm = async (time, title,) => {
     const currentTimeInKorea = moment().tz('Asia/Seoul')
     const timeDifference = moment.duration(time, 'minutes')
     const alarmTime = currentTimeInKorea.clone().add(timeDifference)
     const alarmId = Math.random().toString(36).substring(7)
+    console.log('al id: ',alarmId)
     const deviceToken = fcmToken || (await messaging().getToken())
     const userUid = auth().currentUser.uid
     const alarm = {
       id: alarmId,
       time: alarmTime.format(),
       title,
-      createdAt: getCurrentTime(),  
-      deviceToken,      
+      createdAt: getCurrentTime(),
+      deviceToken,
       userUid,
     }
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
     addData('Alarms', alarm)
-    fetch('http://192.168.200.13:5300/firebaseLogin/msg',{
+    fetch('http://192.168.200.13:5300/firebaseLogin/msg', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body : JSON.stringify({
-        time :alarmTime,
-        title : title,
-        uid : getUser().uid
+      body: JSON.stringify({
+        time: alarmTime,
+        title: title,
+        uid: getUser().uid,
+        id: alarmId,        
       })
     })
-    .catch(error => console.error(error))  
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error))
   }
   //알람 삭제
   const removeAlarm = (id) => {
@@ -95,9 +99,12 @@ function Time({isFocused, fcmToken}){
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      },      
+      },
+      body: JSON.stringify({
+        id: id
+      })
     })
-    .catch(error => console.error(error)) 
+      .catch(error => console.error(error))
   }
 
   // 실시간 한국시간으로 보여주기
@@ -120,10 +127,10 @@ function Time({isFocused, fcmToken}){
         const currentUserUid = auth().currentUser.uid
         querySnapshot.forEach((doc) => {
           const alarmData = doc.data()
-          if(alarmData.userUid === currentUserUid){
+          if (alarmData.userUid === currentUserUid) {
             alarms.push(alarmData)
             // alarmData.time = alarmData.time.toDate()
-          }          
+          }
         })
         setAlarmTimes(alarms)
       },
@@ -142,24 +149,24 @@ function Time({isFocused, fcmToken}){
       openSwipeableItem.close()
       setOpenSwipeableItem(null)
     }
-  } 
+  }
 
   const checkAndTriggerAlarms = () => {
     alarmTimes.forEach((alarm) => {
       const alarmTime = moment(alarm.time);
-      if (currentTime.isSame(alarmTime, 'second')) {        
-        console.log('Matching alarm! Trigger notification:', alarm);        
+      if (currentTime.isSame(alarmTime, 'second')) {
+        console.log('Matching alarm! Trigger notification:', alarm);
       }
     });
   };
-  
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTime(moment().tz('Asia/Seoul'));
-      checkAndTriggerAlarms(); 
+      checkAndTriggerAlarms();
     }, 1000);
 
-        return () => {
+    return () => {
       clearInterval(intervalId);
     };
   }, [currentTime, alarmTimes]);
@@ -236,7 +243,7 @@ const styles = StyleSheet.create({
   },
   alarmsContainer: {
     alignItems: 'center',
-    flex: 1,    
+    flex: 1,
   },
   alarmsText: {
     fontSize: 20,
