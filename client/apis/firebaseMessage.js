@@ -8,8 +8,15 @@ export const getToken = async () => {
   await messaging().registerDeviceForRemoteMessages();
   const token = await messaging().getToken();
   // console.log('token : ', token)
-  firestore().collection('user').doc(getUser().uid).update({
+  firestore().collection('user').doc(getUser()?.uid).update({
     FCMToken : token
+  })
+}
+
+export const deleteFCMTokenInFirebase = () => {
+  const uid = getUser().uid;
+  firestore().collection('user').doc(uid).update({
+    FCMToken : ''
   })
 }
 

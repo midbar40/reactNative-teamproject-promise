@@ -27,13 +27,17 @@ export const getCurrentTime = () => {
     return firestore.FieldValue.serverTimestamp()
 }
 
-export const searchUserByEmail = async (email) => {
+export const searchUserByEmail = async (UID) => {
+    console.log('searchUserByEmail :',UID)
     try {
-        const searchUser = await firestore().collection('user').where('email','==',email).get();
+        // const searchUser = await firestore().collection('user').where('UID','==',UID).get();
+        const searchUser = await firestore().collection('user').get();
+        const searchUserUid = searchUser.docs.filter(doc => 
+            doc._data.UID.includes(UID))
         if(searchUser.docs.length === 0){
             return false
         } else {
-            return searchUser.docs[0];
+            return searchUserUid;
         }
     } catch (error) {
         console.log(error)
@@ -43,7 +47,8 @@ export const searchUserByEmail = async (email) => {
 // 친구 등록
 export const addFriend = async (newFriend) => {
         try {
-            const myUID = getUser()?.uid;
+            console.log('애드프렌즈 ')
+            const myUID = getUser().uid;
             const myDB = await firestore().collection('user').doc(myUID).get();
             const { name, email, friends } = myDB.data();
             const filterFriend = friends.filter(f => f.UID === newFriend.UID)
@@ -69,16 +74,12 @@ export const addFriend = async (newFriend) => {
 }
 // DB에 있는 나의 친구 조회(실시간)
 export const getFriendsRealtimeChange = (onResult, onError) => {
-    if(getUser() !== null){  // 네이버 로그인시 첫 로그인정보 입력화면에서 getUser()가 null이어서 에러처리
-        console.log('파이어베이스72줄 :', getUser())
         const myUID = getUser()?.uid;
         return firestore()
         .collection(`user`)
         .doc(`${myUID}`)
         // .orderBy('date', 'asc')
         .onSnapshot(onResult, onError);
-    }
-
 }
 
 // DB에 있는 나의 친구 조회(1회)

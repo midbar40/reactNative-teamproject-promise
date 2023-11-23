@@ -11,24 +11,28 @@ import {
   FlatList,
 } from 'react-native';
 import Logout from '../components/Logout';
-
 import {getUser} from '../apis/auth';
 import {
   searchUserByEmail,
   addFriend,
   getFriendsRealtimeChange,
 } from '../apis/firebase';
-
+import Clipboard from '@react-native-clipboard/clipboard';
 function HomeScreen({
   props,
   navigation,
   loginInfo,
+  setIsSnsLogin,
   isKakaoLogin,
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
   userInfo,
   setUserInfo,
+  setAppState,
+  appState,
+  isGoogleLogin,
+  setIsGoogleLogin,
 }) {
   const [friendList, setFriendList] = useState([]);
   const [searchUserText, setSearchUserText] = useState('');
@@ -39,12 +43,13 @@ function HomeScreen({
   });
 
   const searchUserToFirebaseDB = async () => {
-    if (searchUserText.trim() === getUser().email) {
-      Alert.alert('자신의 이메일은 검색 할 수 없습니다.');
+    if (searchUserText.trim() == getUser().uid.slice(0,7)) {
+      Alert.alert('자신의 코드는 검색 할 수 없습니다.');
       setSearchUserText('');
       return;
     }
-    const user = await searchUserByEmail(searchUserText);
+    const userArr = await searchUserByEmail(searchUserText);
+    const user = userArr[0];
     if (!user) {
       Alert.alert('유저가 없습니다.');
       setSearchUser({
@@ -80,15 +85,16 @@ function HomeScreen({
 
   useEffect(() => {
     function onResult(querySnapshot) {
+      console.log('홈화면 겟유저 테스트', getUser());
+      console.log('홈화면 appstate :', appState);
       // console.log(querySnapshot.data()?.friends)
-
       setFriendList(querySnapshot.data()?.friends);
     }
 
     function onError(error) {
       console.log(error);
     }
-    if (getUser() !== null) return getFriendsRealtimeChange(onResult, onError);
+    return getFriendsRealtimeChange(onResult, onError);
   }, []);
 
   // console.log(friendList)
@@ -97,20 +103,39 @@ function HomeScreen({
     <SafeAreaView style={styles.container}>
       <StatusBar hidden></StatusBar>
       <View style={styles.nocontent}></View>
-      <Logout 
-       navigation={navigation}
-       loginInfo={loginInfo}
-       isKakaoLogin={isKakaoLogin}
-       setIsKakaoLogin={setIsKakaoLogin}
-       isNaverLogin={isNaverLogin}
-       setIsNaverLogin={setIsNaverLogin}
-       props={props}
-       userInfo={userInfo}
-       setUserInfo={setUserInfo}
+      <Logout
+        navigation={navigation}
+        loginInfo={loginInfo}
+        isKakaoLogin={isKakaoLogin}
+        setIsKakaoLogin={setIsKakaoLogin}
+        isNaverLogin={isNaverLogin}
+        setIsNaverLogin={setIsNaverLogin}
+        props={props}
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
+        setAppState={setAppState}
+        isGoogleLogin={isGoogleLogin}
+        setIsGoogleLogin={setIsGoogleLogin}
+        setIsSnsLogin={setIsSnsLogin}
       />
       <View style={styles.box}>
         <View>
           <Text style={styles.appName}>약속해줘</Text>
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              try {
+                Clipboard.setString(getUser().uid.slice(0, 7));
+                Alert.alert('내 코드가 복사되었습니다.');
+              } catch (error) {
+                Alert.alert('복사에 실패하였습니다.');
+              }
+            }}>
+            <Text style={styles.code}>
+              친구찾기용 내 코드 : {getUser()?.uid.slice(0, 7)}
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.searchUserContainer}>
           <TextInput
@@ -134,7 +159,9 @@ function HomeScreen({
             <TouchableOpacity
               style={styles.addFriendBtnContainer}
               onPress={addFriendToFirebaseDB}>
-              <Text style={[styles.addFriendBtnText, styles.font]}>친구 추가</Text>
+              <Text style={[styles.addFriendBtnText, styles.font]}>
+                친구 추가
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -166,7 +193,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  nocontent:{
+  nocontent: {
     height: 70,
   },
   box: {
@@ -181,10 +208,14 @@ const styles = StyleSheet.create({
     top: 0,
     paddingLeft: 20,
     fontFamily: 'ulsanjunggu',
-    color: '#FAA6AA'
+    color: '#FAA6AA',
+  },
+  code: {
+    marginLeft: 20,
+    marginTop: 10,
   },
   searchUserContainer: {
-    marginTop: 30,
+    marginTop: 20,
     flexDirection: 'row',
   },
   searchUserInput: {
@@ -254,8 +285,8 @@ const styles = StyleSheet.create({
     // borderBottomColor: '#EBCBB9',
   },
   font: {
-    fontFamily: 'IM_Hyemin-Bold'
-  }
+    fontFamily: 'IM_Hyemin-Bold',
+  },
 });
 
 export default HomeScreen;

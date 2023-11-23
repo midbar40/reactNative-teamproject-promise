@@ -70,7 +70,7 @@ router.get('/profile', async function (req, res) {
     
     // console.log(' 유저정보(서버71번줄) : ',rtn)
     if(rtn.id && rtn.code !== -401){
-    req.session.kakaoUser = { email: rtn?.id + '@kakao.com', password: rtn?.id + 'secret', name: rtn?.properties.nickname, token: req.session.key }
+    req.session.kakaoUser = { email: rtn?.id + '@firebasekakao.com', password: rtn?.id + 'secret', name: rtn?.properties.nickname, token: req.session.key }
 
     const userInfo = await listAllUsers() // Firebase에 등록된 유저 정보
     const userEmail = userInfo.map((user) => { return user.email }) // Firebase에 등록된 유저 이메일만 추출
@@ -92,8 +92,8 @@ router.get('/profile', async function (req, res) {
 })
 
 router.get('/logout', function (req, res) {
-   const login_uri = `https://kauth.kakao.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`
-    axios.get(`https://kauth.kakao.com/oauth/logout?client_id=${client_id}&logout_redirect_uri=${login_uri}`)
+//    const login_uri = `https://kauth.kakao.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`
+    axios.get(`https://kauth.kakao.com/oauth/logout?client_id=${client_id}&logout_redirect_uri=http://192.168.0.172:5300/kakaologin`)
     .catch(function (error) {
         console.log('카카오 로그아웃 에러 :', error);
     })

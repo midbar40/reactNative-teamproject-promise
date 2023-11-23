@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet, ImageBackground} from 'react-native';
 import {FindPassword, Login, RegisterUser} from '../components';
 
 function LandingScreen({
@@ -14,7 +14,11 @@ function LandingScreen({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
-  setUserInfo
+  setUserInfo,
+  isGoogleLogin,
+  setIsGoogleLogin,
+  appState,
+  setAppState,
 }) {
   const [loginInfo, setLoginInfo] = useState({
     email: '',
@@ -38,6 +42,7 @@ function LandingScreen({
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* <ImageBackground source={require('../assets/imgs/winter.jpg')} resizeMode='cover' style={styles.image}> */}
       {isFindPassword ? (
         <FindPassword
           email={email}
@@ -52,6 +57,7 @@ function LandingScreen({
         <RegisterUser
           isFindPassword={isFindPassword}
           setIsFindPassword={setIsFindPassword}
+          setIsSnsLogin={setIsSnsLogin}
           findEmail={findEmail}
           navigation={navigation}
           isRegister={isRegister}
@@ -79,8 +85,13 @@ function LandingScreen({
           isNaverLogin={isNaverLogin}
           setIsNaverLogin={setIsNaverLogin}
           setUserInfo={setUserInfo}
+          isGoogleLogin={isGoogleLogin}
+          setIsGoogleLogin={setIsGoogleLogin}
+          setAppState={setAppState}
+          appState= {appState}
         />
       )}
+      {/* </ImageBackground> */}
     </SafeAreaView>
   );
 }
@@ -91,6 +102,10 @@ const styles = StyleSheet.create({
   container: {
     height: 600,
   },
+  image: {
+    flex: 1,
+    // justifyContent: "center"
+  }
 });
 
 export default LandingScreen;

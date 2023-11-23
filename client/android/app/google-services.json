@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "382249266253",
+    "firebase_url": "https://reactnative-teamproject-default-rtdb.firebaseio.com",
     "project_id": "reactnative-teamproject",
     "storage_bucket": "reactnative-teamproject.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.rnproject"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "382249266253-8rp5b30jrs61sofde95lfl91aiq5fm18.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rnproject",
+            "certificate_hash": "cf402e9965e59b67f4fffa3b20e6d37c76b26ee4"
+          }
+        },
+        {
+          "client_id": "382249266253-ckb50ajbd96cjrlrq6078f9eu03dk2e1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDa-2GjMf3lXCa8SHNk45twJHptO-l_0X4"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382249266253-ckb50ajbd96cjrlrq6078f9eu03dk2e1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
