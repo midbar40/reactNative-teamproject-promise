@@ -11,6 +11,9 @@ import {
 import {signIn} from '../apis/auth';
 // import { useNavigation } from '@react-navigation/native';
 import SnsLogin from './SnsLogin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 function Login({
   navigation,
@@ -31,13 +34,22 @@ function Login({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
-  setUserInfo,
   isGoogleLogin,
   setIsGoogleLogin,
   setAppState,
   appState
 }) {
 
+
+  const saveStateToAsyncStorage = async () => {
+    try {
+      const myBoolean = true;
+      await AsyncStorage.setItem('appState', JSON.stringify(myBoolean));
+      setAppState(myBoolean);
+    } catch (error) {
+      console.log('로컬 로그인에러 :', error);
+    }
+  };
     
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
@@ -49,8 +61,8 @@ function Login({
     } else {
       try {
         await signIn(email.trim(), password.trim());
+        await saveStateToAsyncStorage();
         setUserInfo({email: email.trim(), password: password.trim(), token: 'firebaseLogin'})
-        navigation.navigate('App');
         setLoginInfo({email: '', password: ''});
       } catch (e) {
         switch (e.code) {
@@ -91,7 +103,6 @@ function Login({
           setIsNaverLogin={setIsNaverLogin}
           isGoogleLogin={isGoogleLogin}
           setIsGoogleLogin={setIsGoogleLogin}
-          setUserInfo={setUserInfo}
           setAppState={setAppState}
           appState={appState}
         />

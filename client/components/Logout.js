@@ -7,7 +7,6 @@ import { deleteFCMTokenInFirebase } from '../apis/firebaseMessage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Logout({
-  setUserInfo,
   setIsKakaoLogin,
   setIsNaverLogin,
   isKakaoLogin,
@@ -28,6 +27,16 @@ function Logout({
       // 에러 처리
     }
   };
+
+  const storeLoginState = async () => {
+    try{
+      const myBoolean = JSON.stringify(false);
+      await AsyncStorage.setItem('isLogin', myBoolean)
+    }catch(e){
+      console.log(e);
+    }
+  }
+
   const handleLogout = async () => {
     const homeIP = '192.168.0.172:5300'
     const academyIP = '192.168.200.17:5300'
@@ -47,9 +56,9 @@ function Logout({
       await GoogleSignin.signOut();
       setIsGoogleLogin(false);
     }
-    setUserInfo(null); // 유저정보 삭제
     setIsSnsLogin(false); // sns 로그인 상태 false
     await saveStateToAsyncStorage();
+    await storeLoginState()
     console.log('로그아웃 되었습니다 :', getUser());
   };
 

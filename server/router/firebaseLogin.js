@@ -164,6 +164,7 @@ const scheduledJobs = {}
 router.post('/msg', expressAsyncHandler(async (req, res) => {
   const alarmTime = req.body.time
   const alarmTitle = req.body.title
+  const alarmId =  req.body.id
   const uid = req.body.uid
   const userDB = await db.collection('user').doc(uid).get()
   const token = userDB._fieldsProto.FCMToken.stringValue
@@ -180,7 +181,7 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
 
   const jobKey = `${minutes} ${hours} ${day} ${month} *`
 
-  scheduledJobs[jobKey] = schedule.scheduleJob('push', jobKey, async () => {
+  scheduledJobs[jobKey] = schedule.scheduleJob(alarmId, jobKey, async () => {
     console.log('msg보냅니다!!')
 
     fetch('https://fcm.googleapis.com/fcm/send', {

@@ -30,6 +30,17 @@ function AlarmItem({ item, onDelete, isFocused }) {
       onDelete(item.id) // 리스트 제거
       translateX.setValue(0) // 추후 리스트 애니메이션 값 재설정
     })
+
+    fetch('http://192.168.200.13:5300/firebaseLogin/cancel', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }, 
+      body: JSON.stringify({
+        id: item.id,
+      })     
+    })
+    console.log('삭제')
   }
 
   const translateX = new Animated.Value(0)

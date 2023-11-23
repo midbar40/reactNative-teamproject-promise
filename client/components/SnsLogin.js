@@ -23,7 +23,6 @@ function SnsLogin({
   setIsNaverLogin,
   isGoogleLogin,
   setIsGoogleLogin,
-  setUserInfo,
   appState,
   setAppState,
 }) {
@@ -69,13 +68,8 @@ function SnsLogin({
         userInfoFromGoogle.user.email,
         userInfoFromGoogle.user.email + 'secret',
       );
-      console.log('구글 로그인 성공', getUser());
-      setUserInfo({
-        email: userInfoFromGoogle.user.email,
-        password: userInfoFromGoogle.user.email + 'secret',
-        token: idToken,
-      });
       await saveStateToAsyncStorage();
+      console.log('구글 로그인 성공', getUser());
     } catch (err) {
       console.log('구글로그인 오류(snslogin.js 82번쨰줄) :', err);
     }
@@ -128,10 +122,6 @@ function SnsLogin({
       navigation.navigate('Web', {isNaverLogin: isNaverLogin});
     }
   }, [isKakaoLogin, isNaverLogin, isGoogleLogin]);
-
-  // useEffect(() => {
-  //   googleSigninConfigure();
-  // }, []);
 
   return (
     <>
