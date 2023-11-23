@@ -27,23 +27,23 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
 
   const addMember = () => {
     const list = []
+    const notFriendsList = []
     list.push(myInfo)
-    friendLists.map(fList => {
-      console.log('f',fList)
-      friendInfo.map(fInfo => {
-        console.log('fInfo',fInfo)
-        if(fList.UID === fInfo.UID){
-          list.push(fList)
-        }
+
+    const final =  friendInfo.filter(flist => {
+      const filtered = friendLists.filter(info => {
+        return info.UID !== flist.UID && info.UID !== myInfo.UID && notFriendsList.push(info)
       })
+      return filtered
     })
-    console.log('선택목록',friendInfo)
-    console.log('새로운선택목록', list)
-    setPickFriends(list)
+    // console.log('final', final)
+    setPickFriends(final)
+    
+    //이름만 담기
     const arr =[]
-          list.map(l => {
-            arr.push(l.name)
-          })
+    final.map(l => {
+      arr.push(l.name)
+    })
     setSelectedId(arr)
     setOpen(false)
   }
