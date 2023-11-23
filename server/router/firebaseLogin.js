@@ -32,68 +32,32 @@ const signUpUserwithNaverKakao = async (email, password, displayName) => {
   try {
     const auth = admin.auth(); // auth 객체를 가져옵니다.
 
-  const userRecord = await auth.createUser({
-    email: email,
-    password: password,
-    displayName: displayName,
-    friends:  [],
-  });
-  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord?.uid);
+    const userRecord = await auth.createUser({
+      email: email,
+      password: password,
+      displayName: displayName,
+      friends: [],
+    });
+    console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord?.uid);
     registerFirebaseDB(userRecord?.uid, email, displayName); // 유저정보 Firestore database에 등록
-  return userRecord;
-  } catch(error){
-    console.log('유저등록 에러(firebaseLogin 43) :',error);
-    }
+    return userRecord;
+  } catch (error) {
+    console.log('유저등록 에러(firebaseLogin 43) :', error);
+  }
 };
 
 
 // 유저정보 Authentication에 등록  (일반 회원가입)
 const signUpUser = async (email, password, displayName) => {
-  try{
-    const auth = admin.auth(); // auth 객체를 가져옵니다.
-    const userRecord = await auth.createUser({
-      email: email,
-      password: password,
-      displayName: displayName,
-      friends:  [],
-    });
-    console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
-    return userRecord;
-  }
- catch (e) {
-  switch (e.code) {
-    case 'auth/email-already-exists':
-      return console.log('이미 가입된 이메일입니다');
-  case 'auth/invalid-email':
-    return console.log('이메일 형식이 올바르지 않습니다');
-  case 'auth/invalid-password':
-    return console.log('비밀번호는 6자리 이상이어야 합니다');
-  default:
-    return console.log('회원가입이 처리되지 않았습니다');
-  }
-}
-}
-
-// 파이어베이스 구글로그인 유저등록 (auth, db)
-router.post('/googleSignUp', expressAsyncHandler (async(req, res) => {
- const registedUser = await listAllUsers()
- const registedUserEmail = registedUser.map(user=> {return user.email})
-  try{
-      if(registedUserEmail.includes(req.body.email)){
-         console.log('이미 가입된 이메일입니다')
-         res.json('이미 가입된 이메일입니다')
-      } else {
-        const userRecord = await signUpUser(req.body.email, req.body.password, req.body.displayName)
-        await registerFirebaseDB(userRecord?.uid, userRecord?.email, userRecord?.displayName); // 유저정보 Firestore database에 등록
-        res.json(userRecord);
-      }
-  
-      }  catch(err)      {
-        console.log('구글 유저등록 에러(firebaseLogin 92) :',err)
-      }
-  }
-))
-
+  const auth = admin.auth(); // auth 객체를 가져옵니다.
+  const userRecord = await auth.createUser({
+    email: email,
+    password: password,
+    displayName: displayName,
+  });
+  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
+  return userRecord;
+};
 
 // 등록된 모든 유저의 정보를(이메일, uid, 닉네임) 가져오는 함수
 const listAllUsers = async () => {
@@ -129,22 +93,22 @@ router.post('/register', expressAsyncHandler(async (req, res) => {
   try {
     const { email, password, displayName } = req.body;
     const userRecord = await signUpUser(email, password, displayName);
-    console.log('유저레코드 :', userRecord.uid)
-    
-    registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
     res.json(userRecord)
-  } catch(e) {
+    console.log('유저레코드 :', userRecord.uid)
+
+    registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
+  } catch (e) {
     console.log('회원가입 오류 :', e.code)
     switch (e.code) {
       case 'auth/email-already-exists':
         return res.json('이미 가입된 이메일입니다');
-        case 'auth/invalid-email':
-          return res.json('이메일 형식이 올바르지 않습니다');
-          case 'auth/invalid-password':
-            return res.json('비밀번호는 6자리 이상이어야 합니다');
-            default:
-              return res.json('회원가입이 처리되지 않았습니다');
-            }
+      case 'auth/invalid-email':
+        return res.json('이메일 형식이 올바르지 않습니다');
+      case 'auth/invalid-password':
+        return res.json('비밀번호는 6자리 이상이어야 합니다');
+      default:
+        return res.json('회원가입이 처리되지 않았습니다');
+    }
   }
 }))
 
@@ -197,7 +161,7 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
           title: `${hours} : ${minutes}`,
           body: alarmTitle,
           "mutable_content": true,
-          "sound": Tri-tone
+          "sound": "Tri-tone"
         },
         data: {
           'type': 'alarm'
@@ -205,19 +169,18 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
       })
     })
       .catch(e => console.log(e))
-      .then(r => 
-        {
-          console.log(r)
-          res.json('알람이 등록되었습니다')
-        }
-      )
+      .then(r => {
+        console.log(r)
+        res.json('알람이 등록되었습니다')
+      })
+  })  
+}))
 
 router.post('/cancel', expressAsyncHandler(async (req, res) => {
   const id = req.body.id  
   console.log('삭제알람', id)
   schedule.cancelJob(id)
   res.json('알람이 삭제되었습니다.')
-  })
 }))
 
 module.exports = router
