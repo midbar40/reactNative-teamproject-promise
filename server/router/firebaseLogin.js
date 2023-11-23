@@ -129,9 +129,11 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
   const alarmTime = req.body.time
   const alarmTitle = req.body.title
   const uid = req.body.uid
+  const alarmId = req.body.id  
   const userDB = await db.collection('user').doc(uid).get()
   const token = userDB._fieldsProto.FCMToken.stringValue
-
+  console.log('추가알람', alarmId)
+  
   const date = new Date(alarmTime).getTime();
   const newDate = new Date(date)
   console.log('date : ', alarmTime)
@@ -144,7 +146,7 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
 
   const jobKey = `${minutes} ${hours} ${day} ${month} *`
 
-  scheduledJobs[jobKey] = schedule.scheduleJob('push', jobKey, async () => {
+  scheduledJobs[jobKey] = schedule.scheduleJob(`${alarmId}`,jobKey, async () => {
     console.log('msg보냅니다!!')
 
     fetch('https://fcm.googleapis.com/fcm/send', {
@@ -175,7 +177,10 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
 }))
 
 router.post('/cancel', expressAsyncHandler(async (req, res) => {
-  schedule.cancelJob('push')
+  const id = req.body.id  
+  console.log('삭제알람', id)
+  schedule.cancelJob(id)
+  res.json('알람이 삭제되었습니다.')
 }))
 
 module.exports = router

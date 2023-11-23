@@ -15,6 +15,8 @@ function AddAlarm({ visible, onClose, onAddAlarm }){
   const handleAddAlarm = () => {
     if ((!selectTime && !customTime) || !title){
       Alert.alert('제목과 알람 시간을 모두 설정해야 합니다.')
+    }else if (!/^\d+$/.test(customTime) || customTime == '0'){
+      Alert.alert('알람 시간은 0 초과의 숫자만 입력가능합니다.')
     }else{
       const alarmTime = customTime ? parseInt(customTime) : selectTime
       onAddAlarm(alarmTime, title)
