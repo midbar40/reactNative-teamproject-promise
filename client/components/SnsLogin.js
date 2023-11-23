@@ -1,6 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
-import {signIn} from '../apis/auth';
+import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {signIn,getUser} from '../apis/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const googleSigninConfigure = async () => {
+  GoogleSignin.configure({
+    webClientId:
+      '382249266253-ckb50ajbd96cjrlrq6078f9eu03dk2e1.apps.googleusercontent.com',
+  });
+};
 
 function SnsLogin({
   navigation,
@@ -11,12 +21,73 @@ function SnsLogin({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
+  isGoogleLogin,
+  setIsGoogleLogin,
+  setUserInfo,
+  appState,
+  setAppState,
 }) {
-  const homeIP = '192.168.0.172:5300'
-  const academyIP = '192.168.200.17:5300'
+  const homeIP = '192.168.0.172:5300';
+  const academyIP = '192.168.200.17:5300';
 
-  const googleLogin = () => {
-    console.log('google 로그인');
+  const saveStateToAsyncStorage = async () => {
+    try {
+      const myBoolean = true;
+      await AsyncStorage.setItem('appState', JSON.stringify(myBoolean));
+      setAppState(myBoolean);
+    } catch (error) {
+      console.log('로컬 로그인에러 :', error);
+    }
+  };
+
+  // 구글 로그인
+  const signInWithGoogle = async () => {
+    try {
+      // Check if your device supports Google Play
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+      // Get the user's ID token
+      const {idToken} = await GoogleSignin.signIn();
+      console.log('구글 토큰 :', idToken);
+      const userInfoFromGoogle = await GoogleSignin.getCurrentUser();
+      console.log('구글 유저정보 :', userInfoFromGoogle.user);
+
+      await fetch(`http://${academyIP}/firebaseLogin/googleSignUp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: userInfoFromGoogle.user.email,
+          password: userInfoFromGoogle.user.email + 'secret',
+          displayName: userInfoFromGoogle.user.name,
+        }),
+      });
+
+      await signIn(
+        userInfoFromGoogle.user.email,
+        userInfoFromGoogle.user.email + 'secret',
+      );
+      console.log('구글 로그인 성공', getUser());
+      setUserInfo({
+        email: userInfoFromGoogle.user.email,
+        password: userInfoFromGoogle.user.email + 'secret',
+        token: idToken,
+      });
+      await saveStateToAsyncStorage();
+    } catch (err) {
+      console.log('구글로그인 오류(snslogin.js 82번쨰줄) :', err);
+    }
+  };
+
+  // 구글 로그인
+  const googleLogin = async () => {
+    setIsGoogleLogin(true);
+    googleSigninConfigure();
+    setIsKakaoLogin(false);
+    setIsNaverLogin(false);
+    await signInWithGoogle();
   };
 
   const kakaoLogin = async () => {
@@ -25,7 +96,7 @@ function SnsLogin({
     try {
       const response = await fetch(`http://${academyIP}/kakaologin`, {
         cache: 'no-store',
-      })
+      });
       setKakaoLoginLink(response.url);
     } catch (err) {
       console.log(err);
@@ -56,7 +127,11 @@ function SnsLogin({
     } else if (isNaverLogin) {
       navigation.navigate('Web', {isNaverLogin: isNaverLogin});
     }
-  }, [isKakaoLogin, isNaverLogin]);
+  }, [isKakaoLogin, isNaverLogin, isGoogleLogin]);
+
+  // useEffect(() => {
+  //   googleSigninConfigure();
+  // }, []);
 
   return (
     <>

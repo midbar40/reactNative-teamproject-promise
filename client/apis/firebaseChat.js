@@ -3,12 +3,13 @@ import storage from '@react-native-firebase/storage';
 import { getUser } from './auth';
 
 export const creatChatRoom = async (title, calendarUID, friends) => { // 현재는 룸 타이틀로 해서 같은 제목이 있는경우는 안만들게 했지만 추 후 캘린더 아이디값을 받을 예정
+  let chatRoomUID = '';
   try {
     const getChatRoom = await firestore().collection('chat').where('calendarUID','==',calendarUID).get();
     console.log(getChatRoom);
     if(getChatRoom.docs.length !== 0){
       console.log('room is exists');
-      const chatRoomUID = getChatRoom.docs[0].ref._documentPath._parts[1];
+      chatRoomUID = getChatRoom.docs[0].ref._documentPath._parts[1];
       return chatRoomUID;
     } else {
       console.log('room is not exist');
@@ -20,9 +21,10 @@ export const creatChatRoom = async (title, calendarUID, friends) => { // 현재�
         calendarUID : calendarUID,
       })
       .then(r => {
-        console.log('r:',r.id);
-        return r.id;
+        // console.log('r:',r.id);
+        chatRoomUID = r.id;
       })
+      return chatRoomUID
     }
   } catch (error) {
     console.log(error);

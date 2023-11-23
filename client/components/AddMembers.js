@@ -10,6 +10,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
 
   const [open, setOpen] = useState(false) //모달 open
   const [friendLists, setFriendLists] = useState() //친구목록 전체 저장
+  const [friendInfo, setFriendInfo] = useState() //친구목록 이름, UID 저장용
   const [selectedId, setSelectedId] = useState('') //선택 친구 이름 저장
 
   // console.log('show', showSchedule)
@@ -26,14 +27,24 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
 
   const addMember = () => {
     const list = []
+    const notFriendsList = []
     list.push(myInfo)
-    friendLists.map(fList => {
-      if(selectedId && selectedId.indexOf(fList.name) !== -1 ){
-        list.push(fList)
-      }
+
+    const final =  friendInfo.filter(flist => {
+      const filtered = friendLists.filter(info => {
+        return info.UID !== flist.UID && info.UID !== myInfo.UID && notFriendsList.push(info)
+      })
+      return filtered
     })
-    console.log('친구목록',list)
-    setPickFriends(list)
+    // console.log('final', final)
+    setPickFriends(final)
+    
+    //이름만 담기
+    const arr =[]
+    final.map(l => {
+      arr.push(l.name)
+    })
+    setSelectedId(arr)
     setOpen(false)
   }
 
@@ -54,10 +65,15 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
           const list = []
           const memberLists = []
           schedule.members && schedule.members.map(member => {
-            list.push(member.name)
+            list.push({name: member.name, UID: member.UID})
             memberLists.push(member)
           })
-          setSelectedId(list)
+          setFriendInfo(list)
+          const arr =[]
+          list.map(l => {
+            arr.push(l.name)
+          })
+          setSelectedId(arr)
           setPickFriends(memberLists)
         }
     })
@@ -85,7 +101,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
             data={friendLists}
             keyExtractor={(item) => item.UID}
             renderItem={({item}) => (
-              <AddMembersItem item={item} selectedId={selectedId} setSelectedId={setSelectedId}/>
+              <AddMembersItem item={item} pickFriends={pickFriends} setPickFriends={setPickFriends} setSelectedId={setSelectedId} friendInfo={friendInfo} setFriendInfo={setFriendInfo}/>
             )}
             style={styles.lists}
           />

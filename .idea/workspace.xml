@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="123549fa-36fb-4420-b358-dbf2c68cbe25" name="Changes" comment="">
+    <list default="true" id="a79c39c7-f184-4bd4-a729-15d909f387f8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/client/apis/firebaseMessage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/apis/firebaseMessage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/router/firebaseLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/router/firebaseLogin.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -15,28 +16,32 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="2YVti6jJ6GY3WynyxTwc5uuYDsy" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2XYZUcz7AMNgrklV1iY6DHkWj1q" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true",
-    "settings.editor.selected.configurable": "AndroidSdkUpdater"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Administrator/RNproject&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="123549fa-36fb-4420-b358-dbf2c68cbe25" name="Changes" comment="" />
-      <created>1700622702152</created>
+      <changelist id="a79c39c7-f184-4bd4-a729-15d909f387f8" name="Changes" comment="" />
+      <created>1698807990587</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1700622702152</updated>
+      <updated>1698807990587</updated>
     </task>
     <servers />
   </component>

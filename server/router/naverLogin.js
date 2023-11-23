@@ -51,7 +51,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
     const userData = await userResponse.json() // 네이버 로그인 시 받아온 유저 정보
     req.session.user = {email : userData.response.email, password: userData.response.id, name: userData.response.name, token: token} 
     console.log('유저데이터(서버48줄) :', userData)
-    console.log('세션테스트(서버49줄) :', req.session.user)
+    // console.log('세션테스트(서버49줄) :', req.session.user)
     
     const userInfo = await listAllUsers() // Firebase에 등록된 유저 정보
     const userEmail = userInfo.map((user) => { return user.email }) // Firebase에 등록된 유저 이메일만 추출
@@ -74,7 +74,7 @@ router.get('/callback', expressAsyncHandler(async (req, res) => {
 
 // 유저정보
 router.get('/user', expressAsyncHandler(async (req, res) => {
-  console.log('유저정보(서버78줄) :', req.session.user)
+  // console.log('유저정보(서버78줄) :', req.session.user)
   return res.json(req.session.user)
 }))
 
@@ -85,8 +85,9 @@ router.get('/logout', expressAsyncHandler(async (req, res) => {
   code = req.query.code;
   state = req.query.state;
   api_url = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${client_id}&client_secret=${client_secret}&code=${code}&state=${state}`  
+  reLogin_url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${client_id}&state=${state}&redirect_uri=${api_url}&auth_type=reauthenticate`
   console.log("로그아웃 세션삭제(네이버): ",req.session)
-  res.status(200).send('로그아웃 되었습니다') // res 구문으로 마무리하지 않으면 해당 라우터에서 빠져나가지 않게됨
+  res.redirect(reLogin_url)
 }))
 
   module.exports = router

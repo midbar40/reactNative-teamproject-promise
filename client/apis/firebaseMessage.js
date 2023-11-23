@@ -8,7 +8,7 @@ export const getToken = async () => {
   await messaging().registerDeviceForRemoteMessages();
   const token = await messaging().getToken();
   // console.log('token : ', token)
-  firestore().collection('user').doc(getUser().uid).update({
+  firestore().collection('user').doc(getUser()?.uid).update({
     FCMToken : token
   })
 }
@@ -75,7 +75,7 @@ export const sendNotification = async (message, roomUID) => {
           "title": `${myName}`,
           "body": `${message.trim() !== ''? message : '사진'}`,
           "mutable_content": true,
-          // "sound": "Tri-tone"
+          "sound": Tri-tone
           }
       })
     })

@@ -66,9 +66,6 @@ const styles = StyleSheet.create({
   font: {
     fontFamily: 'IM_Hyemin-Bold'
   },
-  fontL:{
-    fontFamily: 'IM_Hyemin-Regular',
-  }
 })
 
 export default PickItem

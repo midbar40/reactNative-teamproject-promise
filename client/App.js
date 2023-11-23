@@ -1,24 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Alert } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen, CalendarScreen, AlarmScreen, TodoScreen, ChatScreen } from './screens';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {signOut, getUser} from './apis/auth';
+import {
+  HomeScreen,
+  CalendarScreen,
+  AlarmScreen,
+  TodoScreen,
+  ChatScreen,
+} from './screens';
 
-import Icon from 'react-native-vector-icons/Ionicons.js'
-import Icon2 from 'react-native-vector-icons/FontAwesome6.js'
+import Icon from 'react-native-vector-icons/Ionicons.js';
+import Icon2 from 'react-native-vector-icons/FontAwesome6.js';
 
 import messaging from '@react-native-firebase/messaging';
 
-
 import PushNotification from 'react-native-push-notification';
-import { configurePushNotifications } from './components/Alarm/apis/Push';
-import { getToken, notificationListener, requestUserPermission } from './apis/firebaseMessage';
-import { getUser } from './apis/auth';
+import {configurePushNotifications} from './components/Alarm/apis/Push';
+import {
+  getToken,
+  notificationListener,
+  requestUserPermission,
+} from './apis/firebaseMessage';
 
 const Tab = createBottomTabNavigator();
-
-function App({ navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIsKakaoLogin, isNaverLogin, setIsNaverLogin, userInfo, setUserInfo }) {
-
+function App({
+  navigation,
+  route,
+  isSnsLogin,
+  setIsSnsLogin,
+  isKakaoLogin,
+  setIsKakaoLogin,
+  isNaverLogin,
+  setIsNaverLogin,
+  userInfo,
+  setUserInfo,
+  setAppState,
+  appState,
+  isGoogleLogin,
+  setIsGoogleLogin
+}) {
   // console.log(route.params.email)
 
   const [isLogin, setIsLogin] = useState(false);
@@ -70,6 +92,10 @@ function App({ navigation, route, isSnsLogin, setIsSnsLogin, isKakaoLogin, setIs
           setIsNaverLogin={setIsNaverLogin}
           userInfo={userInfo}
           setUserInfo={setUserInfo}
+          setAppState={setAppState}
+          appState={appState}
+          isGoogleLogin={isGoogleLogin}
+          setIsGoogleLogin={setIsGoogleLogin}
         />
       )}
       </Tab.Screen>
