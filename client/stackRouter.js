@@ -6,7 +6,6 @@ import LandingScreen from './screens/LandingScreen';
 import WebScreen from './screens/WebScreen';
 import App from './App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getUser, signOut} from './apis/auth';
 
 const Stack = createNativeStackNavigator();
 

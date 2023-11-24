@@ -49,31 +49,15 @@ const signUpUserwithNaverKakao = async (email, password, displayName) => {
 
 // 유저정보 Authentication에 등록  (일반 회원가입)
 const signUpUser = async (email, password, displayName) => {
-  try{
-    const auth = admin.auth(); // auth 객체를 가져옵니다.
-    const userRecord = await auth.createUser({
-      email: email,
-      password: password,
-      displayName: displayName,
-      friends:  [],
-    });
-    console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
-    return userRecord;
-  }
- catch (e) {
-  switch (e.code) {
-    case 'auth/email-already-exists':
-      return console.log('이미 가입된 이메일입니다');
-  case 'auth/invalid-email':
-    return console.log('이메일 형식이 올바르지 않습니다');
-  case 'auth/invalid-password':
-    return console.log('비밀번호는 6자리 이상이어야 합니다');
-  default:
-    return console.log('회원가입이 처리되지 않았습니다');
-  }
-}
-}
-
+  const auth = admin.auth(); // auth 객체를 가져옵니다.
+  const userRecord = await auth.createUser({
+    email: email,
+    password: password,
+    displayName: displayName,
+  });
+  console.log('유저등록에 성공했습니다(firebaselogin.js):', userRecord.uid);
+  return userRecord;
+};
 
 // 등록된 모든 유저의 정보를(이메일, uid, 닉네임) 가져오는 함수
 const listAllUsers = async () => {
@@ -110,8 +94,6 @@ router.post('/register', expressAsyncHandler(async (req, res) => {
     const { email, password, displayName } = req.body;
     const userRecord = await signUpUser(email, password, displayName);
     res.json(userRecord)
-    console.log('유저레코드 :', userRecord.uid)
-
     registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
   } catch (e) {
     console.log('회원가입 오류 :', e.code)
