@@ -4,7 +4,19 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {getUser} from '../apis/auth';
 import {addUserData} from '../apis/firebase';
+// asyncstorage(로컬 로그인 상태 저장, 앱 종료해도 로그인 상태 유지)
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// 리덕스
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setIsSnsLogin,
+  setKakaoLoginLink,
+  setNaverLoginLink,
+  setIsGoogleLogin,
+  setIsKakaoLogin,
+  setIsNaverLogin,
+  setAppState
+} from '../redux_store/slices/stateSlice';
 
 const googleSigninConfigure = async () => {
   GoogleSignin.configure({
@@ -13,25 +25,19 @@ const googleSigninConfigure = async () => {
   });
 };
 
-function SnsLogin({
-  navigation,
-  setNaverLoginLink,
-  setIsSnsLogin,
-  setKakaoLoginLink,
-  isKakaoLogin,
-  setIsKakaoLogin,
-  isNaverLogin,
-  setIsNaverLogin,
-  isGoogleLogin,
-  setIsGoogleLogin,
-  appState,
-  setAppState,
-}) {
+function SnsLogin({navigation}) {
+  // redux store state 가져오기
+  const {isKakaoLogin, isNaverLogin, isGoogleLogin, appState} = useSelector(
+    state => state.state,
+  );
+  const dispatch = useDispatch();
+
+  // asyncstorage에 로그인 상태 저장
   const saveStateToAsyncStorage = async () => {
     try {
       const myBoolean = true;
       await AsyncStorage.setItem('appState', JSON.stringify(myBoolean));
-      setAppState(myBoolean);
+      dispatch(setAppState(myBoolean));
     } catch (error) {
       console.log('로컬 로그인에러 :', error);
     }
@@ -58,40 +64,46 @@ function SnsLogin({
 
   // 구글 로그인
   const googleLogin = async () => {
-    setIsGoogleLogin(true);
-    setIsKakaoLogin(false);
-    setIsNaverLogin(false);
+    dispatch(setIsGoogleLogin(true));
+    dispatch(setIsKakaoLogin(false));
+    dispatch(setIsNaverLogin(false));
     googleSigninConfigure();
     await signInWithGoogle();
   };
 
   const kakaoLogin = async () => {
-    setIsKakaoLogin(true);
-    setIsNaverLogin(false);
-    setIsGoogleLogin(false);
+    dispatch(setIsKakaoLogin(true));
+    dispatch(setIsNaverLogin(false));
+    dispatch(setIsGoogleLogin(false));
     // 카카오 로그인 웹뷰로 이동
     try {
-      const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin`, {
-        cache: 'no-store',
-      });
-      setKakaoLoginLink(response.url);
+      const response = await fetch(
+        `https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin`,
+        {
+          cache: 'no-store',
+        },
+      );
+      dispatch(setKakaoLoginLink(response.url));
     } catch (err) {
       console.log(err);
     }
   };
 
   const naverLogin = async () => {
-    setIsNaverLogin(true);
-    setIsKakaoLogin(false);
-    setIsGoogleLogin(false);
+    dispatch(setIsNaverLogin(true));
+    dispatch(setIsKakaoLogin(false));
+    dispatch(setIsGoogleLogin(false));
     // 네이버 로그인 웹뷰로 이동
     const getNaverLoginLink = async () => {
       try {
-        const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin`, {
-          cache: 'no-store',
-        });
+        const response = await fetch(
+          `https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin`,
+          {
+            cache: 'no-store',
+          },
+        );
         const data = await response.json();
-        setNaverLoginLink(data.API_URL);
+        dispatch(setNaverLoginLink(data.API_URL));
       } catch (err) {
         console.log(err);
       }
@@ -115,7 +127,7 @@ function SnsLogin({
           style={styles.button}
           activeOpacity={0.7}
           onPress={() => {
-            setIsSnsLogin(false);
+            dispatch(setIsSnsLogin(false));
           }}>
           <Text style={[styles.loginBtn, styles.font]}>
             가입된 아이디로 로그인

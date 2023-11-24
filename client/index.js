@@ -3,20 +3,21 @@
  */
 
 import {AppRegistry} from 'react-native';
-import App from './App';
-import stackRouter from './stackRouter';
+import StackRouter from './StackRouter';
 import {name as appName} from './app.json';
 import messaging from '@react-native-firebase/messaging';
 
+import {Provider} from 'react-redux';
+import store from './redux_store/store';
+
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
-  // messaging().onMessage(remoteMessage)
 });
 
-// messaging().onMessage(async remoteMessage => {
-//   console.log('Foreground Message:', remoteMessage);
-//   // showNotification(remoteMessage.notification);
-// })
-// messaging().onMessage(remoteMessage)
+const ReduxApp = () => (
+  <Provider store={store}>
+    <StackRouter />
+  </Provider>
+);
 
-AppRegistry.registerComponent(appName, () => stackRouter);
+AppRegistry.registerComponent(appName, () => ReduxApp);

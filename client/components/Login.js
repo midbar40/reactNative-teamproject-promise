@@ -12,6 +12,8 @@ import {signIn} from '../apis/auth';
 // import { useNavigation } from '@react-navigation/native';
 import SnsLogin from './SnsLogin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSelector, useDispatch} from 'react-redux';
+import {setIsSnsLogin, setAppState} from '../redux_store/slices/stateSlice';
 
 function Login({
   navigation,
@@ -22,32 +24,22 @@ function Login({
   setLoginInfo,
   setIsFindPassword,
   setIsRegister,
-  setNaverLoginLink,
-  naverLoginLink,
-  isSnsLogin,
-  setIsSnsLogin,
-  kakaoLoginLink,
-  setKakaoLoginLink,
-  isKakaoLogin,
-  setIsKakaoLogin,
-  isNaverLogin,
-  setIsNaverLogin,
-  isGoogleLogin,
-  setIsGoogleLogin,
-  setAppState,
-  appState
 }) {
+  // 리덕스 상태값 가져오기
+  const {isSnsLogin, appState} = useSelector(state => state.state);
+  const dispatch = useDispatch();
+
+  // asyncstorage에 로그인 상태 저장
   const saveStateToAsyncStorage = async () => {
     try {
       const myBoolean = true;
       await AsyncStorage.setItem('appState', JSON.stringify(myBoolean));
-      setAppState(myBoolean);
+      dispatch(setAppState(myBoolean));
     } catch (error) {
       console.log('로컬 로그인에러 :', error);
     }
   };
 
-    
   // const navigation = useNavigation();
   const loginAndMoveToApp = async () => {
     // 로그인 정보 확인
@@ -78,27 +70,18 @@ function Login({
     }
   };
   const moveToSnsLogin = () => {
-    setIsSnsLogin(true);
+    dispatch(setIsSnsLogin(true));
   };
   return (
     <View style={styles.contentBox}>
-      <StatusBar backgroundColor="#F2F2F2" barStyle={'dark-content'}></StatusBar>
+      <StatusBar
+        backgroundColor="#F2F2F2"
+        barStyle={'dark-content'}></StatusBar>
       <Text style={styles.appName}>약속해줘</Text>
       {/* 🤙 */}
       {isSnsLogin ? (
         <SnsLogin
           navigation={navigation}
-          setNaverLoginLink={setNaverLoginLink}
-          naverLoginLink={naverLoginLink}
-          setIsSnsLogin={setIsSnsLogin}
-          kakaoLoginLink={kakaoLoginLink}
-          setKakaoLoginLink={setKakaoLoginLink}
-          isKakaoLogin={isKakaoLogin}
-          setIsKakaoLogin={setIsKakaoLogin}
-          isNaverLogin={isNaverLogin}
-          setIsNaverLogin={setIsNaverLogin}
-          isGoogleLogin={isGoogleLogin}
-          setIsGoogleLogin={setIsGoogleLogin}
           setAppState={setAppState}
           appState={appState}
         />
@@ -248,7 +231,7 @@ const styles = StyleSheet.create({
   },
   font: {
     fontFamily: 'IM_Hyemin-Bold',
-  }
+  },
 });
 
 export default Login;

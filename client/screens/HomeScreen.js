@@ -18,28 +18,19 @@ import {
   getFriendsRealtimeChange,
 } from '../apis/firebase';
 import Clipboard from '@react-native-clipboard/clipboard';
+// 리덕스
+import {useSelector} from 'react-redux';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
-function HomeScreen({
-  props,
-  navigation,
-  loginInfo,
-  setIsSnsLogin,
-  isKakaoLogin,
-  setIsKakaoLogin,
-  isNaverLogin,
-  setIsNaverLogin,
-  setAppState,
-  appState,
-  isGoogleLogin,
-  setIsGoogleLogin,
-}) {
+function HomeScreen({props, navigation, loginInfo}) {
+  const appState = useSelector(state => state.state.appState);
 
   const getIsLoginState = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('isLogin');
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   };
 
@@ -52,7 +43,7 @@ function HomeScreen({
   });
 
   const searchUserToFirebaseDB = async () => {
-    if (searchUserText.trim() == getUser().uid.slice(0,7)) {
+    if (searchUserText.trim() == getUser().uid.slice(0, 7)) {
       Alert.alert('자신의 코드는 검색 할 수 없습니다.');
       setSearchUserText('');
       return;
@@ -70,8 +61,7 @@ function HomeScreen({
       const userEmail = user.data().email;
       const userName = user.data().name;
       const userUID = user.ref._documentPath._parts[1];
-      // console.log('user : ',user);
-      // console.log('user uid : ', user.ref._documentPath._parts[1]);
+
       setSearchUser({
         email: userEmail,
         name: userName,
@@ -103,20 +93,18 @@ function HomeScreen({
     return getFriendsRealtimeChange(onResult, onError);
   }, []);
 
-
-    // AsyncStorage에 저장된 isLogin 값 가져오기
-    useEffect(() => {
-      const getStorageData = async () => {
-        try{
-          const isLogin = await getIsLoginState();
-          console.log('홈화면appState : ', appState)
-        }catch(e){
-          console.log(e);
-        }
+  // AsyncStorage에 저장된 isLogin 값 가져오기
+  useEffect(() => {
+    const getStorageData = async () => {
+      try {
+        const isLogin = await getIsLoginState();
+        console.log('홈화면appState : ', appState);
+      } catch (e) {
+        console.log(e);
       }
-      getStorageData()
-    },[appState])
-    
+    };
+    getStorageData();
+  }, [appState]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -125,15 +113,8 @@ function HomeScreen({
       <Logout
         navigation={navigation}
         loginInfo={loginInfo}
-        isKakaoLogin={isKakaoLogin}
-        setIsKakaoLogin={setIsKakaoLogin}
-        isNaverLogin={isNaverLogin}
-        setIsNaverLogin={setIsNaverLogin}
         props={props}
-        setAppState={setAppState}
-        isGoogleLogin={isGoogleLogin}
-        setIsGoogleLogin={setIsGoogleLogin}
-        setIsSnsLogin={setIsSnsLogin}
+        // setAppState={setAppState}
       />
       <View style={styles.box}>
         <View>
