@@ -204,9 +204,10 @@ function ChatRoom({ navigation, selectRoomId }){
         visible={toggleImgModal === ''? false : true}
         transparent={false}
         statusBarTranslucent={true}
+        onRequestClose={() => setToggleImgModal('')}
       >
         <SafeAreaView style={{ flex : 1 }}>
-          <View style={{ paddingTop : 30}}>
+          <View style={{ paddingTop : 50}}>
             <TouchableOpacity onPress={() => {setToggleImgModal('')}} style={styles.foucusImageCancelBtnContainer}>
               <Text style={[styles.foucusImageCancelBtnText, styles.font]}>취소</Text>
             </TouchableOpacity>
