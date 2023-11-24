@@ -19,6 +19,7 @@ import {
   getFriendsRealtimeChange,
 } from '../apis/firebase';
 import Clipboard from '@react-native-clipboard/clipboard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function HomeScreen({
   props,
   navigation,
@@ -28,13 +29,21 @@ function HomeScreen({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
-  userInfo,
-  setUserInfo,
   setAppState,
   appState,
   isGoogleLogin,
   setIsGoogleLogin,
 }) {
+
+  const getIsLoginState = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('isLogin');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e)
+    }
+  };
+
   const [friendList, setFriendList] = useState([]);
   const [searchUserText, setSearchUserText] = useState('');
   const [searchUser, setSearchUser] = useState({
@@ -87,19 +96,29 @@ function HomeScreen({
 
   useEffect(() => {
     function onResult(querySnapshot) {
-      console.log('홈화면 겟유저 테스트', getUser());
-      console.log('홈화면 appstate :', appState);
       // console.log(querySnapshot.data()?.friends)
       setFriendList(querySnapshot.data()?.friends);
     }
-
     function onError(error) {
       console.log(error);
     }
     return getFriendsRealtimeChange(onResult, onError);
   }, []);
 
-  // console.log(friendList)
+
+    // AsyncStorage에 저장된 isLogin 값 가져오기
+    useEffect(() => {
+      const getStorageData = async () => {
+        try{
+          const isLogin = await getIsLoginState();
+          console.log('홈화면appState : ', appState)
+        }catch(e){
+          console.log(e);
+        }
+      }
+      getStorageData()
+    },[appState])
+    
 
   return (
     <SafeAreaView style={styles.container}>
@@ -113,8 +132,6 @@ function HomeScreen({
         isNaverLogin={isNaverLogin}
         setIsNaverLogin={setIsNaverLogin}
         props={props}
-        userInfo={userInfo}
-        setUserInfo={setUserInfo}
         setAppState={setAppState}
         isGoogleLogin={isGoogleLogin}
         setIsGoogleLogin={setIsGoogleLogin}

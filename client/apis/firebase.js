@@ -93,3 +93,21 @@ export const getFriendsOnce = async () => {
     return myDBData.data().friends;
 }
 }
+
+
+// 로그인시 firestore에 추가 (구글용)
+export const addUserData = async (user) => {
+    try{
+        // 유저정보 추가
+      const userProfile = await firestore().collection('user').doc(user.uid).set({
+            UID: user.uid,
+            email : user.email,
+            name : user.displayName,
+            friends : [],
+        })
+        console.log('client firebase.js 등록성공: ',userProfile)
+        return true
+    }catch(error){
+        console.log('client firebase.js 등록에러: ',error)
+    }
+}

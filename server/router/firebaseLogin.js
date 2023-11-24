@@ -94,8 +94,6 @@ router.post('/register', expressAsyncHandler(async (req, res) => {
     const { email, password, displayName } = req.body;
     const userRecord = await signUpUser(email, password, displayName);
     res.json(userRecord)
-    console.log('유저레코드 :', userRecord.uid)
-
     registerFirebaseDB(userRecord.uid, userRecord.email, userRecord.displayName) // DB등록 함수
   } catch (e) {
     console.log('회원가입 오류 :', e.code)
@@ -128,8 +126,8 @@ const scheduledJobs = {}
 router.post('/msg', expressAsyncHandler(async (req, res) => {
   const alarmTime = req.body.time
   const alarmTitle = req.body.title
+  const alarmId =  req.body.id
   const uid = req.body.uid
-  const alarmId = req.body.id  
   const userDB = await db.collection('user').doc(uid).get()
   const token = userDB._fieldsProto.FCMToken.stringValue
   console.log('추가알람', alarmId)
@@ -146,7 +144,7 @@ router.post('/msg', expressAsyncHandler(async (req, res) => {
 
   const jobKey = `${minutes} ${hours} ${day} ${month} *`
 
-  scheduledJobs[jobKey] = schedule.scheduleJob(`${alarmId}`,jobKey, async () => {
+  scheduledJobs[jobKey] = schedule.scheduleJob(alarmId, jobKey, async () => {
     console.log('msg보냅니다!!')
 
     fetch('https://fcm.googleapis.com/fcm/send', {

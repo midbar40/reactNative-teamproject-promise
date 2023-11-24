@@ -14,7 +14,6 @@ function LandingScreen({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
-  setUserInfo,
   isGoogleLogin,
   setIsGoogleLogin,
   appState,
@@ -84,7 +83,6 @@ function LandingScreen({
           setIsKakaoLogin={setIsKakaoLogin}
           isNaverLogin={isNaverLogin}
           setIsNaverLogin={setIsNaverLogin}
-          setUserInfo={setUserInfo}
           isGoogleLogin={isGoogleLogin}
           setIsGoogleLogin={setIsGoogleLogin}
           setAppState={setAppState}

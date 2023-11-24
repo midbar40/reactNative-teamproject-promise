@@ -34,8 +34,6 @@ function App({
   setIsKakaoLogin,
   isNaverLogin,
   setIsNaverLogin,
-  userInfo,
-  setUserInfo,
   setAppState,
   appState,
   isGoogleLogin,
@@ -90,8 +88,6 @@ function App({
           setIsKakaoLogin={setIsKakaoLogin}
           isNaverLogin={isNaverLogin}
           setIsNaverLogin={setIsNaverLogin}
-          userInfo={userInfo}
-          setUserInfo={setUserInfo}
           setAppState={setAppState}
           appState={appState}
           isGoogleLogin={isGoogleLogin}

@@ -1,76 +1,73 @@
 import React, {useState, useEffect} from 'react';
+import {View,Text, StyleSheet, Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LandingScreen from './screens/LandingScreen';
 import WebScreen from './screens/WebScreen';
 import App from './App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getUser, signOut} from './apis/auth';
 
 const Stack = createNativeStackNavigator();
 
 function stackRouter({navigation, route}) {
-  const [appState, setAppState] = useState(false);
-
-  const loadStateFromAsyncStorage = async () => {
-    try {
-      const serializedState = await AsyncStorage.getItem('appState');
-      const myBoolean = JSON.parse(serializedState);
-      if (serializedState === null) {
-        return undefined; // 저장된 상태 값이 없으면 undefined 반환
-      }
-      return JSON.parse(serializedState);
-    } catch (error) {
-      return undefined; // 에러 처리
-    }
-  };
+  const [appState, setAppState] = useState(false); 
   const [isGoogleLogin, setIsGoogleLogin] = useState(false);
   const [isNaverLogin, setIsNaverLogin] = useState(false);
   const [isKakaoLogin, setIsKakaoLogin] = useState(false);
   const [naverLoginLink, setNaverLoginLink] = useState('');
   const [kakaoLoginLink, setKakaoLoginLink] = useState('');
   const [isSnsLogin, setIsSnsLogin] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    email: '',
-    password: '',
-    token: '',
-  });
+  const [loading, setloading] = useState(true);
 
-  // AsyncStorage에 저장된 appState 값 불러오기
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const keys = await AsyncStorage.getAllKeys();
-        if (keys.includes('appState')) {
-          const res = await AsyncStorage.getItem('appState');
-          setAppState(res);
-        } else {
-          console.log('appState 키가 존재하지 않습니다.');
-          // appState 키가 존재하지 않는 경우에 대한 처리를 추가할 수 있습니다.
-        }
-      } catch (error) {
-        console.error('로컬스토리지에서 값 불러오는 도중 오류 발생: ', error);
-        // 여기서 오류를 적절하게 처리하거나 fallback 로직을 구현할 수 있습니다.
-      }
-    };
-    fetchData();
-  }, []);
-  console.log('스택라우터 appState', appState);
+  // AsyncStorage에 로그인 appState 가져오기
+  const getIsLoginState = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('appState');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e)
+    }
+  };
+
+// 랜딩에서 AsyncStorage에 저장된 appState 값 가져오기
+useEffect(() => {
+  const getStorageData = async () => {
+    try{
+      const isLogin = await getIsLoginState();
+      setAppState(isLogin);
+      setloading(false)
+    }catch(e){
+      console.log(e);
+    }
+  }
+  getStorageData()
+},[])
+console.log('스택라우터앱스테이트 : ', appState)
 
 
-  useEffect(() => {
-    const loginUserInfo = getUser()
-    if(loginUserInfo !== null) setUserInfo(loginUserInfo)
-  },[userInfo])
+  if(loading){
+    return (
+      <>
+      <View style={styles.container}>
+        <Text style={styles.appName}>약속해줘</Text>
+      </View>
+      <View>
+        <Image 
+        source={require('./assets/imgs/finger1.png')}
+        />
+      </View>
+      </>
+    )
+  }
 
   return (
-    <NavigationContainer key={appState}>
+    <NavigationContainer >
       <Stack.Navigator
         initialRouteName= 'Landing'
         screenOptions={{
           headerShown: false,
         }}>
-        {userInfo == null || userInfo.token == '' ? (
+        {!appState ? (
           <>
             <Stack.Screen name="Landing">
               {props => (
@@ -86,7 +83,6 @@ function stackRouter({navigation, route}) {
                   setIsKakaoLogin={setIsKakaoLogin}
                   isNaverLogin={isNaverLogin}
                   setIsNaverLogin={setIsNaverLogin}
-                  setUserInfo={setUserInfo}
                   isGoogleLogin={isGoogleLogin}
                   setIsGoogleLogin={setIsGoogleLogin}
                   setAppState={setAppState}
@@ -103,8 +99,6 @@ function stackRouter({navigation, route}) {
                   setNaverLoginLink={setNaverLoginLink}
                   kakaoLoginLink={kakaoLoginLink}
                   setKakaoLoginLink={setKakaoLoginLink}
-                  userInfo={userInfo}
-                  setUserInfo={setUserInfo}
                   setIsKakaoLogin={setIsKakaoLogin}
                   setIsNaverLogin={setIsNaverLogin}
                   setAppState={setAppState}
@@ -125,8 +119,6 @@ function stackRouter({navigation, route}) {
                 setIsNaverLogin={setIsNaverLogin}
                 isGoogleLogin={isGoogleLogin}
                 setIsGoogleLogin={setIsGoogleLogin}
-                userInfo={userInfo}
-                setUserInfo={setUserInfo}
                 setAppState={setAppState}
                 appState={appState}
               />
@@ -138,5 +130,20 @@ function stackRouter({navigation, route}) {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    justifyContent: 'center',
+  },
+  appName: {
+    fontSize: 55,
+    fontFamily: 'ulsanjunggu',
+    color: '#FAA6AA',
+    // fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+})
 
 export default stackRouter;

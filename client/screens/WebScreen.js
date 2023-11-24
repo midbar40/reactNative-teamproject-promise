@@ -9,8 +9,6 @@ function WebScreen({
   navigation,
   naverLoginLink,
   kakaoLoginLink,
-  userInfo,
-  setUserInfo,
   setIsKakaoLogin,
   setIsNaverLogin,
   setAppState,
@@ -33,7 +31,7 @@ function WebScreen({
   const getNaverUserInfo = async () => {
     // gpt가 짜준 코드
     try {
-      const userResponse = await fetch(`http://${academyIP}/naverlogin/user`, {
+      const userResponse = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin/user`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +52,7 @@ function WebScreen({
 
       if (updatedUserInfo?.token) {
         await signIn(updatedUserInfo?.email, updatedUserInfo?.password);
-        setUserInfo(updatedUserInfo); // userInfo를 상위 스코프에서 접근 가능한 변수에 할당
+        await saveStateToAsyncStorage();
       } else {
         console.log('로그인 실패 :', updatedUserInfo);
       }
@@ -65,15 +63,14 @@ function WebScreen({
 
   // 네이버 로그인
   const showNaverLogin = async () => {
-    if (getUser() == null || !userInfo?.token) {
+    if (getUser() == null ) {
       await getNaverUserInfo();
-      await saveStateToAsyncStorage();
     }
   };
 
   const getKakaoUserInfo = async () => {
     try {
-      const response = await fetch(`http://${academyIP}/kakaologin/profile`, {
+      const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +92,7 @@ function WebScreen({
 
       if (updatedUserInfo?.token) {
         await signIn(updatedUserInfo?.email, updatedUserInfo?.password);
-        setUserInfo(updatedUserInfo);
+        await saveStateToAsyncStorage();
       } else {
         console.log('로그인 실패 :', getUser());
       }
@@ -106,11 +103,8 @@ function WebScreen({
 
   // 카카오 로그인
   const showKakaoLogin = async () => {
-    if (getUser() == null || !userInfo?.token) {
+    if (getUser() == null) {
       await getKakaoUserInfo();
-      await saveStateToAsyncStorage();
-  // console.log('로그인 성공 (101번째 겟유저):', getUser());
-
     } else {
       console.log('카카오 로그인 실패 :', getUser());
     }
