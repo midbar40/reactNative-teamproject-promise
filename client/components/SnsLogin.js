@@ -74,7 +74,7 @@ function SnsLogin({
     setIsGoogleLogin(false);
     // 카카오 로그인 웹뷰로 이동
     try {
-      const response = await fetch(`${academyIP}/kakaologin`, {
+      const response = await fetch(`${academyIP}/kakaoLogin`, {
         cache: 'no-store',
       });
       setKakaoLoginLink(response.url);
@@ -90,7 +90,7 @@ function SnsLogin({
     // 네이버 로그인 웹뷰로 이동
     const getNaverLoginLink = async () => {
       try {
-        const response = await fetch(`${academyIP}/naverlogin`, {
+        const response = await fetch(`${academyIP}/naverLogin`, {
           cache: 'no-store',
         });
         const data = await response.json();
