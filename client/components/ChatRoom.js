@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal, StatusBar } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal, StatusBar, Keyboard } from 'react-native';
 
 // 컴포넌트
 import ChatList from './ChatList';
@@ -40,6 +40,7 @@ function ChatRoom({ navigation, selectRoomId }){
   // 이미지 갤러리 오픈
   const openImageLibrary = () => {
     setMessage('');
+    Keyboard.dismiss();
     let options = {
       mediaType: "photo",
       includeBase64: true,
@@ -168,20 +169,16 @@ function ChatRoom({ navigation, selectRoomId }){
         } */}
       
       <View style={styles.chatInputContainer}>
-        {uploadFile?.fileUri ? 
-          <TouchableOpacity onPress={() => setUploadFile({})} style={styles.addFileButtonContainer} on>
-            <View style={{ flex : 1 }}>
-              <Text style={styles.addFileButtonText}>x</Text>
-            </View>
-          </TouchableOpacity>
-        :
-          <TouchableOpacity onPress={openImageLibrary} style={styles.addFileButtonContainer} on>
-            <View style={{ flex : 1 }}>
-              <Text style={styles.addFileButtonText}>+</Text>
-            </View>
-          </TouchableOpacity>
-        }
-        
+        <TouchableOpacity 
+          onPress={uploadFile?.fileUri ? () => setUploadFile({}) : openImageLibrary} 
+          style={styles.addFileButtonContainer}
+        >
+          <View style={{ flex : 1 }}>
+            <Text 
+            style={uploadFile?.fileUri ? [styles.addFileButtonText, { transform : [{rotate : '45deg'}]}] : 
+            styles.addFileButtonText}>+</Text>
+          </View>
+        </TouchableOpacity>
         <TextInput 
           onChangeText={setMessage}
           value={message}
@@ -271,6 +268,7 @@ const styles = StyleSheet.create({
     paddingVertical : 0,
     flex : 1,
     padding: 5,
+    height : 35,
   },
   chatSubmitButton : {
     width : 70,
@@ -281,17 +279,17 @@ const styles = StyleSheet.create({
     textAlign : 'center',
     // fontWeight : 'bold',
     fontSize : 18,
-    justifyContent: 'center',
-    alignItems: 'center'
+    lineHeight : 35
   },
   addFileButtonContainer : {
     width : 30,
     backgroundColor :"#69DBB1",
   },
   addFileButtonText : {
-    fontSize : 20,
+    fontSize : 30,
     textAlign : 'center',
     // fontWeight : 'bold',
+    lineHeight : 35,
   },
   addImageViewContaier : {
     height : 200,
