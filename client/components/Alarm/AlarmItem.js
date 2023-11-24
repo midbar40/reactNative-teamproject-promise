@@ -22,6 +22,17 @@ function AlarmItem({ item, onDelete, isFocused }) {
   // 리스트 삭제
   const handleDelete = () => {
     // 리스트 삭제 애니메이션
+    // fetch('http://192.168.200.13:5300/firebaseLogin/cancel', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: {
+    //     id: item.id
+    //   }
+    // })
+    // .catch(error => console.error(error))
+
     Animated.timing(translateX, {
       toValue: 62, // 리스트를 오른쪽으로 사라지는 거리(화면밖으로)
       duration: 250, // 애니메이션 시간
@@ -31,16 +42,9 @@ function AlarmItem({ item, onDelete, isFocused }) {
       translateX.setValue(0) // 추후 리스트 애니메이션 값 재설정
     })
 
-    fetch('https://port-0-node-express-5mk12alpawtk1g.sel5.cloudtype.app/firebaseLogin/cancel', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      }, 
-      body: JSON.stringify({
-        id: item.id,
-      })     
-    })
-    console.log('삭제')
+    
+    console.log('패치 하고 난후')
+
   }
 
   const translateX = new Animated.Value(0)

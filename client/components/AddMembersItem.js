@@ -1,29 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
 
-function AddMembersItem({item, selectedId, setSelectedId}){
+function AddMembersItem({item, pickFriends, setPickFriends, setSelectedId, friendInfo, setFriendInfo}){
   
   const [pick, setPick] = useState(false)
 
-  //이미 스케쥴에 등록된 친구는 클릭되어있게
+  // 이미 스케쥴에 등록된 친구는 클릭되어있게
   useEffect(() => {
-    selectedId && selectedId.indexOf(item.name) !== -1 && setPick(!pick)
+    const friendsName = []
+    const friendsUid = []
+    friendInfo && friendInfo.map(friend => {
+      friendsName.push(friend.name)
+      friendsUid.push(friend.UID)
+    })
+    console.log('name, uid', friendsName, friendsUid)
+    pickFriends && friendsUid.indexOf(item.UID) !== -1 && friendsName.indexOf(item.name) !== -1 && setPick(!pick)
   },[])
 
 
   //member추가
   const onPress = () => {
-    if(selectedId.indexOf(item.name) === -1 || selectedId=== ''){
-      setSelectedId([...selectedId, item.name])
-    }else if(pick){
-      //다시 누르면 걸러주기
-      const list = selectedId
-      const filterd = list.filter(list =>{
-        return list !== item.name
-      } 
-        )
-        setSelectedId(filterd)
-    }
+    const names = []
+    const Uids = []
+    console.log(friendInfo)
+    if(Uids.indexOf(item.UID) === -1 || friendInfo === []){
+        friendInfo && friendInfo.map(friend => {
+          names.push(friend.name)
+          Uids.push(friend.UID)
+        })
+        setFriendInfo([...friendInfo, {
+          name: item.name,
+          UID: item.UID
+        }])
+        if(pick){
+          const filtered = friendInfo.filter(list => {
+            return list.UID !== item.UID && list.name !== item.UID
+          })
+          setFriendInfo(filtered)
+        }
+      }
     setPick(!pick)
   }
 

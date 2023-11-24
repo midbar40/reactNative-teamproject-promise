@@ -158,7 +158,7 @@ function HomeScreen({
           <TextInput
             style={[styles.searchUserInput, styles.font]}
             onChangeText={setSearchUserText}
-            placeholder="찾고 싶은 친구의 이메일을 입력하세요!"
+            placeholder="찾고 싶은 친구의 코드를 입력하세요!"
             value={searchUserText}
           />
           <TouchableOpacity

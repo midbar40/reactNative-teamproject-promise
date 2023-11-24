@@ -137,7 +137,8 @@ function ChatRoom({ navigation, selectRoomId }){
 
   return (
     <SafeAreaView style={styles.block}>
-      <StatusBar hidden></StatusBar>
+      {/* <StatusBar barStyle='dark-content' backgroundColor='#fff' hidden={false}/>
+      <View style={styles.box}></View> */}
       <View style={styles.chatRoomNameContainer}>
         <TouchableOpacity style={styles.returnBtnContainer} onPress={() => navigation.navigate('ChatRoomList')}>
           <Text style={styles.returnBtnText}>◀</Text>
@@ -224,11 +225,15 @@ const styles = StyleSheet.create({
     flex : 1,
     backgroundColor: '#fff',
   },
+  box:{
+    height: 8,
+    // backgroundColor: 'lightgray'
+  },
   chatRoomNameContainer : {
     backgroundColor : '#FAA6AA',
     height : 40,
     marginBottom : 5,
-    flexDirection : 'row'
+    flexDirection : 'row',
   },
   returnBtnContainer : {
     width : 40,
