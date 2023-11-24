@@ -17,8 +17,6 @@ function RegisterUser({
   setLoginInfo,
   setIsSnsLogin
 }) {
-  const homeIP = '192.168.0.172:5300';
-  const academyIP = '192.168.200.17:5300';
   const [registerInfo, setRegisterInfo] = useState({
     email: '',
     nickname: '',
@@ -46,7 +44,7 @@ function RegisterUser({
       return Alert.alert('비밀번호가 일치하지 않습니다');
     } else {
       try {
-        const reponse = await fetch(`http://${academyIP}/firebaseLogin/register`, {
+        const reponse = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/firebaseLogin/register`, {
           // FIrebase 회원가입
             method: 'POST',
             headers: {

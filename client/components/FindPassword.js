@@ -17,8 +17,7 @@ function FindPassword({
   setIsFindPassword,
   setIsRegister,
 }) {
-  const homeIP = '192.168.0.172:5300'
-  const academyIP = '192.168.200.17:5300'
+
   const [userEmail, setUserEmail] = useState([]); // 가입된 이메일 목록
   const findEmailAndSend = async () => {
     try {
@@ -37,7 +36,7 @@ function FindPassword({
   useEffect(() => {
     try {
       async function fetchData() {
-        await fetch(`http://${academyIP}/firebaseLogin`)  // 사용하고 있는 컴퓨터의 ip주소로 변경(ipv4 주소 확인 방법: cmd -> ipconfig)
+        await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/firebaseLogin`)  // 사용하고 있는 컴퓨터의 ip주소로 변경(ipv4 주소 확인 방법: cmd -> ipconfig)
           .then(res => res.json())
           .then(data => {
             // console.log(data);
