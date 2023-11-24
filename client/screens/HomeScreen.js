@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Alert,
   FlatList,
+  Keyboard,
 } from 'react-native';
 import Logout from '../components/Logout';
 import {getUser} from '../apis/auth';
@@ -67,6 +68,7 @@ function HomeScreen({
         UID: '',
       });
     } else {
+      Keyboard.dismiss();
       const userEmail = user.data().email;
       const userName = user.data().name;
       const userUID = user.ref._documentPath._parts[1];

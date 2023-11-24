@@ -75,7 +75,7 @@ export const sendNotification = async (message, roomUID) => {
           "title": `${myName}`,
           "body": `${message.trim() !== ''? message : '사진'}`,
           "mutable_content": true,
-          "sound": Tri-tone
+          "sound": 'Tri-tone'
           }
       })
     })

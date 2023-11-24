@@ -307,7 +307,7 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
         transparent={true}
         visible={openModal}
         onRequestClose={() => {
-          setOpenModal(!openModal)  
+          setOpenModal(!openModal)
         }}
         onShow={() => {
           setStartDate(selectedDate)

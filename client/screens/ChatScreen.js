@@ -41,6 +41,14 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
       navigation.navigate('ChatRoom');
     }
   },[selectRoomId])
+
+  const tabHidden = () => {
+    navigation.setOptions({ tabBarStyle : {display: 'none' }})
+  }
+
+  const tabShow = () => {
+    navigation.setOptions({ tabBarStyle : {display: 'flex' }})
+  }
   
   return (
     <Stack.Navigator screenOptions={{ headerShown : false }} colors={{background: '#fff'}}>
@@ -57,6 +65,8 @@ function ChatScreen({ navigation, selectRoomId, setSelectRoomId }){
       <Stack.Screen name="ChatRoom" children={(props) => 
         <ChatRoom 
           {...props}
+          tabShow={tabShow}
+          tabHidden={tabHidden}
           roomTitle={roomTitle}
           selectRoomId={selectRoomId}
         />
