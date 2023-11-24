@@ -322,7 +322,10 @@ function CalendarScreen({ navigation, setSelectRoomId }) {
           }else{
           //스케쥴을 수정하려고 모달창 열때 
             //정보 자동으로 담아 보여주기
-            itemKey &&
+            console.log('onshowItemKey',itemKey)
+            console.log('1번')
+            showSchedule &&
+            console.log('2번')
             getOneSchedule('CalendarSchedule', itemKey, 
             function onResult(querySnapshot){
               const list = []

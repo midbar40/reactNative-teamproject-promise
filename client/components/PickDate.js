@@ -19,10 +19,10 @@ function PickDate({selectedDate, loadSchedule, showSchedule, setShowSchedule, se
         //해당 스케쥴을 만든사람만 삭제 가능
         if(schedule.createdUser === myInfo.UID){
           Alert.alert('삭제',
-            '할일을 삭제하시겠습니까?',
-            [{text: '취소', style: 'cancel'},
-             {text: '삭제', onPress: () => {
-              try{
+          '할일을 삭제하시겠습니까?',
+          [{text: '취소', style: 'cancel'},
+          {text: '삭제', onPress: () => {
+            try{
                 // 화면에서도 삭제
                 const newSchedule = showSchedule.filter(show => itemKey !== show.id)
                 setShowSchedule(newSchedule)
@@ -31,11 +31,11 @@ function PickDate({selectedDate, loadSchedule, showSchedule, setShowSchedule, se
                 //채팅방 id 조회
                 setItemKey('')
                 getThisSchedulesChatRoom(schedule.id)
-                  .then(result => {
-                    console.log(result.docs[0].id)
-                    deleteThisSchedulesChatRoom(result.docs[0].id)
-                  })
-                  .catch(err => console.log('deletechatroomErr', err))
+                .then(result => {
+                  console.log(result.docs[0].id)
+                  deleteThisSchedulesChatRoom(result.docs[0].id)
+                })
+                .catch(err => console.log('deletechatroomErr', err))
               }catch(err){console.log('err:', err)}
               
             }}]
