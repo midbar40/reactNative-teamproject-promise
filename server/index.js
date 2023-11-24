@@ -18,22 +18,23 @@ app.use(session({
   secret: 'secret',
   resave: false,
   saveUninitialized: true,
-  store: MongoStore.create(
-    { 
-    mongoUrl: 'mongodb+srv://inyo0506:kVi2OogRcjwRoWyi@cluster0.14ofbcq.mongodb.net/' ,
-    dbName: 'RNproject',
-    collectionName: 'session',
-  })
+  
+  // store: MongoStore.create(
+  //   { 
+  //   mongoUrl: 'mongodb+srv://inyo0506:kVi2OogRcjwRoWyi@cluster0.14ofbcq.mongodb.net/' ,
+  //   dbName: 'RNproject',
+  //   collectionName: 'session',
+  // })
 }))
 
 
 // 라우터 설정
 const naverLoginRouter = require('./router/naverLogin');
-const kakaoLoginRouter = require('./router/kakaologin');
+const kakaoLoginRouter = require('./router/kakaoLogin');
 const firebaseLoginRouter = require('./router/firebaseLogin');
 
 // 라우터 적용
-app.use('/naverlogin', naverLoginRouter);
+app.use('/naverLogin', naverLoginRouter);
 app.use('/kakaoLogin', kakaoLoginRouter);
 app.use('/firebaseLogin', firebaseLoginRouter);
 

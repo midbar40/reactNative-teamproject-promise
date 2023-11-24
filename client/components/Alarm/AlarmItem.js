@@ -99,13 +99,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   alarmTime: {
-    fontSize: 16,
+    fontSize: 16,    
     // fontWeight: 'bold',
   },
   alarmTitle: {
     fontSize: 16,
     alignItems: 'flex-start',
     width: 170,
+    marginLeft: 20,
+    paddingLeft: 10,    
     // fontWeight: 'bold'
   },
   swipe: {
