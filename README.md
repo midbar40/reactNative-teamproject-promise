@@ -1,6 +1,6 @@
 # 약속해줘
 
-<img src="https://github.com/hyung-2/RNproject/blob/master/client/assets/imgs/loading.PNG" width="180" height="400"/>  <img src="https://github.com/hyung-2/RNproject/blob/hyung/client/assets/imgs/home.png" width="180" height="400"/>  <img src="https://github.com/hyung-2/RNproject/blob/hyung/client/assets/imgs/calendar.PNG" width="180" height="400"/>  <img src="https://github.com/hyung-2/RNproject/blob/hyung/client/assets/imgs/chatting.png" width="180" height="400"/>  <img src="https://github.com/hyung-2/RNproject/blob/hyung/client/assets/imgs/alarm.PNG" width="180" height="400"/>
+<img src="https://github.com/hyung-2/RNproject/blob/master/client/assets/imgs/loading.PNG" width="150" height="300"/>  <img src="https://github.com/hyung-2/RNproject/blob/hyung/client/assets/imgs/home.png" width="150" height="300"/>  <img src="https://github.com/hyung-2/RNproject/blob/hyung/client/assets/imgs/calendar.PNG" width="150" height="300"/>  <img src="https://github.com/hyung-2/RNproject/blob/hyung/client/assets/imgs/chatting.png" width="150" height="300"/>  <img src="https://github.com/hyung-2/RNproject/blob/hyung/client/assets/imgs/alarm.PNG" width="150" height="300"/>
 
 **약속해줘**는 안드로이드 기반 어플리케이션입니다. 
 
