@@ -18,12 +18,13 @@ app.use(session({
   secret: 'secret',
   resave: false,
   saveUninitialized: true,
-  store: MongoStore.create(
-    { 
-    mongoUrl: 'mongodb+srv://inyo0506:kVi2OogRcjwRoWyi@cluster0.14ofbcq.mongodb.net/' ,
-    dbName: 'RNproject',
-    collectionName: 'session',
-  })
+  
+  // store: MongoStore.create(
+  //   { 
+  //   mongoUrl: 'mongodb+srv://inyo0506:kVi2OogRcjwRoWyi@cluster0.14ofbcq.mongodb.net/' ,
+  //   dbName: 'RNproject',
+  //   collectionName: 'session',
+  // })
 }))
 
 

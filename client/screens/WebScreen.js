@@ -31,7 +31,7 @@ function WebScreen({
   const getNaverUserInfo = async () => {
     // gpt가 짜준 코드
     try {
-      const userResponse = await fetch(`${academyIP}/naverlogin/user`, {
+      const userResponse = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin/user`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ function WebScreen({
 
   const getKakaoUserInfo = async () => {
     try {
-      const response = await fetch(`${academyIP}/kakaologin/profile`, {
+      const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
