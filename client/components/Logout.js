@@ -40,6 +40,7 @@ function Logout({
   const handleLogout = async () => {
     const homeIP = '192.168.0.172:5300'
     const academyIP = '192.168.200.17:5300'
+
     console.log('로그인상태: ', getUser());
     deleteFCMTokenInFirebase(); // 유저의 FCM토큰을 삭제합니다.
     await signOut(); // 파이어베이스 로그아웃

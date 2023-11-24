@@ -31,7 +31,7 @@ function AlarmItem({ item, onDelete, isFocused }) {
       translateX.setValue(0) // 추후 리스트 애니메이션 값 재설정
     })
 
-    fetch('http://192.168.200.13:5300/firebaseLogin/cancel', {
+    fetch('https://port-0-node-express-5mk12alpawtk1g.sel5.cloudtype.app/firebaseLogin/cancel', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

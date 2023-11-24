@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {signIn,getUser} from '../apis/auth';
+import {getUser} from '../apis/auth';
+import {addUserData} from '../apis/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const googleSigninConfigure = async () => {
@@ -42,34 +43,17 @@ function SnsLogin({
   // 구글 로그인
   const signInWithGoogle = async () => {
     try {
-      // Check if your device supports Google Play
+      // 구글로그인 진행코드
       await GoogleSignin.hasPlayServices({
         showPlayServicesUpdateDialog: true,
       });
-      // Get the user's ID token
       const {idToken} = await GoogleSignin.signIn();
-      console.log('구글 토큰 :', idToken);
-      const userInfoFromGoogle = await GoogleSignin.getCurrentUser();
-      console.log('구글 유저정보 :', userInfoFromGoogle.user);
-
-      await fetch(`http://${academyIP}/firebaseLogin/googleSignUp`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: userInfoFromGoogle.user.email,
-          password: userInfoFromGoogle.user.email + 'secret',
-          displayName: userInfoFromGoogle.user.name,
-        }),
-      });
-
-      await signIn(
-        userInfoFromGoogle.user.email,
-        userInfoFromGoogle.user.email + 'secret',
-      );
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      const res = await auth().signInWithCredential(googleCredential);
+      // 파이어스토어에 유저 데이터 추가
+      await addUserData(getUser());
+      // asyncstorage에 로그인 상태 저장
       await saveStateToAsyncStorage();
-      console.log('구글 로그인 성공', getUser());
     } catch (err) {
       console.log('구글로그인 오류(snslogin.js 82번쨰줄) :', err);
     }
@@ -78,17 +62,19 @@ function SnsLogin({
   // 구글 로그인
   const googleLogin = async () => {
     setIsGoogleLogin(true);
-    googleSigninConfigure();
     setIsKakaoLogin(false);
     setIsNaverLogin(false);
+    googleSigninConfigure();
     await signInWithGoogle();
   };
 
   const kakaoLogin = async () => {
     setIsKakaoLogin(true);
     setIsNaverLogin(false);
+    setIsGoogleLogin(false);
+    // 카카오 로그인 웹뷰로 이동
     try {
-      const response = await fetch(`http://${academyIP}/kakaologin`, {
+      const response = await fetch(`${academyIP}/kakaologin`, {
         cache: 'no-store',
       });
       setKakaoLoginLink(response.url);
@@ -100,9 +86,11 @@ function SnsLogin({
   const naverLogin = async () => {
     setIsNaverLogin(true);
     setIsKakaoLogin(false);
+    setIsGoogleLogin(false);
+    // 네이버 로그인 웹뷰로 이동
     const getNaverLoginLink = async () => {
       try {
-        const response = await fetch(`http://${academyIP}/naverlogin`, {
+        const response = await fetch(`${academyIP}/naverlogin`, {
           cache: 'no-store',
         });
         const data = await response.json();
@@ -111,10 +99,10 @@ function SnsLogin({
         console.log(err);
       }
     };
-
     await getNaverLoginLink();
   };
 
+  // 각 sns로그인 버튼 클릭시 state 값 변경해서 웹뷰로 이동
   useEffect(() => {
     if (isKakaoLogin) {
       navigation.navigate('Web', {isKakaoLogin: isKakaoLogin});
@@ -132,7 +120,9 @@ function SnsLogin({
           onPress={() => {
             setIsSnsLogin(false);
           }}>
-          <Text style={[styles.loginBtn, styles.font]}>가입된 아이디로 로그인</Text>
+          <Text style={[styles.loginBtn, styles.font]}>
+            가입된 아이디로 로그인
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.loginBtnBox}>
@@ -140,7 +130,9 @@ function SnsLogin({
           style={styles.GoogleButton}
           activeOpacity={0.7}
           onPress={googleLogin}>
-          <Text style={[styles.GoogleLoginBtn, styles.font]}>Google 로그인</Text>
+          <Text style={[styles.GoogleLoginBtn, styles.font]}>
+            Google 로그인
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.KakaoButton}
@@ -220,6 +212,6 @@ const styles = StyleSheet.create({
   },
   font: {
     fontFamily: 'IM_Hyemin-Bold',
-  }
+  },
 });
 export default SnsLogin;

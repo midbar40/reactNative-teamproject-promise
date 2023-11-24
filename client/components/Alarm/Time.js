@@ -72,7 +72,7 @@ function Time({isFocused, fcmToken}){
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
     addData('Alarms', alarm)
-    fetch('http://192.168.200.13:5300/firebaseLogin/msg',{
+    fetch('https://port-0-node-express-5mk12alpawtk1g.sel5.cloudtype.app/firebaseLogin/msg',{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

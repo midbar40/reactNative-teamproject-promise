@@ -74,26 +74,6 @@ const signUpUser = async (email, password, displayName) => {
 }
 }
 
-// 파이어베이스 구글로그인 유저등록 (auth, db)
-router.post('/googleSignUp', expressAsyncHandler (async(req, res) => {
- const registedUser = await listAllUsers()
- const registedUserEmail = registedUser.map(user=> {return user.email})
-  try{
-      if(registedUserEmail.includes(req.body.email)){
-         console.log('이미 가입된 이메일입니다')
-         res.json('이미 가입된 이메일입니다')
-      } else {
-        const userRecord = await signUpUser(req.body.email, req.body.password, req.body.displayName)
-        await registerFirebaseDB(userRecord?.uid, userRecord?.email, userRecord?.displayName); // 유저정보 Firestore database에 등록
-        res.json(userRecord);
-      }
-  
-      }  catch(err)      {
-        console.log('구글 유저등록 에러(firebaseLogin 92) :',err)
-      }
-  }
-))
-
 
 // 등록된 모든 유저의 정보를(이메일, uid, 닉네임) 가져오는 함수
 const listAllUsers = async () => {
