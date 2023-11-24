@@ -36,7 +36,7 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
       return filtered
     })
     friendInfo ? list.push(...final) : ''
-    // console.log('함께하는 멤버:', list)
+    console.log('함께하는 멤버:', list)
     final ? setPickFriends(list) : setPickFriends(myInfo)
     
     //이름만 담기
