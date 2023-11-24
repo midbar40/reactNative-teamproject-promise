@@ -8,7 +8,7 @@ import { sendMessageToFirebase, getMessage, uploadFileToFirebaseStorage, getChat
 import { launchImageLibrary } from 'react-native-image-picker';
 import {  sendNotification } from '../apis/firebaseMessage';
 
-function ChatRoom({ navigation, selectRoomId }){
+function ChatRoom({ navigation, selectRoomId, tabHidden, tabShow }){
   const [message, setMessage] = useState(''); // 인풋에 적은 메세지
   const [messageList , setMessageList] = useState([]); // DB로 부터 실시간으로 받은 메세지 리스트
   const [uploadFile, setUploadFile] = useState({}); // 갤러리에서 선택한 (이미지) 파일
@@ -93,6 +93,11 @@ function ChatRoom({ navigation, selectRoomId }){
   }
 
   // 채팅방 메세지 받아오기
+  useEffect(() => {
+    tabHidden()
+    return () => tabShow()
+  },[]);
+
   useEffect(() => {
     async function onResult(querySnapshot){
       // querySnapshot.forEach(doc => {
