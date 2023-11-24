@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal, StatusBar } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, FlatList, Image, Modal, StatusBar, Keyboard } from 'react-native';
 
 // 컴포넌트
 import ChatList from './ChatList';
@@ -8,7 +8,7 @@ import { sendMessageToFirebase, getMessage, uploadFileToFirebaseStorage, getChat
 import { launchImageLibrary } from 'react-native-image-picker';
 import {  sendNotification } from '../apis/firebaseMessage';
 
-function ChatRoom({ navigation, selectRoomId }){
+function ChatRoom({ navigation, selectRoomId, tabHidden, tabShow }){
   const [message, setMessage] = useState(''); // 인풋에 적은 메세지
   const [messageList , setMessageList] = useState([]); // DB로 부터 실시간으로 받은 메세지 리스트
   const [uploadFile, setUploadFile] = useState({}); // 갤러리에서 선택한 (이미지) 파일
@@ -40,6 +40,7 @@ function ChatRoom({ navigation, selectRoomId }){
   // 이미지 갤러리 오픈
   const openImageLibrary = () => {
     setMessage('');
+    Keyboard.dismiss();
     let options = {
       mediaType: "photo",
       includeBase64: true,
@@ -92,6 +93,11 @@ function ChatRoom({ navigation, selectRoomId }){
   }
 
   // 채팅방 메세지 받아오기
+  useEffect(() => {
+    tabHidden()
+    return () => tabShow()
+  },[]);
+
   useEffect(() => {
     async function onResult(querySnapshot){
       // querySnapshot.forEach(doc => {
@@ -168,20 +174,16 @@ function ChatRoom({ navigation, selectRoomId }){
         } */}
       
       <View style={styles.chatInputContainer}>
-        {uploadFile?.fileUri ? 
-          <TouchableOpacity onPress={() => setUploadFile({})} style={styles.addFileButtonContainer} on>
-            <View style={{ flex : 1 }}>
-              <Text style={styles.addFileButtonText}>x</Text>
-            </View>
-          </TouchableOpacity>
-        :
-          <TouchableOpacity onPress={openImageLibrary} style={styles.addFileButtonContainer} on>
-            <View style={{ flex : 1 }}>
-              <Text style={styles.addFileButtonText}>+</Text>
-            </View>
-          </TouchableOpacity>
-        }
-        
+        <TouchableOpacity 
+          onPress={uploadFile?.fileUri ? () => setUploadFile({}) : openImageLibrary} 
+          style={styles.addFileButtonContainer}
+        >
+          <View style={{ flex : 1 }}>
+            <Text 
+            style={uploadFile?.fileUri ? [styles.addFileButtonText, { transform : [{rotate : '45deg'}]}] : 
+            styles.addFileButtonText}>+</Text>
+          </View>
+        </TouchableOpacity>
         <TextInput 
           onChangeText={setMessage}
           value={message}
@@ -204,9 +206,10 @@ function ChatRoom({ navigation, selectRoomId }){
         visible={toggleImgModal === ''? false : true}
         transparent={false}
         statusBarTranslucent={true}
+        onRequestClose={() => setToggleImgModal('')}
       >
         <SafeAreaView style={{ flex : 1 }}>
-          <View style={{ paddingTop : 30}}>
+          <View style={{ paddingTop : 50}}>
             <TouchableOpacity onPress={() => {setToggleImgModal('')}} style={styles.foucusImageCancelBtnContainer}>
               <Text style={[styles.foucusImageCancelBtnText, styles.font]}>취소</Text>
             </TouchableOpacity>
@@ -270,6 +273,7 @@ const styles = StyleSheet.create({
     paddingVertical : 0,
     flex : 1,
     padding: 5,
+    height : 35,
   },
   chatSubmitButton : {
     width : 70,
@@ -280,17 +284,17 @@ const styles = StyleSheet.create({
     textAlign : 'center',
     // fontWeight : 'bold',
     fontSize : 18,
-    justifyContent: 'center',
-    alignItems: 'center'
+    lineHeight : 35
   },
   addFileButtonContainer : {
     width : 30,
     backgroundColor :"#69DBB1",
   },
   addFileButtonText : {
-    fontSize : 20,
+    fontSize : 30,
     textAlign : 'center',
     // fontWeight : 'bold',
+    lineHeight : 35,
   },
   addImageViewContaier : {
     height : 200,

@@ -21,27 +21,27 @@ function AddMembers({pickFriends, setPickFriends, itemKey, showSchedule, myInfo}
   }
 
   const closeModal = () => {
-    setPickFriends('')
     setOpen(false)
   }
 
   const addMember = () => {
     const list = []
     const notFriendsList = []
-    list.push(myInfo)
+    itemKey === '' ? list.push(myInfo) : ''
 
     const final =  friendInfo && friendInfo.filter(flist => {
       const filtered = friendLists.filter(info => {
-        return info.UID !== flist.UID && info.UID !== myInfo.UID && notFriendsList.push(info)
+        return info.UID !== flist.UID && info.UID !== myInfo.UID && flist.UID !== myInfo.UID && notFriendsList.push(info)
       })
       return filtered
     })
-    // console.log('final', final)
-    final ? setPickFriends(final) : setPickFriends(myInfo)
+    friendInfo ? list.push(...final) : ''
+    console.log('함께하는 멤버:', list)
+    final ? setPickFriends(list) : setPickFriends(myInfo)
     
     //이름만 담기
     const arr =[]
-    final && final.map(l => {
+    list && list.map(l => {
       arr.push(l.name)
     })
     setSelectedId(arr)
