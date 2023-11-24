@@ -27,9 +27,6 @@ function SnsLogin({
   appState,
   setAppState,
 }) {
-  const homeIP = '192.168.0.172:5300';
-  const academyIP = '192.168.200.17:5300';
-
   const saveStateToAsyncStorage = async () => {
     try {
       const myBoolean = true;
@@ -74,7 +71,7 @@ function SnsLogin({
     setIsGoogleLogin(false);
     // 카카오 로그인 웹뷰로 이동
     try {
-      const response = await fetch(`${academyIP}/kakaologin`, {
+      const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin`, {
         cache: 'no-store',
       });
       setKakaoLoginLink(response.url);
@@ -90,7 +87,7 @@ function SnsLogin({
     // 네이버 로그인 웹뷰로 이동
     const getNaverLoginLink = async () => {
       try {
-        const response = await fetch(`${academyIP}/naverlogin`, {
+        const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin`, {
           cache: 'no-store',
         });
         const data = await response.json();
