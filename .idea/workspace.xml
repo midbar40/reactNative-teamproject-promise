@@ -5,8 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a79c39c7-f184-4bd4-a729-15d909f387f8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/client/apis/firebaseMessage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/apis/firebaseMessage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/router/firebaseLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/router/firebaseLogin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-hdpi/node_modules_reactnativecalendars_src_calendar_img_next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-hdpi/node_modules_reactnativecalendars_src_calendar_img_previous.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-hdpi/node_modules_reactnativecalendars_src_img_down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-hdpi/node_modules_reactnativecalendars_src_img_up.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-hdpi/node_modules_reactnavigation_elements_src_assets_backicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-mdpi/node_modules_reactnativecalendars_src_img_down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-mdpi/node_modules_reactnativecalendars_src_img_up.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-mdpi/node_modules_reactnavigation_elements_src_assets_backicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-mdpi/node_modules_reactnavigation_elements_src_assets_backiconmask.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xhdpi/node_modules_reactnativecalendars_src_calendar_img_next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xhdpi/node_modules_reactnativecalendars_src_calendar_img_previous.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xhdpi/node_modules_reactnativecalendars_src_img_down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xhdpi/node_modules_reactnativecalendars_src_img_up.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxhdpi/node_modules_reactnativecalendars_src_calendar_img_next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxhdpi/node_modules_reactnativecalendars_src_calendar_img_previous.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxhdpi/node_modules_reactnativecalendars_src_img_down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxhdpi/node_modules_reactnativecalendars_src_img_up.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxxhdpi/node_modules_reactnativecalendars_src_calendar_img_next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxxhdpi/node_modules_reactnativecalendars_src_calendar_img_previous.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxxhdpi/node_modules_reactnativecalendars_src_img_down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxxhdpi/node_modules_reactnativecalendars_src_img_up.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/android/app/src/main/res/drawable-xxxhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,16 +47,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Administrator/RNproject&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "AnalyzeApkAction.lastApkPath": "C:/Users/Administrator/RNproject",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "C:/Users/Administrator/RNproject",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

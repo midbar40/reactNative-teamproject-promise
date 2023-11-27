@@ -77,6 +77,7 @@ function SnsLogin({navigation}) {
     dispatch(setIsGoogleLogin(false));
     // 카카오 로그인 웹뷰로 이동
     try {
+<<<<<<< HEAD
       const response = await fetch(
         `https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin`,
         {
@@ -84,6 +85,13 @@ function SnsLogin({navigation}) {
         },
       );
       dispatch(setKakaoLoginLink(response.url));
+=======
+      // const response = await fetch(`${academyIP}/kakaoLogin`, {
+      const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin`, {
+        cache: 'no-store',
+      });
+      setKakaoLoginLink(response.url);
+>>>>>>> 52478c0f20d2b6f204600b6c2700936256d0f32c
     } catch (err) {
       console.log(err);
     }
@@ -96,12 +104,19 @@ function SnsLogin({navigation}) {
     // 네이버 로그인 웹뷰로 이동
     const getNaverLoginLink = async () => {
       try {
+<<<<<<< HEAD
         const response = await fetch(
           `https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin`,
           {
             cache: 'no-store',
           },
         );
+=======
+        // const response = await fetch(`${academyIP}/naverLogin`, {
+        const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin`, {
+          cache: 'no-store',
+        });
+>>>>>>> 52478c0f20d2b6f204600b6c2700936256d0f32c
         const data = await response.json();
         dispatch(setNaverLoginLink(data.API_URL));
       } catch (err) {
