@@ -73,7 +73,7 @@ function Time({ isFocused, fcmToken }) {
     setAlarmTimes([...alarmTimes, alarm])
     setAddAlarmModal(false)
     addData('Alarms', alarm)
-    fetch('http://192.168.200.13:5300/firebaseLogin/msg', {
+    fetch('https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/firebaseLogin/msg', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function Time({ isFocused, fcmToken }) {
     const updatedAlarms = alarmTimes.filter((alarm) => alarm.id !== id && alarm.userUid === currentUserUid)
     setAlarmTimes(updatedAlarms)
     removeData('Alarms', id)
-    fetch('http://192.168.200.13:5300/firebaseLogin/cancel', {
+    fetch('https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/firebaseLogin/cancel', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

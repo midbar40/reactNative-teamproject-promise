@@ -4,17 +4,20 @@ import {WebView} from 'react-native-webview';
 import {signIn, getUser} from '../apis/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function WebScreen({
-  route,
-  navigation,
-  naverLoginLink,
-  kakaoLoginLink,
+//리덕스
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setIsGoogleLogin,
   setIsKakaoLogin,
   setIsNaverLogin,
   setAppState,
-}) {
-  const homeIP = '192.168.0.172:5300';
-  const academyIP = '192.168.200.17:5300';
+} from '../redux_store/slices/stateSlice';
+
+function WebScreen({route}) {
+  // 리덕스 상태값 가져오기
+  const {naverLoginLink, kakaoLoginLink} = useSelector(state => state.state);
+  const dispatch = useDispatch();
+
   let isNaverLogin = route.params?.isNaverLogin;
   let isKakaoLogin = route.params?.isKakaoLogin;
 
@@ -22,7 +25,7 @@ function WebScreen({
     try {
       const myBoolean = true;
       await AsyncStorage.setItem('appState', JSON.stringify(myBoolean));
-      setAppState(myBoolean);
+      dispatch(setAppState(myBoolean));
     } catch (error) {
       console.log('로컬 로그인에러 :', error);
     }
@@ -31,16 +34,19 @@ function WebScreen({
   const getNaverUserInfo = async () => {
     // gpt가 짜준 코드
     try {
-      const userResponse = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin/user`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'cache-control':
-            'no-cache, must-revalidate, post-check=0, pre-check=0',
+      const userResponse = await fetch(
+        `https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/naverLogin/user`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'cache-control':
+              'no-cache, must-revalidate, post-check=0, pre-check=0',
+          },
+          credentials: 'include',
+          cache: 'no-store',
         },
-        credentials: 'include',
-        cache: 'no-store',
-      });
+      );
 
       const userData = await userResponse?.json(); // 데이터 수신을 기다림
 
@@ -63,32 +69,33 @@ function WebScreen({
 
   // 네이버 로그인
   const showNaverLogin = async () => {
-    if (getUser() == null ) {
+    if (getUser() == null) {
       await getNaverUserInfo();
     }
   };
 
   const getKakaoUserInfo = async () => {
     try {
-      const response = await fetch(`https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin/profile`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'cache-control':
-            'no-cache, must-revalidate, post-check=0, pre-check=0',
+      const response = await fetch(
+        `https://port-0-rnproject-server-5mk12alpawtk1g.sel5.cloudtype.app/kakaoLogin/profile`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'cache-control':
+              'no-cache, must-revalidate, post-check=0, pre-check=0',
+          },
+          credentials: 'include',
+          cache: 'no-store',
         },
-        credentials: 'include',
-        cache: 'no-store',
-      });
+      );
       const userData = await response?.json();
-
 
       const updatedUserInfo = {
         email: userData.email,
         password: userData.password,
         token: userData.token,
       };
-
 
       if (updatedUserInfo?.token) {
         await signIn(updatedUserInfo?.email, updatedUserInfo?.password);
@@ -112,8 +119,9 @@ function WebScreen({
 
   // 카카오, 네이버 state 초기화
   const handleNaverKakaoState = () => {
-    setIsKakaoLogin(false);
-    setIsNaverLogin(false);
+    dispatch(setIsKakaoLogin(false));
+    dispatch(setIsNaverLogin(false));
+    dispatch(setIsGoogleLogin(false));
   };
 
   // 카카오/네이버로그인 화면에서 뒤로가기 버튼 눌렀을 때

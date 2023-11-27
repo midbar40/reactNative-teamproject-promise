@@ -4,18 +4,18 @@ import {FindPassword, Login, RegisterUser} from '../components';
 
 function LandingScreen({
   navigation,
-  setNaverLoginLink,
-  naverLoginLink,
-  isSnsLogin,
-  setIsSnsLogin,
-  kakaoLoginLink,
-  setKakaoLoginLink,
-  isKakaoLogin,
-  setIsKakaoLogin,
-  isNaverLogin,
-  setIsNaverLogin,
-  isGoogleLogin,
-  setIsGoogleLogin,
+  // setNaverLoginLink,
+  // naverLoginLink,
+  // isSnsLogin,
+  // setIsSnsLogin,
+  // kakaoLoginLink,
+  // setKakaoLoginLink,
+  // isKakaoLogin,
+  // setIsKakaoLogin,
+  // isNaverLogin,
+  // setIsNaverLogin,
+  // isGoogleLogin,
+  // setIsGoogleLogin,
   appState,
   setAppState,
 }) {
@@ -56,7 +56,7 @@ function LandingScreen({
         <RegisterUser
           isFindPassword={isFindPassword}
           setIsFindPassword={setIsFindPassword}
-          setIsSnsLogin={setIsSnsLogin}
+          // setIsSnsLogin={setIsSnsLogin}
           findEmail={findEmail}
           navigation={navigation}
           isRegister={isRegister}
@@ -73,18 +73,18 @@ function LandingScreen({
           setLoginInfo={setLoginInfo}
           setIsFindPassword={setIsFindPassword}
           setIsRegister={setIsRegister}
-          setNaverLoginLink={setNaverLoginLink}
-          naverLoginLink={naverLoginLink}
-          kakaoLoginLink={kakaoLoginLink}
-          setKakaoLoginLink={setKakaoLoginLink}
-          isSnsLogin={isSnsLogin}
-          setIsSnsLogin={setIsSnsLogin}
-          isKakaoLogin={isKakaoLogin}
-          setIsKakaoLogin={setIsKakaoLogin}
-          isNaverLogin={isNaverLogin}
-          setIsNaverLogin={setIsNaverLogin}
-          isGoogleLogin={isGoogleLogin}
-          setIsGoogleLogin={setIsGoogleLogin}
+          // setNaverLoginLink={setNaverLoginLink}
+          // naverLoginLink={naverLoginLink}
+          // kakaoLoginLink={kakaoLoginLink}
+          // setKakaoLoginLink={setKakaoLoginLink}
+          // isSnsLogin={isSnsLogin}
+          // setIsSnsLogin={setIsSnsLogin}
+          // isKakaoLogin={isKakaoLogin}
+          // setIsKakaoLogin={setIsKakaoLogin}
+          // isNaverLogin={isNaverLogin}
+          // setIsNaverLogin={setIsNaverLogin}
+          // isGoogleLogin={isGoogleLogin}
+          // setIsGoogleLogin={setIsGoogleLogin}
           setAppState={setAppState}
           appState= {appState}
         />
